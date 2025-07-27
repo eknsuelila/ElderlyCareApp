@@ -1,0 +1,84 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ElderlyCareApp.Models
+{
+    public enum MealType
+    {
+        Breakfast,
+        Lunch,
+        Dinner,
+        Snack,
+        Supplement
+    }
+
+    public enum MealQuality
+    {
+        Poor,
+        Fair,
+        Good,
+        Excellent
+    }
+
+    public class MealLog
+    {
+        [Key]
+        public int Id { get; set; }
+        
+        [Required]
+        public int ElderlyPersonId { get; set; }
+        [ForeignKey("ElderlyPersonId")]
+        public virtual ElderlyPerson ElderlyPerson { get; set; } = null!;
+        
+        [Required]
+        public int UserId { get; set; }
+        [ForeignKey("UserId")]
+        public virtual User User { get; set; } = null!;
+        
+        [Required]
+        public MealType MealType { get; set; }
+        
+        [StringLength(200)]
+        public string? MealName { get; set; }
+        
+        [StringLength(500)]
+        public string? Description { get; set; }
+        
+        [StringLength(500)]
+        public string? Foods { get; set; }
+        
+        [StringLength(500)]
+        public string? Beverages { get; set; }
+        
+        public DateTime MealTime { get; set; }
+        
+        public int? DurationMinutes { get; set; }
+        
+        [Range(0, 100)]
+        public int? PercentageEaten { get; set; }
+        
+        public MealQuality Quality { get; set; } = MealQuality.Good;
+        
+        [Range(1, 10)]
+        public int? AppetiteLevel { get; set; } // 1-10 scale
+        
+        [StringLength(500)]
+        public string? DietaryCompliance { get; set; }
+        
+        [StringLength(500)]
+        public string? AllergiesNoted { get; set; }
+        
+        [StringLength(500)]
+        public string? Supplements { get; set; }
+        
+        [StringLength(500)]
+        public string? Notes { get; set; }
+        
+        public bool IsCompleted { get; set; } = true;
+        
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        
+        public DateTime? UpdatedAt { get; set; }
+    }
+} 

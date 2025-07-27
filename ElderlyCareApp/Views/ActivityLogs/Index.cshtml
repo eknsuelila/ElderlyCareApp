@@ -1,0 +1,62 @@
+@model IEnumerable<ElderlyCareApp.Models.ActivityLog>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Activity Logs</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Elderly Person</th>
+            <th>Activity Type</th>
+            <th>Category</th>
+            <th>Start Time</th>
+            <th>Duration</th>
+            <th>Location</th>
+            <th>Energy Level</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.ElderlyPerson.Name)</td>
+            <td>@Html.DisplayFor(modelItem => item.ActivityType)</td>
+            <td>
+                <span class="badge bg-info">@Html.DisplayFor(modelItem => item.Category)</span>
+            </td>
+            <td>@Html.DisplayFor(modelItem => item.StartTime)</td>
+            <td>@Html.DisplayFor(modelItem => item.DurationMinutes) min</td>
+            <td>@Html.DisplayFor(modelItem => item.Location)</td>
+            <td>
+                @if (item.EnergyLevel.HasValue)
+                {
+                    <span class="badge @(item.EnergyLevel >= 7 ? "bg-success" : item.EnergyLevel >= 4 ? "bg-warning" : "bg-danger")">
+                        @item.EnergyLevel/10
+                    </span>
+                }
+                else
+                {
+                    <span class="text-muted">-</span>
+                }
+            </td>
+            <td>
+                <span class="badge @(item.IsCompleted ? "bg-success" : "bg-warning")">
+                    @(item.IsCompleted ? "Completed" : "In Progress")
+                </span>
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a> |
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,140 @@
+@model IEnumerable<ElderlyCareApp.Models.ElderlyPerson>
+
+@{
+    ViewData["Title"] = "Elderly People";
+}
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <h1><i class="fas fa-users"></i> Elderly People</h1>
+        </div>
+        <div class="col-md-6 text-end">
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add New Elderly Person
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>
+                                <i class="fas fa-user"></i> Name
+                            </th>
+                            <th>
+                                <i class="fas fa-birthday-cake"></i> Age
+                            </th>
+                            <th>
+                                <i class="fas fa-phone"></i> Phone
+                            </th>
+                            <th>
+                                <i class="fas fa-map-marker-alt"></i> City
+                            </th>
+                            <th>
+                                <i class="fas fa-user-md"></i> Medical Conditions
+                            </th>
+                            <th>
+                                <i class="fas fa-exclamation-triangle"></i> Allergies
+                            </th>
+                            <th>
+                                <i class="fas fa-info-circle"></i> Status
+                            </th>
+                            <th>
+                                <i class="fas fa-cogs"></i> Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@Html.DisplayFor(modelItem => item.Name)</strong>
+                                </td>
+                                <td>
+                                    @{
+                                        var age = DateTime.Now.Year - item.DateOfBirth.Year;
+                                        if (item.DateOfBirth > DateTime.Now.AddYears(-age)) age--;
+                                    }
+                                    @age years
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.PhoneNumber))
+                                    {
+                                        <a href="tel:@item.PhoneNumber">@item.PhoneNumber</a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Not provided</span>
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.City)
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.MedicalConditions))
+                                    {
+                                        <span class="badge bg-warning text-dark">@item.MedicalConditions</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">None recorded</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.Allergies))
+                                    {
+                                        <span class="badge bg-danger">@item.Allergies</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">None</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.IsActive)
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Inactive</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-center mt-5">
+        <i class="fas fa-users fa-3x text-muted mb-3"></i>
+        <h3 class="text-muted">No Elderly People Found</h3>
+        <p class="text-muted">Start by adding the first elderly person to the system.</p>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add First Elderly Person
+        </a>
+    </div>
+}

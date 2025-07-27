@@ -1,0 +1,140 @@
+@model ElderlyCareApp.Models.SocialInteractionLog
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>SocialInteractionLog</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group">
+                <label asp-for="ElderlyPersonId" class="control-label">Elderly Person</label>
+                <select asp-for="ElderlyPersonId" class="form-control" asp-items="ViewBag.ElderlyPersonId"></select>
+                <span asp-validation-for="ElderlyPersonId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label">Caregiver</label>
+                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="InteractionType" class="control-label">Interaction Type</label>
+                <select asp-for="InteractionType" class="form-control" asp-items="Html.GetEnumSelectList<InteractionType>()"></select>
+                <span asp-validation-for="InteractionType" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="InteractionTitle" class="control-label">Interaction Title</label>
+                <input asp-for="InteractionTitle" class="form-control" />
+                <span asp-validation-for="InteractionTitle" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Description</label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Participants" class="control-label">Participants</label>
+                <input asp-for="Participants" class="form-control" />
+                <span asp-validation-for="Participants" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Relationship" class="control-label">Relationship</label>
+                <input asp-for="Relationship" class="form-control" placeholder="Family, Friend, Neighbor, etc." />
+                <span asp-validation-for="Relationship" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="StartTime" class="control-label">Start Time</label>
+                <input asp-for="StartTime" class="form-control" type="datetime-local" />
+                <span asp-validation-for="StartTime" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="EndTime" class="control-label">End Time</label>
+                <input asp-for="EndTime" class="form-control" type="datetime-local" />
+                <span asp-validation-for="EndTime" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="DurationMinutes" class="control-label">Duration (Minutes)</label>
+                <input asp-for="DurationMinutes" class="form-control" type="number" />
+                <span asp-validation-for="DurationMinutes" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Location" class="control-label">Location</label>
+                <input asp-for="Location" class="form-control" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Quality" class="control-label">Quality</label>
+                <select asp-for="Quality" class="form-control" asp-items="Html.GetEnumSelectList<InteractionQuality>()"></select>
+                <span asp-validation-for="Quality" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="MoodBefore" class="control-label">Mood Before (1-10)</label>
+                <input asp-for="MoodBefore" class="form-control" type="number" min="1" max="10" />
+                <span asp-validation-for="MoodBefore" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="MoodAfter" class="control-label">Mood After (1-10)</label>
+                <input asp-for="MoodAfter" class="form-control" type="number" min="1" max="10" />
+                <span asp-validation-for="MoodAfter" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="EngagementLevel" class="control-label">Engagement Level (1-10)</label>
+                <input asp-for="EngagementLevel" class="form-control" type="number" min="1" max="10" />
+                <span asp-validation-for="EngagementLevel" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="TopicsDiscussed" class="control-label">Topics Discussed</label>
+                <textarea asp-for="TopicsDiscussed" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="TopicsDiscussed" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Activities" class="control-label">Activities</label>
+                <textarea asp-for="Activities" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Activities" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Notes" class="control-label">Notes</label>
+                <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsCompleted" /> @Html.DisplayNameFor(model => model.IsCompleted)
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,51 @@
+@model IEnumerable<ElderlyCareApp.Models.MedicationLog>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Medication Logs</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Elderly Person</th>
+            <th>Medication</th>
+            <th>Dosage</th>
+            <th>Status</th>
+            <th>Scheduled Time</th>
+            <th>Actual Time</th>
+            <th>Prescribed By</th>
+            <th>Pharmacy</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.ElderlyPerson.Name)</td>
+            <td>@Html.DisplayFor(modelItem => item.MedicationName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Dosage)</td>
+            <td>
+                <span class="badge @(item.Status == MedicationStatus.Taken ? "bg-success" : 
+                                   item.Status == MedicationStatus.Missed ? "bg-danger" : 
+                                   item.Status == MedicationStatus.Scheduled ? "bg-warning" : "bg-secondary")">
+                    @Html.DisplayFor(modelItem => item.Status)
+                </span>
+            </td>
+            <td>@Html.DisplayFor(modelItem => item.ScheduledTime)</td>
+            <td>@Html.DisplayFor(modelItem => item.ActualTime)</td>
+            <td>@Html.DisplayFor(modelItem => item.PrescribedBy)</td>
+            <td>@Html.DisplayFor(modelItem => item.Pharmacy)</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a> |
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ElderlyCareApp</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ElderlyCareApp.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-user-md me-2"></i>ElderlyCareApp
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-home me-1"></i>Dashboard
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="SystemOverview">
+                                <i class="fas fa-chart-bar me-1"></i>System Overview
+                            </a>
+                        </li>
+                        
+                        <!-- People Management -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="peopleDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-users me-1"></i>People
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="peopleDropdown">
+                                <li><a class="dropdown-item" asp-controller="ElderlyPeople" asp-action="Index">
+                                    <i class="fas fa-user me-2"></i>Elderly People
+                                </a></li>
+                                <li><a class="dropdown-item" asp-controller="Users" asp-action="Index">
+                                    <i class="fas fa-user-md me-2"></i>Care Staff
+                                </a></li>
+                            </ul>
+                        </li>
+
+                        <!-- Care Management -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="careDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-clipboard-list me-1"></i>Care Management
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="careDropdown">
+                                <li><a class="dropdown-item" asp-controller="CarePlans" asp-action="Index">
+                                    <i class="fas fa-clipboard me-2"></i>Care Plans
+                                </a></li>
+                                <li><a class="dropdown-item" asp-controller="TaskSchedules" asp-action="Index">
+                                    <i class="fas fa-tasks me-2"></i>Task Schedules
+                                </a></li>
+                            </ul>
+                        </li>
+
+                        <!-- Health Monitoring -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="healthDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-heartbeat me-1"></i>Health
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="healthDropdown">
+                                <li><a class="dropdown-item" asp-controller="VitalSignsLogs" asp-action="Index">
+                                    <i class="fas fa-stethoscope me-2"></i>Vital Signs
+                                </a></li>
+                                <li><a class="dropdown-item" asp-controller="SymptomLogs" asp-action="Index">
+                                    <i class="fas fa-thermometer-half me-2"></i>Symptoms
+                                </a></li>
+                                <li><a class="dropdown-item" asp-controller="AppointmentLogs" asp-action="Index">
+                                    <i class="fas fa-calendar-check me-2"></i>Appointments
+                                </a></li>
+                            </ul>
+                        </li>
+
+                        <!-- Daily Activities -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="activitiesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-calendar-day me-1"></i>Activities
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="activitiesDropdown">
+                                <li><a class="dropdown-item" asp-controller="ActivityLogs" asp-action="Index">
+                                    <i class="fas fa-walking me-2"></i>Activities
+                                </a></li>
+                                <li><a class="dropdown-item" asp-controller="MedicationLogs" asp-action="Index">
+                                    <i class="fas fa-pills me-2"></i>Medications
+                                </a></li>
+                                <li><a class="dropdown-item" asp-controller="MealLogs" asp-action="Index">
+                                    <i class="fas fa-utensils me-2"></i>Meals
+                                </a></li>
+                                <li><a class="dropdown-item" asp-controller="SocialInteractionLogs" asp-action="Index">
+                                    <i class="fas fa-comments me-2"></i>Social Interactions
+                                </a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <!-- User Information and Logout -->
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-1"></i>
+                                @Context.Session.GetString("CurrentUserName") ?? "User"
+                                <span class="badge bg-light text-dark ms-1">
+                                    @Context.Session.GetString("CurrentUserRole") ?? "Unknown"
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><h6 class="dropdown-header">Signed in as</h6></li>
+                                <li><span class="dropdown-item-text">
+                                    <i class="fas fa-user me-2"></i>@Context.Session.GetString("CurrentUserName")
+                                </span></li>
+                                <li><span class="dropdown-item-text">
+                                    <i class="fas fa-user-tag me-2"></i>@Context.Session.GetString("CurrentUserRole")
+                                </span></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <div class="container-fluid">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    &copy; 2025 - ElderlyCareApp - Comprehensive Elderly Care Management System
+                </div>
+                <div class="col-md-6 text-end">
+                    <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

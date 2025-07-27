@@ -1,0 +1,171 @@
+@model IEnumerable<ElderlyCareApp.Models.SymptomLog>
+
+@{
+    ViewData["Title"] = "Symptom Logs";
+}
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <h1><i class="fas fa-thermometer-half"></i> Symptom Logs</h1>
+        </div>
+        <div class="col-md-6 text-end">
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Log Symptom
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>
+                                <i class="fas fa-user"></i> Patient
+                            </th>
+                            <th>
+                                <i class="fas fa-exclamation-triangle"></i> Symptom
+                            </th>
+                            <th>
+                                <i class="fas fa-level-up-alt"></i> Severity
+                            </th>
+                            <th>
+                                <i class="fas fa-map-marker-alt"></i> Location
+                            </th>
+                            <th>
+                                <i class="fas fa-clock"></i> Logged At
+                            </th>
+                            <th>
+                                <i class="fas fa-heart"></i> Mood
+                            </th>
+                            <th>
+                                <i class="fas fa-info-circle"></i> Status
+                            </th>
+                            <th>
+                                <i class="fas fa-cogs"></i> Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@Html.DisplayFor(modelItem => item.ElderlyPerson.Name)</strong>
+                                </td>
+                                <td>
+                                    <strong>@Html.DisplayFor(modelItem => item.Symptom)</strong>
+                                    @if (!string.IsNullOrEmpty(item.Description))
+                                    {
+                                        <br /><small class="text-muted">@item.Description</small>
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        string severityClass;
+                                        switch (item.Severity)
+                                        {
+                                            case ElderlyCareApp.Models.SymptomSeverity.Critical:
+                                                severityClass = "bg-danger";
+                                                break;
+                                            case ElderlyCareApp.Models.SymptomSeverity.Severe:
+                                                severityClass = "bg-warning";
+                                                break;
+                                            case ElderlyCareApp.Models.SymptomSeverity.Moderate:
+                                                severityClass = "bg-info";
+                                                break;
+                                            case ElderlyCareApp.Models.SymptomSeverity.Mild:
+                                                severityClass = "bg-success";
+                                                break;
+                                            default:
+                                                severityClass = "bg-secondary";
+                                                break;
+                                        }
+                                    }
+                                    <span class="badge @severityClass">@item.Severity</span>
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.Location))
+                                    {
+                                        <span class="badge bg-secondary">@item.Location</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Not specified</span>
+                                    }
+                                </td>
+                                <td>
+                                    @item.LogTime.ToString("MMM dd, HH:mm")
+                                </td>
+                                <td>
+                                    @{
+                                        string moodClass;
+                                        switch (item.Mood)
+                                        {
+                                            case ElderlyCareApp.Models.MoodLevel.Excellent:
+                                                moodClass = "bg-success";
+                                                break;
+                                            case ElderlyCareApp.Models.MoodLevel.Good:
+                                                moodClass = "bg-info";
+                                                break;
+                                            case ElderlyCareApp.Models.MoodLevel.Fair:
+                                                moodClass = "bg-warning";
+                                                break;
+                                            case ElderlyCareApp.Models.MoodLevel.Poor:
+                                                moodClass = "bg-danger";
+                                                break;
+                                            case ElderlyCareApp.Models.MoodLevel.VeryPoor:
+                                                moodClass = "bg-dark";
+                                                break;
+                                            default:
+                                                moodClass = "bg-secondary";
+                                                break;
+                                        }
+                                    }
+                                    <span class="badge @moodClass">@item.Mood</span>
+                                </td>
+                                <td>
+                                    @if (item.IsOngoing)
+                                    {
+                                        <span class="badge bg-warning">Ongoing</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">Resolved</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-center mt-5">
+        <i class="fas fa-thermometer-half fa-3x text-muted mb-3"></i>
+        <h3 class="text-muted">No Symptom Logs Found</h3>
+        <p class="text-muted">Start by logging the first symptom.</p>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Log First Symptom
+        </a>
+    </div>
+} 

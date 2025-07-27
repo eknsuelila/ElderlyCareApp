@@ -1,0 +1,130 @@
+@model IEnumerable<ElderlyCareApp.Models.ElderlyPerson>
+
+@{
+    ViewData["Title"] = "Select Patient";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="display-4">
+                <i class="fas fa-user-md text-primary"></i> Elderly Care Management System
+            </h1>
+            <p class="lead text-muted">Please select a patient to begin managing their care</p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-users"></i> Active Patients
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <div class="row">
+                            @foreach (var patient in Model)
+                            {
+                                <div class="col-md-6 col-lg-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm patient-card" 
+                                         style="cursor: pointer; transition: transform 0.2s;"
+                                         onclick="selectPatient(@patient.Id)">
+                                        <div class="card-body text-center">
+                                            <div class="mb-3">
+                                                <i class="fas fa-user-circle fa-4x text-primary"></i>
+                                            </div>
+                                            <h5 class="card-title fw-bold">@patient.Name</h5>
+                                            
+                                            @{
+                                                var age = DateTime.Now.Year - patient.DateOfBirth.Year;
+                                                if (patient.DateOfBirth > DateTime.Now.AddYears(-age)) age--;
+                                            }
+                                            <p class="text-muted mb-2">@age years old</p>
+                                            
+                                            @if (!string.IsNullOrEmpty(patient.City))
+                                            {
+                                                <p class="text-muted mb-2">
+                                                    <i class="fas fa-map-marker-alt"></i> @patient.City
+                                                </p>
+                                            }
+                                            
+                                            @if (!string.IsNullOrEmpty(patient.MedicalConditions))
+                                            {
+                                                <div class="mb-2">
+                                                    <span class="badge bg-warning text-dark">
+                                                        <i class="fas fa-user-md"></i> @patient.MedicalConditions
+                                                    </span>
+                                                </div>
+                                            }
+                                            
+                                            @if (!string.IsNullOrEmpty(patient.Allergies))
+                                            {
+                                                <div class="mb-3">
+                                                    <span class="badge bg-danger">
+                                                        <i class="fas fa-exclamation-triangle"></i> @patient.Allergies
+                                                    </span>
+                                                </div>
+                                            }
+                                            
+                                            <button class="btn btn-primary btn-sm w-100" 
+                                                    onclick="event.stopPropagation(); selectPatient(@patient.Id)">
+                                                <i class="fas fa-arrow-right"></i> Select Patient
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-users fa-4x text-muted mb-3"></i>
+                            <h4 class="text-muted">No Active Patients Found</h4>
+                            <p class="text-muted">Add patients to the system to begin managing their care.</p>
+                            <a asp-controller="ElderlyPeople" asp-action="Create" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add First Patient
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <a asp-action="SystemOverview" class="btn btn-outline-secondary">
+                <i class="fas fa-chart-bar"></i> View System Overview
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .patient-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+</style>
+
+<script>
+    function selectPatient(patientId) {
+        // Create a form and submit it to select the patient
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '@Url.Action("SelectPatient", "Home")';
+        
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'patientId';
+        input.value = patientId;
+        
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script> 
