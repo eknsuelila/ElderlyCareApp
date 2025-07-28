@@ -1,31 +1,32 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ElderlyCareApp.Models;
+using System.Threading.Tasks;
 
 namespace ElderlyCareApp.Controllers
 {
-    public class ActivityLogsController : Controller
+    public class CareNotesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ActivityLogsController(ApplicationDbContext context)
+        public CareNotesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: ActivityLogs
+        // GET: CareNotes
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ActivityLogs.Include(a => a.ElderlyPerson).Include(a => a.User);
-            return View(await applicationDbContext.ToListAsync());
+            var careNotes = await _context.CareNotes
+                .Include(c => c.ElderlyPerson)
+                .Include(c => c.User)
+                .OrderByDescending(c => c.CreatedAt)
+                .ToListAsync();
+            return View(careNotes);
         }
 
-        // GET: ActivityLogs/Details/5
+        // GET: CareNotes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,44 +34,44 @@ namespace ElderlyCareApp.Controllers
                 return NotFound();
             }
 
-            var activityLog = await _context.ActivityLogs
-                .Include(a => a.ElderlyPerson)
-                .Include(a => a.User)
+            var careNote = await _context.CareNotes
+                .Include(c => c.ElderlyPerson)
+                .Include(c => c.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (activityLog == null)
+            if (careNote == null)
             {
                 return NotFound();
             }
 
-            return View(activityLog);
+            return View(careNote);
         }
 
-        // GET: ActivityLogs/Create
-        public IActionResult Create()
+        // GET: CareNotes/Create
+        public async Task<IActionResult> Create()
         {
-            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Name");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name");
+            ViewBag.ElderlyPeople = await _context.ElderlyPeople.Where(p => p.IsActive).ToListAsync();
+            ViewBag.Users = await _context.Users.Where(u => u.IsActive).ToListAsync();
             return View();
         }
 
-        // POST: ActivityLogs/Create
+        // POST: CareNotes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ElderlyPersonId,UserId,ActivityType,Description,StartTime,EndTime,DurationMinutes,Notes")] ActivityLog activityLog)
+        public async Task<IActionResult> Create([Bind("ElderlyPersonId,UserId,NoteType,Title,Content")] CareNote careNote)
         {
             if (ModelState.IsValid)
             {
-                activityLog.CreatedAt = DateTime.Now;
-                _context.Add(activityLog);
+                careNote.CreatedAt = DateTime.Now;
+                _context.Add(careNote);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Name", activityLog.ElderlyPersonId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", activityLog.UserId);
-            return View(activityLog);
+            ViewBag.ElderlyPeople = await _context.ElderlyPeople.Where(p => p.IsActive).ToListAsync();
+            ViewBag.Users = await _context.Users.Where(u => u.IsActive).ToListAsync();
+            return View(careNote);
         }
 
-        // GET: ActivityLogs/Edit/5
+        // GET: CareNotes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,22 +79,22 @@ namespace ElderlyCareApp.Controllers
                 return NotFound();
             }
 
-            var activityLog = await _context.ActivityLogs.FindAsync(id);
-            if (activityLog == null)
+            var careNote = await _context.CareNotes.FindAsync(id);
+            if (careNote == null)
             {
                 return NotFound();
             }
             ViewBag.ElderlyPeople = await _context.ElderlyPeople.Where(p => p.IsActive).ToListAsync();
             ViewBag.Users = await _context.Users.Where(u => u.IsActive).ToListAsync();
-            return View(activityLog);
+            return View(careNote);
         }
 
-        // POST: ActivityLogs/Edit/5
+        // POST: CareNotes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ElderlyPersonId,UserId,ActivityType,Description,StartTime,EndTime")] ActivityLog activityLog)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ElderlyPersonId,UserId,NoteType,Title,Content,CreatedAt")] CareNote careNote)
         {
-            if (id != activityLog.Id)
+            if (id != careNote.Id)
             {
                 return NotFound();
             }
@@ -102,12 +103,12 @@ namespace ElderlyCareApp.Controllers
             {
                 try
                 {
-                    _context.Update(activityLog);
+                    _context.Update(careNote);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ActivityLogExists(activityLog.Id))
+                    if (!CareNoteExists(careNote.Id))
                     {
                         return NotFound();
                     }
@@ -120,10 +121,10 @@ namespace ElderlyCareApp.Controllers
             }
             ViewBag.ElderlyPeople = await _context.ElderlyPeople.Where(p => p.IsActive).ToListAsync();
             ViewBag.Users = await _context.Users.Where(u => u.IsActive).ToListAsync();
-            return View(activityLog);
+            return View(careNote);
         }
 
-        // GET: ActivityLogs/Delete/5
+        // GET: CareNotes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,35 +132,35 @@ namespace ElderlyCareApp.Controllers
                 return NotFound();
             }
 
-            var activityLog = await _context.ActivityLogs
-                .Include(a => a.ElderlyPerson)
-                .Include(a => a.User)
+            var careNote = await _context.CareNotes
+                .Include(c => c.ElderlyPerson)
+                .Include(c => c.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (activityLog == null)
+            if (careNote == null)
             {
                 return NotFound();
             }
 
-            return View(activityLog);
+            return View(careNote);
         }
 
-        // POST: ActivityLogs/Delete/5
+        // POST: CareNotes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var activityLog = await _context.ActivityLogs.FindAsync(id);
-            if (activityLog != null)
+            var careNote = await _context.CareNotes.FindAsync(id);
+            if (careNote != null)
             {
-                _context.ActivityLogs.Remove(activityLog);
+                _context.CareNotes.Remove(careNote);
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ActivityLogExists(int id)
+        private bool CareNoteExists(int id)
         {
-            return _context.ActivityLogs.Any(e => e.Id == id);
+            return _context.CareNotes.Any(e => e.Id == id);
         }
     }
-}
+} 

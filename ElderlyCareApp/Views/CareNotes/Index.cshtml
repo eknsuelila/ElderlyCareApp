@@ -1,18 +1,18 @@
-@model IEnumerable<ElderlyCareApp.Models.ActivityLog>
+@model IEnumerable<ElderlyCareApp.Models.CareNote>
 
 @{
-    ViewData["Title"] = "Activity Logs";
+    ViewData["Title"] = "Care Notes";
 }
 
 <div class="container-fluid">
     <div class="row mb-4">
         <div class="col-md-8">
-            <h1><i class="fas fa-walking text-primary"></i> Activity Logs</h1>
-            <p class="text-muted">Track daily activities and exercises for elderly care</p>
+            <h1><i class="fas fa-sticky-note text-primary"></i> Care Notes</h1>
+            <p class="text-muted">Track important notes and observations about patient care</p>
         </div>
         <div class="col-md-4 text-end">
             <a asp-action="Create" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Add Activity
+                <i class="fas fa-plus"></i> Add Note
             </a>
         </div>
     </div>
@@ -23,11 +23,11 @@
                 <table class="table table-striped table-hover">
                     <thead class="table-dark">
                         <tr>
-                            <th>Activity Type</th>
+                            <th>Title</th>
+                            <th>Type</th>
                             <th>Patient</th>
-                            <th>Start Time</th>
-                            <th>Duration</th>
-                            <th>Logged By</th>
+                            <th>Created By</th>
+                            <th>Date</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -36,25 +36,26 @@
                         {
                             <tr>
                                 <td>
-                                    <span class="badge bg-primary">@item.ActivityType</span>
-                                    @if (!string.IsNullOrEmpty(item.Description))
+                                    <strong>@item.Title</strong>
+                                    @if (!string.IsNullOrEmpty(item.Content))
                                     {
-                                        <br><small class="text-muted">@item.Description</small>
+                                        <br><small class="text-muted">@(item.Content.Length > 50 ? item.Content.Substring(0, 50) + "..." : item.Content)</small>
                                     }
+                                </td>
+                                <td>
+                                    <span class="badge @(item.NoteType switch {
+                                        NoteType.Health => "bg-danger",
+                                        NoteType.Important => "bg-warning",
+                                        NoteType.Behavior => "bg-info",
+                                        NoteType.Mood => "bg-success",
+                                        _ => "bg-secondary"
+                                    })">
+                                        @item.NoteType
+                                    </span>
                                 </td>
                                 <td>@item.ElderlyPerson.Name</td>
-                                <td>@item.StartTime.ToString("MMM dd, HH:mm")</td>
-                                <td>
-                                    @if (item.DurationMinutes.HasValue)
-                                    {
-                                        <span>@item.DurationMinutes minutes</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">-</span>
-                                    }
-                                </td>
                                 <td>@item.User.Name</td>
+                                <td>@item.CreatedAt.ToString("MMM dd, HH:mm")</td>
                                 <td>
                                     <div class="btn-group" role="group">
                                         <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
@@ -75,4 +76,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> 

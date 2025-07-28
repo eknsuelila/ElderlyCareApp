@@ -1,345 +1,115 @@
 @model ElderlyCareApp.Models.ElderlyPerson
 
 @{
-    ViewData["Title"] = "Elderly Person Details";
+    ViewData["Title"] = "Patient Details";
 }
 
 <div class="container-fluid">
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h1><i class="fas fa-user"></i> @Model.Name</h1>
-        </div>
-        <div class="col-md-6 text-end">
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">
-                <i class="fas fa-edit"></i> Edit
-            </a>
-            <a asp-action="Index" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Back to List
-            </a>
-        </div>
-    </div>
-
     <div class="row">
-        <!-- Personal Information -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="fas fa-info-circle"></i> Personal Information</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Name:</div>
-                        <div class="col-sm-8">@Model.Name</div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Date of Birth:</div>
-                        <div class="col-sm-8">@Model.DateOfBirth.ToString("MMMM dd, yyyy")</div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Age:</div>
-                        <div class="col-sm-8">
-                            @{
-                                var age = DateTime.Now.Year - Model.DateOfBirth.Year;
-                                if (Model.DateOfBirth > DateTime.Now.AddYears(-age)) age--;
-                            }
-                            @age years
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Phone:</div>
-                        <div class="col-sm-8">
-                            @if (!string.IsNullOrEmpty(Model.PhoneNumber))
-                            {
-                                <a href="tel:@Model.PhoneNumber">@Model.PhoneNumber</a>
-                            }
-                            else
-                            {
-                                <span class="text-muted">Not provided</span>
-                            }
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Blood Type:</div>
-                        <div class="col-sm-8">
-                            @if (!string.IsNullOrEmpty(Model.BloodType))
-                            {
-                                <span class="badge bg-info">@Model.BloodType</span>
-                            }
-                            else
-                            {
-                                <span class="text-muted">Not specified</span>
-                            }
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Status:</div>
-                        <div class="col-sm-8">
-                            @if (Model.IsActive)
-                            {
-                                <span class="badge bg-success">Active</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-secondary">Inactive</span>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Address Information -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0"><i class="fas fa-map-marker-alt"></i> Address Information</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Address:</div>
-                        <div class="col-sm-8">@Model.Address</div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">City:</div>
-                        <div class="col-sm-8">@Model.City</div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Postal Code:</div>
-                        <div class="col-sm-8">@Model.PostalCode</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <!-- Emergency Contact -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-header bg-warning text-dark">
-                    <h5 class="mb-0"><i class="fas fa-phone"></i> Emergency Contact</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Name:</div>
-                        <div class="col-sm-8">@Model.EmergencyContactName</div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Phone:</div>
-                        <div class="col-sm-8">
-                            @if (!string.IsNullOrEmpty(Model.EmergencyContactPhone))
-                            {
-                                <a href="tel:@Model.EmergencyContactPhone">@Model.EmergencyContactPhone</a>
-                            }
-                            else
-                            {
-                                <span class="text-muted">Not provided</span>
-                            }
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Relationship:</div>
-                        <div class="col-sm-8">@Model.EmergencyContactRelationship</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Medical Information -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-header bg-danger text-white">
-                    <h5 class="mb-0"><i class="fas fa-user-md"></i> Medical Information</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Physician:</div>
-                        <div class="col-sm-8">@Model.PrimaryCarePhysician</div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Physician Phone:</div>
-                        <div class="col-sm-8">
-                            @if (!string.IsNullOrEmpty(Model.PhysicianPhone))
-                            {
-                                <a href="tel:@Model.PhysicianPhone">@Model.PhysicianPhone</a>
-                            }
-                            else
-                            {
-                                <span class="text-muted">Not provided</span>
-                            }
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Insurance:</div>
-                        <div class="col-sm-8">@Model.InsuranceProvider</div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Policy #:</div>
-                        <div class="col-sm-8">@Model.InsurancePolicyNumber</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <!-- Medical Conditions & Allergies -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-header bg-warning text-dark">
-                    <h5 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Medical Conditions & Allergies</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-12">
-                            <h6 class="fw-bold">Medical Conditions:</h6>
-                            @if (!string.IsNullOrEmpty(Model.MedicalConditions))
-                            {
-                                <div class="alert alert-warning">
-                                    @Model.MedicalConditions
-                                </div>
-                            }
-                            else
-                            {
-                                <span class="text-muted">None recorded</span>
-                            }
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <h6 class="fw-bold">Allergies:</h6>
-                            @if (!string.IsNullOrEmpty(Model.Allergies))
-                            {
-                                <div class="alert alert-danger">
-                                    @Model.Allergies
-                                </div>
-                            }
-                            else
-                            {
-                                <span class="text-muted">None recorded</span>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Care Preferences -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0"><i class="fas fa-heart"></i> Care Preferences</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-12">
-                            <h6 class="fw-bold">Care Preferences:</h6>
-                            @if (!string.IsNullOrEmpty(Model.CarePreferences))
-                            {
-                                <div class="alert alert-info">
-                                    @Model.CarePreferences
-                                </div>
-                            }
-                            else
-                            {
-                                <span class="text-muted">None specified</span>
-                            }
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-12">
-                            <h6 class="fw-bold">Dietary Restrictions:</h6>
-                            @if (!string.IsNullOrEmpty(Model.DietaryRestrictions))
-                            {
-                                <div class="alert alert-info">
-                                    @Model.DietaryRestrictions
-                                </div>
-                            }
-                            else
-                            {
-                                <span class="text-muted">None specified</span>
-                            }
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <h6 class="fw-bold">Mobility Aids:</h6>
-                            @if (!string.IsNullOrEmpty(Model.MobilityAids))
-                            {
-                                <div class="alert alert-info">
-                                    @Model.MobilityAids
-                                </div>
-                            }
-                            else
-                            {
-                                <span class="text-muted">None specified</span>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Additional Notes -->
-    @if (!string.IsNullOrEmpty(Model.Notes))
-    {
-        <div class="row">
-            <div class="col-12 mb-4">
-                <div class="card shadow">
-                    <div class="card-header bg-secondary text-white">
-                        <h5 class="mb-0"><i class="fas fa-sticky-note"></i> Additional Notes</h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="mb-0">@Model.Notes</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-
-    <!-- System Information -->
-    <div class="row">
-        <div class="col-12">
+        <div class="col-md-8">
             <div class="card shadow">
-                <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0"><i class="fas fa-cogs"></i> System Information</h5>
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-user"></i> Patient Details
+                    </h4>
                 </div>
                 <div class="card-body">
+                    <!-- Personal Information -->
+                    <h5 class="text-primary mb-3">
+                        <i class="fas fa-user"></i> Personal Information
+                    </h5>
                     <div class="row">
-                        <div class="col-md-3">
-                            <small class="text-muted">Created:</small><br />
-                            <strong>@Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")</strong>
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Name</dt>
+                                <dd class="col-sm-8">@Model.Name</dd>
+
+                                <dt class="col-sm-4">Date of Birth</dt>
+                                <dd class="col-sm-8">@Model.DateOfBirth.ToString("MMM dd, yyyy")</dd>
+
+                                <dt class="col-sm-4">Age</dt>
+                                <dd class="col-sm-8">
+                                    @{
+                                        var age = DateTime.Now.Year - Model.DateOfBirth.Year;
+                                        if (Model.DateOfBirth > DateTime.Now.AddYears(-age)) age--;
+                                    }
+                                    @age years old
+                                </dd>
+                            </dl>
                         </div>
-                        <div class="col-md-3">
-                            <small class="text-muted">Last Updated:</small><br />
-                            <strong>
-                                @if (Model.UpdatedAt.HasValue)
-                                {
-                                    @Model.UpdatedAt.Value.ToString("MMM dd, yyyy HH:mm")
-                                }
-                                else
-                                {
-                                    <span class="text-muted">Never</span>
-                                }
-                            </strong>
-                        </div>
-                        <div class="col-md-3">
-                            <small class="text-muted">Record ID:</small><br />
-                            <strong>@Model.Id</strong>
-                        </div>
-                        <div class="col-md-3">
-                            <small class="text-muted">Status:</small><br />
-                            @if (Model.IsActive)
-                            {
-                                <span class="badge bg-success">Active</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-secondary">Inactive</span>
-                            }
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Phone Number</dt>
+                                <dd class="col-sm-8">@(Model.PhoneNumber ?? "Not provided")</dd>
+
+                                <dt class="col-sm-4">Status</dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger")">
+                                        @(Model.IsActive ? "Active" : "Inactive")
+                                    </span>
+                                </dd>
+                            </dl>
                         </div>
                     </div>
+
+                    <!-- Emergency Contact -->
+                    <h5 class="text-primary mb-3 mt-4">
+                        <i class="fas fa-phone"></i> Emergency Contact
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Contact Name</dt>
+                                <dd class="col-sm-8">@(Model.EmergencyContactName ?? "Not provided")</dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Contact Phone</dt>
+                                <dd class="col-sm-8">@(Model.EmergencyContactPhone ?? "Not provided")</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <!-- Medical Information -->
+                    <h5 class="text-primary mb-3 mt-4">
+                        <i class="fas fa-heartbeat"></i> Medical Information
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Allergies</dt>
+                                <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Allergies) ? "None reported" : Model.Allergies)</dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Medical Conditions</dt>
+                                <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.MedicalConditions) ? "None reported" : Model.MedicalConditions)</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <!-- Additional Notes -->
+                    @if (!string.IsNullOrEmpty(Model.Notes))
+                    {
+                        <h5 class="text-primary mb-3 mt-4">
+                            <i class="fas fa-sticky-note"></i> Additional Notes
+                        </h5>
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="text-muted">@Model.Notes</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
                 </div>
             </div>
         </div>

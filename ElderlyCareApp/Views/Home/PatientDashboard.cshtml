@@ -1,392 +1,405 @@
-@model ElderlyCareApp.Controllers.PatientDashboardViewModel
+@model ElderlyCareApp.Controllers.HomeController.PatientDashboardViewModel
 
 @{
-    ViewData["Title"] = $"{Model.Patient.Name} - Dashboard";
+    ViewData["Title"] = Model?.Patient?.Name != null ? $"{Model.Patient.Name} - Dashboard" : "Patient Dashboard";
 }
 
-<div class="container-fluid">
-    <!-- Patient Header -->
-    <div class="row mb-4">
-        <div class="col-md-8">
-            <div class="d-flex align-items-center">
-                <div class="me-3">
-                    <i class="fas fa-user-circle fa-3x text-primary"></i>
+@if (Model?.Patient == null)
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-danger">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Error</h4>
+                    <p>Patient information could not be loaded. Please try again.</p>
+                    <a asp-action="PatientSelection" class="btn btn-primary">
+                        <i class="fas fa-users"></i> Back to Patient Selection
+                    </a>
                 </div>
-                <div>
-                    <h1 class="mb-1">@Model.Patient.Name</h1>
-                    @{
-                        var age = DateTime.Now.Year - Model.Patient.DateOfBirth.Year;
-                        if (Model.Patient.DateOfBirth > DateTime.Now.AddYears(-age)) age--;
-                    }
-                    <p class="text-muted mb-0">
-                        @age years old • 
-                        @if (!string.IsNullOrEmpty(Model.Patient.City))
-                        {
-                            <i class="fas fa-map-marker-alt"></i> @Model.Patient.City
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container-fluid">
+        <!-- Patient Header -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fas fa-user-circle fa-3x text-primary"></i>
+                    </div>
+                    <div>
+                        <h1 class="mb-1">@Model.Patient.Name</h1>
+                        @{
+                            var age = DateTime.Now.Year - Model.Patient.DateOfBirth.Year;
+                            if (Model.Patient.DateOfBirth > DateTime.Now.AddYears(-age)) age--;
                         }
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 text-end">
-            <a asp-action="ClearSelection" class="btn btn-outline-secondary me-2">
-                <i class="fas fa-users"></i> Change Patient
-            </a>
-            <a asp-controller="ElderlyPeople" asp-action="Details" asp-route-id="@Model.Patient.Id" class="btn btn-info">
-                <i class="fas fa-user"></i> View Profile
-            </a>
-        </div>
-    </div>
-
-    <!-- Quick Stats -->
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="card bg-primary text-white">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h4 class="mb-0">@Model.TotalCarePlans</h4>
-                            <small>Total Care Plans</small>
-                        </div>
-                        <div class="align-self-center">
-                            <i class="fas fa-clipboard-list fa-2x"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-success text-white">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h4 class="mb-0">@Model.ActiveCarePlans</h4>
-                            <small>Active Plans</small>
-                        </div>
-                        <div class="align-self-center">
-                            <i class="fas fa-check-circle fa-2x"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-warning text-dark">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h4 class="mb-0">@Model.PendingTasks</h4>
-                            <small>Pending Tasks</small>
-                        </div>
-                        <div class="align-self-center">
-                            <i class="fas fa-tasks fa-2x"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-info text-white">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h4 class="mb-0">@Model.TodayTasks.Count</h4>
-                            <small>Today's Tasks</small>
-                        </div>
-                        <div class="align-self-center">
-                            <i class="fas fa-calendar-day fa-2x"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <!-- Today's Tasks -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-calendar-day"></i> Today's Tasks
-                    </h5>
-                </div>
-                <div class="card-body">
-                    @if (Model.TodayTasks.Any())
-                    {
-                        <div class="list-group list-group-flush">
-                            @foreach (var task in Model.TodayTasks)
+                        <p class="text-muted mb-0">
+                            @age years old
+                            @if (!string.IsNullOrEmpty(Model.Patient.EmergencyContactName))
                             {
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="mb-1">@task.Title</h6>
-                                        <small class="text-muted">
-                                            <i class="fas fa-clock"></i> @task.ScheduledTime.ToString("HH:mm") • 
-                                            @task.User?.Name
-                                        </small>
-                                    </div>
-                                    @{
-                                        string statusClass = task.Status switch
-                                        {
-                                            ElderlyCareApp.Models.TaskStatus.Completed => "bg-success",
-                                            ElderlyCareApp.Models.TaskStatus.InProgress => "bg-warning",
-                                            ElderlyCareApp.Models.TaskStatus.Scheduled => "bg-info",
-                                            ElderlyCareApp.Models.TaskStatus.Overdue => "bg-danger",
-                                            _ => "bg-secondary"
-                                        };
-                                    }
-                                    <span class="badge @statusClass">@task.Status</span>
-                                </div>
+                                <br><small><i class="fas fa-phone"></i> Emergency: @Model.Patient.EmergencyContactName (@Model.Patient.EmergencyContactPhone)</small>
                             }
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-end">
+                <div class="btn-group" role="group">
+                    <a asp-controller="ElderlyPeople" asp-action="Edit" asp-route-id="@Model.Patient.Id" class="btn btn-outline-primary">
+                        <i class="fas fa-edit"></i> Edit Patient
+                    </a>
+                    <a asp-controller="ElderlyPeople" asp-action="Delete" asp-route-id="@Model.Patient.Id" class="btn btn-outline-danger">
+                        <i class="fas fa-trash"></i> Delete Patient
+                    </a>
+                </div>
+                <a asp-action="ClearSelection" class="btn btn-outline-secondary me-2">
+                    <i class="fas fa-users"></i> Change Patient
+                </a>
+                <a asp-controller="ElderlyPeople" asp-action="Details" asp-route-id="@Model.Patient.Id" class="btn btn-info">
+                    <i class="fas fa-user"></i> View Profile
+                </a>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="mb-0">@(Model.RecentActivities?.Count ?? 0)</h4>
+                                <small>Recent Activities</small>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-walking fa-2x"></i>
+                            </div>
                         </div>
-                    }
-                    else
-                    {
-                        <p class="text-muted text-center py-3">No tasks scheduled for today</p>
-                    }
-                    <div class="mt-3">
-                        <a asp-controller="TaskSchedules" asp-action="Create" class="btn btn-primary btn-sm">
-                            <i class="fas fa-plus"></i> Add Task
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="mb-0">@(Model.RecentMedications?.Count ?? 0)</h4>
+                                <small>Recent Medications</small>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-pills fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-dark">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="mb-0">@(Model.RecentMeals?.Count ?? 0)</h4>
+                                <small>Recent Meals</small>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-utensils fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="mb-0">@(Model.RecentAppointments?.Count ?? 0)</h4>
+                                <small>Recent Appointments</small>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-calendar-alt fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Recent Activities -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-walking text-primary"></i> Recent Activities
+                        </h5>
+                        <a asp-controller="ActivityLogs" asp-action="Create" asp-route-patientId="@Model.Patient.Id" class="btn btn-sm btn-primary">
+                            <i class="fas fa-plus"></i> Add Activity
                         </a>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Upcoming Appointments -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-calendar-check"></i> Upcoming Appointments
-                    </h5>
-                </div>
-                <div class="card-body">
-                    @if (Model.UpcomingAppointments.Any())
-                    {
-                        <div class="list-group list-group-flush">
-                            @foreach (var appointment in Model.UpcomingAppointments)
-                            {
-                                <div class="list-group-item">
-                                    <h6 class="mb-1">@appointment.Title</h6>
-                                    <small class="text-muted">
-                                        <i class="fas fa-calendar"></i> @appointment.ScheduledDateTime.ToString("MMM dd, yyyy HH:mm") • 
-                                        <i class="fas fa-user-md"></i> @appointment.ProviderName
-                                    </small>
-                                    <br />
-                                    <small class="text-muted">
-                                        <i class="fas fa-map-marker-alt"></i> @appointment.Location
-                                    </small>
-                                </div>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <p class="text-muted text-center py-3">No upcoming appointments</p>
-                    }
-                    <div class="mt-3">
-                        <a asp-controller="AppointmentLogs" asp-action="Create" class="btn btn-info btn-sm">
-                            <i class="fas fa-plus"></i> Schedule Appointment
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <!-- Recent Activities -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-running"></i> Recent Activities
-                    </h5>
-                </div>
-                <div class="card-body">
-                    @if (Model.RecentActivityLogs.Any())
-                    {
-                        <div class="list-group list-group-flush">
-                            @foreach (var activity in Model.RecentActivityLogs)
-                            {
-                                <div class="list-group-item">
-                                    <h6 class="mb-1">@activity.ActivityType</h6>
-                                    <small class="text-muted">
-                                        <i class="fas fa-clock"></i> @activity.StartTime.ToString("MMM dd, HH:mm") • 
-                                        @activity.User?.Name
-                                    </small>
-                                    @if (!string.IsNullOrEmpty(activity.Description))
-                                    {
-                                        <br />
-                                        <small class="text-muted">@activity.Description</small>
-                                    }
-                                </div>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <p class="text-muted text-center py-3">No recent activities</p>
-                    }
-                    <div class="mt-3">
-                        <a asp-controller="ActivityLogs" asp-action="Create" class="btn btn-success btn-sm">
-                            <i class="fas fa-plus"></i> Log Activity
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Recent Medications -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-header bg-warning text-dark">
-                    <h5 class="mb-0">
-                        <i class="fas fa-pills"></i> Recent Medications
-                    </h5>
-                </div>
-                <div class="card-body">
-                    @if (Model.RecentMedicationLogs.Any())
-                    {
-                        <div class="list-group list-group-flush">
-                            @foreach (var medication in Model.RecentMedicationLogs)
-                            {
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="mb-1">@medication.MedicationName</h6>
-                                        <small class="text-muted">
-                                            <i class="fas fa-clock"></i> @medication.ScheduledTime.ToString("MMM dd, HH:mm") • 
-                                            @medication.Dosage
-                                        </small>
-                                    </div>
-                                    @{
-                                        string medStatusClass = medication.Status switch
-                                        {
-                                            MedicationStatus.Taken => "bg-success",
-                                            MedicationStatus.Scheduled => "bg-info",
-                                            MedicationStatus.Missed => "bg-danger",
-                                            _ => "bg-secondary"
-                                        };
-                                    }
-                                    <span class="badge @medStatusClass">@medication.Status</span>
-                                </div>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <p class="text-muted text-center py-3">No recent medications</p>
-                    }
-                    <div class="mt-3">
-                        <a asp-controller="MedicationLogs" asp-action="Create" class="btn btn-warning btn-sm">
-                            <i class="fas fa-plus"></i> Log Medication
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <!-- Recent Vital Signs -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-header bg-danger text-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-heartbeat"></i> Recent Vital Signs
-                    </h5>
-                </div>
-                <div class="card-body">
-                    @if (Model.RecentVitalSigns.Any())
-                    {
-                        <div class="list-group list-group-flush">
-                            @foreach (var vital in Model.RecentVitalSigns)
-                            {
-                                <div class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <small class="text-muted">@vital.MeasurementTime.ToString("MMM dd, HH:mm")</small>
-                                        </div>
-                                        <div class="col-6 text-end">
-                                            @if (vital.SystolicPressure.HasValue && vital.DiastolicPressure.HasValue)
-                                            {
-                                                <span class="badge bg-info">BP: @vital.SystolicPressure/@vital.DiastolicPressure</span>
-                                            }
-                                            @if (vital.HeartRate.HasValue)
-                                            {
-                                                <span class="badge bg-success">HR: @vital.HeartRate</span>
-                                            }
-                                            @if (vital.Temperature.HasValue)
-                                            {
-                                                <span class="badge bg-warning">Temp: @vital.Temperature°C</span>
-                                            }
+                    <div class="card-body">
+                        @if (Model.RecentActivities?.Any() == true)
+                        {
+                            <div class="list-group list-group-flush">
+                                @foreach (var activity in Model.RecentActivities)
+                                {
+                                    <div class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h6 class="mb-1">@activity.Description</h6>
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    <a asp-controller="ActivityLogs" asp-action="Edit" asp-route-id="@activity.Id" class="btn btn-outline-primary btn-sm">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a asp-controller="ActivityLogs" asp-action="Delete" asp-route-id="@activity.Id" class="btn btn-outline-danger btn-sm">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <p class="mb-1 text-muted">
+                                                <i class="fas fa-clock"></i> @activity.StartTime.ToString("MMM dd, yyyy HH:mm")
+                                                @if (activity.EndTime.HasValue)
+                                                {
+                                                    <span>- @activity.EndTime.Value.ToString("HH:mm")</span>
+                                                }
+                                            </p>
+                                            <small class="text-muted">
+                                                <i class="fas fa-user"></i> @(activity.User?.Name ?? "Unknown")
+                                            </small>
                                         </div>
                                     </div>
-                                </div>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <p class="text-muted text-center py-3">No recent vital signs</p>
-                    }
-                    <div class="mt-3">
-                        <a asp-controller="VitalSignsLogs" asp-action="Create" class="btn btn-danger btn-sm">
-                            <i class="fas fa-plus"></i> Record Vital Signs
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-0">No recent activities recorded.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Medications -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-pills text-success"></i> Recent Medications
+                        </h5>
+                        <a asp-controller="MedicationLogs" asp-action="Create" asp-route-patientId="@Model.Patient.Id" class="btn btn-sm btn-success">
+                            <i class="fas fa-plus"></i> Add Medication
                         </a>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.RecentMedications?.Any() == true)
+                        {
+                            <div class="list-group list-group-flush">
+                                @foreach (var medication in Model.RecentMedications)
+                                {
+                                    <div class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h6 class="mb-1">@medication.MedicationName</h6>
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    <a asp-controller="MedicationLogs" asp-action="Edit" asp-route-id="@medication.Id" class="btn btn-outline-primary btn-sm">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a asp-controller="MedicationLogs" asp-action="Delete" asp-route-id="@medication.Id" class="btn btn-outline-danger btn-sm">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <p class="mb-1 text-muted">
+                                                <i class="fas fa-clock"></i> @medication.Timestamp.ToString("MMM dd, yyyy HH:mm")
+                                                <span class="badge @(medication.Taken ? "bg-success" : "bg-warning") ms-2">
+                                                    @(medication.Taken ? "Taken" : "Missed")
+                                                </span>
+                                            </p>
+                                            <small class="text-muted">
+                                                <i class="fas fa-user"></i> @(medication.User?.Name ?? "Unknown")
+                                                @if (!string.IsNullOrEmpty(medication.Dosage))
+                                                {
+                                                    <span>• @medication.Dosage</span>
+                                                }
+                                            </small>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-0">No recent medications recorded.</p>
+                        }
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Recent Symptoms -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-header bg-secondary text-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-thermometer-half"></i> Recent Symptoms
-                    </h5>
-                </div>
-                <div class="card-body">
-                    @if (Model.RecentSymptoms.Any())
-                    {
-                        <div class="list-group list-group-flush">
-                            @foreach (var symptom in Model.RecentSymptoms)
-                            {
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="mb-1">@symptom.Symptom</h6>
-                                        <small class="text-muted">
-                                            <i class="fas fa-clock"></i> @symptom.LogTime.ToString("MMM dd, HH:mm")
-                                        </small>
-                                    </div>
-                                    @{
-                                        string severityClass = symptom.Severity switch
-                                        {
-                                            SymptomSeverity.Critical => "bg-danger",
-                                            SymptomSeverity.Severe => "bg-warning",
-                                            SymptomSeverity.Moderate => "bg-info",
-                                            SymptomSeverity.Mild => "bg-success",
-                                            _ => "bg-secondary"
-                                        };
-                                    }
-                                    <span class="badge @severityClass">@symptom.Severity</span>
-                                </div>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <p class="text-muted text-center py-3">No recent symptoms</p>
-                    }
-                    <div class="mt-3">
-                        <a asp-controller="SymptomLogs" asp-action="Create" class="btn btn-secondary btn-sm">
-                            <i class="fas fa-plus"></i> Log Symptom
+        <div class="row">
+            <!-- Recent Meals -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-utensils text-warning"></i> Recent Meals
+                        </h5>
+                        <a asp-controller="MealLogs" asp-action="Create" asp-route-patientId="@Model.Patient.Id" class="btn btn-sm btn-warning">
+                            <i class="fas fa-plus"></i> Add Meal
                         </a>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.RecentMeals?.Any() == true)
+                        {
+                            <div class="list-group list-group-flush">
+                                @foreach (var meal in Model.RecentMeals)
+                                {
+                                    <div class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h6 class="mb-1">@meal.MealType - @meal.Description</h6>
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    <a asp-controller="MealLogs" asp-action="Edit" asp-route-id="@meal.Id" class="btn btn-outline-primary btn-sm">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a asp-controller="MealLogs" asp-action="Delete" asp-route-id="@meal.Id" class="btn btn-outline-danger btn-sm">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <p class="mb-1 text-muted">
+                                                <i class="fas fa-clock"></i> @meal.MealTime.ToString("MMM dd, yyyy HH:mm")
+                                            </p>
+                                            <small class="text-muted">
+                                                <i class="fas fa-user"></i> @(meal.User?.Name ?? "Unknown")
+                                            </small>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-0">No recent meals recorded.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Appointments -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-calendar-check text-info"></i> Recent Appointments
+                        </h5>
+                        <a asp-controller="AppointmentLogs" asp-action="Create" asp-route-patientId="@Model.Patient.Id" class="btn btn-sm btn-info">
+                            <i class="fas fa-plus"></i> Add Appointment
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.RecentAppointments?.Any() == true)
+                        {
+                            <div class="list-group list-group-flush">
+                                @foreach (var appointment in Model.RecentAppointments)
+                                {
+                                    <div class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h6 class="mb-1">@appointment.Title</h6>
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    <a asp-controller="AppointmentLogs" asp-action="Edit" asp-route-id="@appointment.Id" class="btn btn-outline-primary btn-sm">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a asp-controller="AppointmentLogs" asp-action="Delete" asp-route-id="@appointment.Id" class="btn btn-outline-danger btn-sm">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <p class="mb-1 text-muted">
+                                                <i class="fas fa-clock"></i> @appointment.ScheduledDateTime.ToString("MMM dd, yyyy HH:mm")
+                                                <span class="badge @(appointment.Status == AppointmentStatus.Completed ? "bg-success" : appointment.Status == AppointmentStatus.Scheduled ? "bg-primary" : "bg-warning") ms-2">
+                                                    @appointment.Status
+                                                </span>
+                                            </p>
+                                            <small class="text-muted">
+                                                <i class="fas fa-user"></i> @(appointment.User?.Name ?? "Unknown")
+                                                @if (!string.IsNullOrEmpty(appointment.ProviderName))
+                                                {
+                                                    <span>• @appointment.ProviderName</span>
+                                                }
+                                            </small>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-0">No recent appointments recorded.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Care Notes -->
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="card shadow">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-sticky-note text-secondary"></i> Recent Care Notes
+                        </h5>
+                        <a asp-controller="CareNotes" asp-action="Create" asp-route-patientId="@Model.Patient.Id" class="btn btn-sm btn-secondary">
+                            <i class="fas fa-plus"></i> Add Note
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.RecentNotes?.Any() == true)
+                        {
+                            <div class="list-group list-group-flush">
+                                @foreach (var note in Model.RecentNotes)
+                                {
+                                    <div class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h6 class="mb-1">@note.Title</h6>
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    <a asp-controller="CareNotes" asp-action="Edit" asp-route-id="@note.Id" class="btn btn-outline-primary btn-sm">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a asp-controller="CareNotes" asp-action="Delete" asp-route-id="@note.Id" class="btn btn-outline-danger btn-sm">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <p class="mb-1 text-muted">
+                                                <i class="fas fa-clock"></i> @note.CreatedAt.ToString("MMM dd, yyyy HH:mm")
+                                                <span class="badge bg-secondary ms-2">@note.NoteType</span>
+                                            </p>
+                                            <small class="text-muted">
+                                                <i class="fas fa-user"></i> @(note.User?.Name ?? "Unknown")
+                                                @if (!string.IsNullOrEmpty(note.Content))
+                                                {
+                                                    <span>• @(note.Content.Length > 50 ? note.Content.Substring(0, 50) + "..." : note.Content)</span>
+                                                }
+                                            </small>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-0">No recent care notes recorded.</p>
+                        }
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div> 
+} 

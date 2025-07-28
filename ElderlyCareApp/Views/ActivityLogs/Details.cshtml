@@ -1,69 +1,84 @@
 @model ElderlyCareApp.Models.ActivityLog
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Activity Details";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>ActivityLog</h4>
-    <hr />
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-6">
-            <dl class="row">
-                <dt class="col-sm-4">Elderly Person</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.ElderlyPerson.Name)</dd>
-                
-                <dt class="col-sm-4">Caregiver</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.User.Name)</dd>
-                
-                <dt class="col-sm-4">Activity Type</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.ActivityType)</dd>
-                
-                <dt class="col-sm-4">Category</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.Category)</dd>
-                
-                <dt class="col-sm-4">Description</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.Description)</dd>
-                
-                <dt class="col-sm-4">Start Time</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.StartTime)</dd>
-                
-                <dt class="col-sm-4">End Time</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.EndTime)</dd>
-                
-                <dt class="col-sm-4">Duration</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.DurationMinutes) minutes</dd>
-                
-                <dt class="col-sm-4">Location</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.Location)</dd>
-                
-                <dt class="col-sm-4">Energy Level</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.EnergyLevel)/10</dd>
-                
-                <dt class="col-sm-4">Enjoyment Level</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.EnjoymentLevel)/10</dd>
-                
-                <dt class="col-sm-4">Is Completed</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.IsCompleted)</dd>
-            </dl>
-        </div>
-        <div class="col-md-6">
-            <dl class="row">
-                <dt class="col-sm-4">Notes</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.Notes)</dd>
-                
-                <dt class="col-sm-4">Created At</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.CreatedAt)</dd>
-                
-                <dt class="col-sm-4">Updated At</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.UpdatedAt)</dd>
-            </dl>
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-walking"></i> Activity Details
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Activity Type</dt>
+                                <dd class="col-sm-8">@Model.ActivityType</dd>
+
+                                <dt class="col-sm-4">Start Time</dt>
+                                <dd class="col-sm-8">@Model.StartTime.ToString("MMM dd, yyyy HH:mm")</dd>
+
+                                @if (Model.EndTime.HasValue)
+                                {
+                                    <dt class="col-sm-4">End Time</dt>
+                                    <dd class="col-sm-8">@Model.EndTime.Value.ToString("MMM dd, yyyy HH:mm")</dd>
+                                }
+
+                                @if (Model.DurationMinutes.HasValue)
+                                {
+                                    <dt class="col-sm-4">Duration</dt>
+                                    <dd class="col-sm-8">@Model.DurationMinutes minutes</dd>
+                                }
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Patient</dt>
+                                <dd class="col-sm-8">@Model.ElderlyPerson.Name</dd>
+
+                                <dt class="col-sm-4">Logged By</dt>
+                                <dd class="col-sm-8">@Model.User.Name</dd>
+
+                                <dt class="col-sm-4">Created</dt>
+                                <dd class="col-sm-8">@Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <h6>Description</h6>
+                                <p class="text-muted">@Model.Description</p>
+                            </div>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.Notes))
+                    {
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <h6>Notes</h6>
+                                <p class="text-muted">@Model.Notes</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a> |
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>

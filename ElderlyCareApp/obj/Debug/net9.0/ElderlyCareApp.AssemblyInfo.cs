@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ElderlyCareApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+78a9ed8f61e0f993128df325907745d6984058af")]
 [assembly: System.Reflection.AssemblyProductAttribute("ElderlyCareApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ElderlyCareApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

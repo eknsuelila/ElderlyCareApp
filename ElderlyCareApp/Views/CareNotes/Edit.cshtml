@@ -1,7 +1,7 @@
-@model ElderlyCareApp.Models.MedicationLog
+@model ElderlyCareApp.Models.CareNote
 
 @{
-    ViewData["Title"] = "Edit Medication";
+    ViewData["Title"] = "Edit Care Note";
 }
 
 <div class="container-fluid">
@@ -10,7 +10,7 @@
             <div class="card shadow">
                 <div class="card-header bg-warning text-dark">
                     <h4 class="mb-0">
-                        <i class="fas fa-edit"></i> Edit Medication
+                        <i class="fas fa-edit"></i> Edit Care Note
                     </h4>
                 </div>
                 <div class="card-body">
@@ -29,7 +29,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label asp-for="UserId" class="form-label">Logged By</label>
+                                    <label asp-for="UserId" class="form-label">Created By</label>
                                     <select asp-for="UserId" class="form-select" asp-items="ViewBag.UserId"></select>
                                     <span asp-validation-for="UserId" class="text-danger"></span>
                                 </div>
@@ -39,44 +39,24 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label asp-for="MedicationName" class="form-label">Medication Name</label>
-                                    <input asp-for="MedicationName" class="form-control" />
-                                    <span asp-validation-for="MedicationName" class="text-danger"></span>
+                                    <label asp-for="NoteType" class="form-label">Note Type</label>
+                                    <select asp-for="NoteType" class="form-select" asp-items="Html.GetEnumSelectList<NoteType>()"></select>
+                                    <span asp-validation-for="NoteType" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label asp-for="Dosage" class="form-label">Dosage</label>
-                                    <input asp-for="Dosage" class="form-control" placeholder="e.g., 500mg" />
-                                    <span asp-validation-for="Dosage" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label asp-for="Timestamp" class="form-label">Time Taken</label>
-                                    <input asp-for="Timestamp" class="form-control" type="datetime-local" />
-                                    <span asp-validation-for="Timestamp" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label asp-for="Taken" class="form-label">Status</label>
-                                    <div class="form-check">
-                                        <input asp-for="Taken" class="form-check-input" />
-                                        <label asp-for="Taken" class="form-check-label">Medication was taken</label>
-                                    </div>
-                                    <span asp-validation-for="Taken" class="text-danger"></span>
+                                    <label asp-for="Title" class="form-label">Title</label>
+                                    <input asp-for="Title" class="form-control" />
+                                    <span asp-validation-for="Title" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Notes" class="form-label">Notes</label>
-                            <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Any additional notes about the medication..."></textarea>
-                            <span asp-validation-for="Notes" class="text-danger"></span>
+                            <label asp-for="Content" class="form-label">Content</label>
+                            <textarea asp-for="Content" class="form-control" rows="5"></textarea>
+                            <span asp-validation-for="Content" class="text-danger"></span>
                         </div>
 
                         <div class="card-footer">
@@ -96,4 +76,4 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+} 

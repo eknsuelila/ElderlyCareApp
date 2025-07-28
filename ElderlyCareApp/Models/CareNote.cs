@@ -4,17 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ElderlyCareApp.Models
 {
-    public enum ActivityType
+    public enum NoteType
     {
-        Walk,
-        Exercise,
-        Reading,
-        Social,
-        Rest,
-        Other
+        General,
+        Health,
+        Behavior,
+        Mood,
+        Important
     }
 
-    public class ActivityLog
+    public class CareNote
     {
         [Key]
         public int Id { get; set; }
@@ -30,19 +29,14 @@ namespace ElderlyCareApp.Models
         public virtual User User { get; set; } = null!;
         
         [Required]
-        public ActivityType ActivityType { get; set; }
+        public NoteType NoteType { get; set; }
         
-        [StringLength(500)]
-        public string? Description { get; set; }
+        [Required]
+        [StringLength(200)]
+        public string Title { get; set; } = string.Empty;
         
-        public DateTime StartTime { get; set; }
-        
-        public DateTime? EndTime { get; set; }
-        
-        public int? DurationMinutes { get; set; }
-        
-        [StringLength(500)]
-        public string? Notes { get; set; }
+        [StringLength(1000)]
+        public string? Content { get; set; }
         
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }

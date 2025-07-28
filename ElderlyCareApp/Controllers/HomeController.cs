@@ -1,103 +1,88 @@
-using System.Diagnostics;
-using ElderlyCareApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ElderlyCareApp.Models;
 
 namespace ElderlyCareApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+        public HomeController(ApplicationDbContext context)
         {
-            _logger = logger;
             _context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            // Check if user is logged in
             var currentUserId = HttpContext.Session.GetInt32("CurrentUserId");
             if (!currentUserId.HasValue)
             {
                 return RedirectToAction("Login", "Account");
             }
-
-            // Check if a patient is selected
             var selectedPatientId = HttpContext.Session.GetInt32("SelectedPatientId");
-            
             if (selectedPatientId.HasValue)
             {
-                // Show personalized dashboard for selected patient
                 return await PatientDashboard(selectedPatientId.Value);
             }
-            
-            // Show patient selection page
             return await PatientSelection();
         }
 
         public async Task<IActionResult> PatientSelection()
         {
-            // Check if user is logged in
             var currentUserId = HttpContext.Session.GetInt32("CurrentUserId");
+            var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
+            
             if (!currentUserId.HasValue)
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
-            
-            // Get patients based on user role
-            IQueryable<ElderlyPerson> patientsQuery = _context.ElderlyPeople.Where(p => p.IsActive);
-            
-            // Family members can only see their own family members
+            var query = _context.ElderlyPeople.Where(p => p.IsActive);
+
+            // Filter patients based on user role
             if (currentUserRole == "Family")
             {
-                // For demo purposes, family members can see all patients
-                // In a real system, you'd filter by family relationships
-                patientsQuery = patientsQuery.Where(p => p.IsActive);
+                // Family users can see all patients (they own the app)
+                // No filtering needed
             }
-            // Caregivers can see all patients they're assigned to
             else if (currentUserRole == "Caregiver")
             {
-                // For demo purposes, caregivers can see all patients
-                // In a real system, you'd filter by caregiver assignments
-                patientsQuery = patientsQuery.Where(p => p.IsActive);
+                // Caregivers can only see patients they are currently assigned to
+                var currentDate = DateTime.Now.Date;
+                query = query.Where(p => _context.CaregiverAssignments
+                    .Where(ca => ca.CaregiverId == currentUserId.Value && 
+                                ca.ElderlyPersonId == p.Id && 
+                                ca.IsActive &&
+                                ca.StartDate <= currentDate &&
+                                (ca.EndDate == null || ca.EndDate >= currentDate))
+                    .Any());
             }
 
-            var patients = await patientsQuery.OrderBy(p => p.Name).ToListAsync();
+            var patients = await query.ToListAsync();
             return View("PatientSelection", patients);
         }
 
         [HttpPost]
         public IActionResult SelectPatient(int patientId)
         {
-            // Check if user is logged in
-            var currentUserId = HttpContext.Session.GetInt32("CurrentUserId");
-            if (!currentUserId.HasValue)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
             HttpContext.Session.SetInt32("SelectedPatientId", patientId);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
 
         public IActionResult ClearSelection()
         {
             HttpContext.Session.Remove("SelectedPatientId");
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> PatientDashboard(int patientId)
         {
-            // Check if user is logged in
-            var currentUserId = HttpContext.Session.GetInt32("CurrentUserId");
-            if (!currentUserId.HasValue)
+            // Debug: Check if any patients exist
+            var allPatients = await _context.ElderlyPeople.ToListAsync();
+            if (!allPatients.Any())
             {
-                return RedirectToAction("Login", "Account");
+                return NotFound("No patients found in database");
             }
 
             var patient = await _context.ElderlyPeople
@@ -105,129 +90,103 @@ namespace ElderlyCareApp.Controllers
 
             if (patient == null)
             {
-                HttpContext.Session.Remove("SelectedPatientId");
-                return RedirectToAction(nameof(Index));
+                return NotFound($"Patient with ID {patientId} not found. Available IDs: {string.Join(", ", allPatients.Select(p => p.Id))}");
             }
 
-            var dashboardViewModel = new PatientDashboardViewModel
+            try
             {
-                Patient = patient,
-                
-                // Patient-specific statistics
-                TotalCarePlans = await _context.CarePlans
-                    .Where(c => c.ElderlyPersonId == patientId)
-                    .CountAsync(),
-                
-                ActiveCarePlans = await _context.CarePlans
-                    .Where(c => c.ElderlyPersonId == patientId && c.Status == CarePlanStatus.Active)
-                    .CountAsync(),
-                
-                PendingTasks = await _context.TaskSchedules
-                    .Where(t => t.ElderlyPersonId == patientId && 
-                               t.Status == Models.TaskStatus.Scheduled && 
-                               t.ScheduledTime >= DateTime.Today)
-                    .CountAsync(),
-                
-                TodayTasks = await _context.TaskSchedules
-                    .Include(t => t.User)
-                    .Where(t => t.ElderlyPersonId == patientId && 
-                               t.ScheduledTime.Date == DateTime.Today)
-                    .OrderBy(t => t.ScheduledTime)
-                    .ToListAsync(),
-                
-                RecentActivityLogs = await _context.ActivityLogs
-                    .Include(a => a.User)
-                    .Where(a => a.ElderlyPersonId == patientId)
-                    .OrderByDescending(a => a.StartTime)
-                    .Take(5)
-                    .ToListAsync(),
-                
-                RecentMedicationLogs = await _context.MedicationLogs
-                    .Include(m => m.User)
-                    .Where(m => m.ElderlyPersonId == patientId)
-                    .OrderByDescending(m => m.ScheduledTime)
-                    .Take(5)
-                    .ToListAsync(),
-                
-                UpcomingAppointments = await _context.AppointmentLogs
-                    .Include(a => a.User)
-                    .Where(a => a.ElderlyPersonId == patientId && 
-                               a.ScheduledDateTime >= DateTime.Now && 
-                               a.Status == AppointmentStatus.Scheduled)
-                    .OrderBy(a => a.ScheduledDateTime)
-                    .Take(5)
-                    .ToListAsync(),
-                
-                RecentVitalSigns = await _context.VitalSignsLogs
-                    .Where(v => v.ElderlyPersonId == patientId)
-                    .OrderByDescending(v => v.MeasurementTime)
-                    .Take(3)
-                    .ToListAsync(),
-                
-                RecentSymptoms = await _context.SymptomLogs
-                    .Where(s => s.ElderlyPersonId == patientId)
-                    .OrderByDescending(s => s.LogTime)
-                    .Take(3)
-                    .ToListAsync()
-            };
+                var viewModel = new PatientDashboardViewModel
+                {
+                    Patient = patient,
+                    RecentActivities = await _context.ActivityLogs
+                        .Include(a => a.User)
+                        .Where(a => a.ElderlyPersonId == patientId)
+                        .OrderByDescending(a => a.StartTime)
+                        .Take(5)
+                        .ToListAsync() ?? new List<ActivityLog>(),
+                    RecentMedications = await _context.MedicationLogs
+                        .Include(m => m.User)
+                        .Where(m => m.ElderlyPersonId == patientId)
+                        .OrderByDescending(m => m.Timestamp)
+                        .Take(5)
+                        .ToListAsync() ?? new List<MedicationLog>(),
+                    RecentMeals = await _context.MealLogs
+                        .Include(m => m.User)
+                        .Where(m => m.ElderlyPersonId == patientId)
+                        .OrderByDescending(m => m.MealTime)
+                        .Take(5)
+                        .ToListAsync() ?? new List<MealLog>(),
+                    RecentAppointments = await _context.AppointmentLogs
+                        .Include(a => a.User)
+                        .Where(a => a.ElderlyPersonId == patientId)
+                        .OrderByDescending(a => a.ScheduledDateTime)
+                        .Take(5)
+                        .ToListAsync() ?? new List<AppointmentLog>(),
+                    RecentNotes = await _context.CareNotes
+                        .Include(n => n.User)
+                        .Where(n => n.ElderlyPersonId == patientId)
+                        .OrderByDescending(n => n.CreatedAt)
+                        .Take(5)
+                        .ToListAsync() ?? new List<CareNote>()
+                };
 
-            return View("PatientDashboard", dashboardViewModel);
+                return View("PatientDashboard", viewModel);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (in a real app, you'd use a proper logging framework)
+                return StatusCode(500, $"An error occurred while loading patient data: {ex.Message}");
+            }
         }
 
         public async Task<IActionResult> SystemOverview()
         {
-            // Check if user is logged in
             var currentUserId = HttpContext.Session.GetInt32("CurrentUserId");
             if (!currentUserId.HasValue)
             {
                 return RedirectToAction("Login", "Account");
             }
-
             var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
-            
-            // Only caregivers can access system overview
             if (currentUserRole != "Caregiver")
             {
                 return RedirectToAction("AccessDenied", "Account");
             }
 
-            var dashboardViewModel = new DashboardViewModel
+            var viewModel = new DashboardViewModel
             {
                 TotalElderlyPeople = await _context.ElderlyPeople.CountAsync(),
-                TotalUsers = await _context.Users.CountAsync(),
-                TotalCarePlans = await _context.CarePlans.CountAsync(),
-                PendingTasks = await _context.TaskSchedules
-                    .Where(t => t.Status == Models.TaskStatus.Scheduled && t.ScheduledTime >= DateTime.Today)
-                    .CountAsync(),
-                
-                RecentActivityLogs = await _context.ActivityLogs
+                ActiveElderlyPeople = await _context.ElderlyPeople.Where(p => p.IsActive).CountAsync(),
+                TotalActivities = await _context.ActivityLogs.CountAsync(),
+                TotalMedications = await _context.MedicationLogs.CountAsync(),
+                TotalMeals = await _context.MealLogs.CountAsync(),
+                TotalAppointments = await _context.AppointmentLogs.CountAsync(),
+                RecentActivities = await _context.ActivityLogs
                     .Include(a => a.ElderlyPerson)
+                    .Include(a => a.User)
                     .OrderByDescending(a => a.StartTime)
-                    .Take(5)
+                    .Take(10)
                     .ToListAsync(),
-                
-                RecentMedicationLogs = await _context.MedicationLogs
+                RecentMedications = await _context.MedicationLogs
                     .Include(m => m.ElderlyPerson)
-                    .OrderByDescending(m => m.ScheduledTime)
-                    .Take(5)
+                    .Include(m => m.User)
+                    .OrderByDescending(m => m.Timestamp)
+                    .Take(10)
                     .ToListAsync(),
-                
-                UpcomingAppointments = await _context.AppointmentLogs
+                RecentMeals = await _context.MealLogs
+                    .Include(m => m.ElderlyPerson)
+                    .Include(m => m.User)
+                    .OrderByDescending(m => m.MealTime)
+                    .Take(10)
+                    .ToListAsync(),
+                RecentAppointments = await _context.AppointmentLogs
                     .Include(a => a.ElderlyPerson)
-                    .Where(a => a.ScheduledDateTime >= DateTime.Now && a.Status == AppointmentStatus.Scheduled)
-                    .OrderBy(a => a.ScheduledDateTime)
-                    .Take(5)
-                    .ToListAsync(),
-                
-                TodayTasks = await _context.TaskSchedules
-                    .Include(t => t.ElderlyPerson)
-                    .Include(t => t.User)
-                    .Where(t => t.ScheduledTime.Date == DateTime.Today)
-                    .OrderBy(t => t.ScheduledTime)
+                    .Include(a => a.User)
+                    .OrderByDescending(a => a.ScheduledDateTime)
+                    .Take(10)
                     .ToListAsync()
             };
 
-            return View("SystemOverview", dashboardViewModel);
+            return View("SystemOverview", viewModel);
         }
 
         public IActionResult Privacy()
@@ -235,36 +194,28 @@ namespace ElderlyCareApp.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public class DashboardViewModel
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            public int TotalElderlyPeople { get; set; }
+            public int ActiveElderlyPeople { get; set; }
+            public int TotalActivities { get; set; }
+            public int TotalMedications { get; set; }
+            public int TotalMeals { get; set; }
+            public int TotalAppointments { get; set; }
+            public List<ActivityLog> RecentActivities { get; set; } = new List<ActivityLog>();
+            public List<MedicationLog> RecentMedications { get; set; } = new List<MedicationLog>();
+            public List<MealLog> RecentMeals { get; set; } = new List<MealLog>();
+            public List<AppointmentLog> RecentAppointments { get; set; } = new List<AppointmentLog>();
         }
-    }
 
-    public class DashboardViewModel
-    {
-        public int TotalElderlyPeople { get; set; }
-        public int TotalUsers { get; set; }
-        public int TotalCarePlans { get; set; }
-        public int PendingTasks { get; set; }
-        public List<ActivityLog> RecentActivityLogs { get; set; } = new();
-        public List<MedicationLog> RecentMedicationLogs { get; set; } = new();
-        public List<AppointmentLog> UpcomingAppointments { get; set; } = new();
-        public List<TaskSchedule> TodayTasks { get; set; } = new();
-    }
-
-    public class PatientDashboardViewModel
-    {
-        public ElderlyPerson Patient { get; set; } = null!;
-        public int TotalCarePlans { get; set; }
-        public int ActiveCarePlans { get; set; }
-        public int PendingTasks { get; set; }
-        public List<TaskSchedule> TodayTasks { get; set; } = new();
-        public List<ActivityLog> RecentActivityLogs { get; set; } = new();
-        public List<MedicationLog> RecentMedicationLogs { get; set; } = new();
-        public List<AppointmentLog> UpcomingAppointments { get; set; } = new();
-        public List<VitalSignsLog> RecentVitalSigns { get; set; } = new();
-        public List<SymptomLog> RecentSymptoms { get; set; } = new();
+        public class PatientDashboardViewModel
+        {
+            public ElderlyPerson Patient { get; set; } = null!;
+            public List<ActivityLog> RecentActivities { get; set; } = new List<ActivityLog>();
+            public List<MedicationLog> RecentMedications { get; set; } = new List<MedicationLog>();
+            public List<MealLog> RecentMeals { get; set; } = new List<MealLog>();
+            public List<AppointmentLog> RecentAppointments { get; set; } = new List<AppointmentLog>();
+            public List<CareNote> RecentNotes { get; set; } = new List<CareNote>();
+        }
     }
 }

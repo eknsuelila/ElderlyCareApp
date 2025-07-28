@@ -48,26 +48,25 @@ namespace ElderlyCareApp.Controllers
         // GET: MedicationLogs/Create
         public IActionResult Create()
         {
-            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Id");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Name");
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name");
             return View();
         }
 
         // POST: MedicationLogs/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ElderlyPersonId,UserId,MedicationName,Dosage,Taken,Timestamp")] MedicationLog medicationLog)
+        public async Task<IActionResult> Create([Bind("ElderlyPersonId,UserId,MedicationName,Dosage,Taken,Timestamp,Notes")] MedicationLog medicationLog)
         {
             if (ModelState.IsValid)
             {
+                medicationLog.CreatedAt = DateTime.Now;
                 _context.Add(medicationLog);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Id", medicationLog.ElderlyPersonId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", medicationLog.UserId);
+            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Name", medicationLog.ElderlyPersonId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", medicationLog.UserId);
             return View(medicationLog);
         }
 
@@ -84,17 +83,15 @@ namespace ElderlyCareApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Id", medicationLog.ElderlyPersonId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", medicationLog.UserId);
+            ViewBag.ElderlyPeople = await _context.ElderlyPeople.Where(p => p.IsActive).ToListAsync();
+            ViewBag.Users = await _context.Users.Where(u => u.IsActive).ToListAsync();
             return View(medicationLog);
         }
 
         // POST: MedicationLogs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ElderlyPersonId,UserId,MedicationName,Dosage,Taken,Timestamp")] MedicationLog medicationLog)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ElderlyPersonId,UserId,MedicationName,Dosage,Taken,Timestamp,Notes")] MedicationLog medicationLog)
         {
             if (id != medicationLog.Id)
             {
@@ -121,8 +118,8 @@ namespace ElderlyCareApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Id", medicationLog.ElderlyPersonId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", medicationLog.UserId);
+            ViewBag.ElderlyPeople = await _context.ElderlyPeople.Where(p => p.IsActive).ToListAsync();
+            ViewBag.Users = await _context.Users.Where(u => u.IsActive).ToListAsync();
             return View(medicationLog);
         }
 
@@ -155,9 +152,8 @@ namespace ElderlyCareApp.Controllers
             if (medicationLog != null)
             {
                 _context.MedicationLogs.Remove(medicationLog);
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

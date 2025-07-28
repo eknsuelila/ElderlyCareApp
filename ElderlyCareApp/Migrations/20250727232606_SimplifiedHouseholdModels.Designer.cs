@@ -4,6 +4,7 @@ using ElderlyCareApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElderlyCareApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250727232606_SimplifiedHouseholdModels")]
+    partial class SimplifiedHouseholdModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,9 +49,6 @@ namespace ElderlyCareApp.Migrations
                     b.Property<int>("ElderlyPersonId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ElderlyPersonId1")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("EndTime")
                         .HasColumnType("datetime2");
 
@@ -65,8 +65,6 @@ namespace ElderlyCareApp.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ElderlyPersonId");
-
-                    b.HasIndex("ElderlyPersonId1");
 
                     b.HasIndex("UserId");
 
@@ -92,9 +90,6 @@ namespace ElderlyCareApp.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("ElderlyPersonId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ElderlyPersonId1")
                         .HasColumnType("int");
 
                     b.Property<string>("Location")
@@ -127,8 +122,6 @@ namespace ElderlyCareApp.Migrations
 
                     b.HasIndex("ElderlyPersonId");
 
-                    b.HasIndex("ElderlyPersonId1");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("AppointmentLogs");
@@ -152,9 +145,6 @@ namespace ElderlyCareApp.Migrations
                     b.Property<int>("ElderlyPersonId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ElderlyPersonId1")
-                        .HasColumnType("int");
-
                     b.Property<int>("NoteType")
                         .HasColumnType("int");
 
@@ -170,52 +160,9 @@ namespace ElderlyCareApp.Migrations
 
                     b.HasIndex("ElderlyPersonId");
 
-                    b.HasIndex("ElderlyPersonId1");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("CareNotes");
-                });
-
-            modelBuilder.Entity("ElderlyCareApp.Models.CaregiverAssignment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CaregiverId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ElderlyPersonId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ElderlyPersonId");
-
-                    b.HasIndex("CaregiverId", "ElderlyPersonId", "IsActive")
-                        .IsUnique()
-                        .HasFilter("[IsActive] = 1");
-
-                    b.ToTable("CaregiverAssignments");
                 });
 
             modelBuilder.Entity("ElderlyCareApp.Models.ElderlyPerson", b =>
@@ -287,9 +234,6 @@ namespace ElderlyCareApp.Migrations
                     b.Property<int>("ElderlyPersonId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ElderlyPersonId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("MealName")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -310,8 +254,6 @@ namespace ElderlyCareApp.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ElderlyPersonId");
-
-                    b.HasIndex("ElderlyPersonId1");
 
                     b.HasIndex("UserId");
 
@@ -336,9 +278,6 @@ namespace ElderlyCareApp.Migrations
                     b.Property<int>("ElderlyPersonId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ElderlyPersonId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("MedicationName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -360,8 +299,6 @@ namespace ElderlyCareApp.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ElderlyPersonId");
-
-                    b.HasIndex("ElderlyPersonId1");
 
                     b.HasIndex("UserId");
 
@@ -409,28 +346,21 @@ namespace ElderlyCareApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
-
                     b.ToTable("Users");
                 });
 
             modelBuilder.Entity("ElderlyCareApp.Models.ActivityLog", b =>
                 {
                     b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
-                        .WithMany()
+                        .WithMany("ActivityLogs")
                         .HasForeignKey("ElderlyPersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", null)
-                        .WithMany("ActivityLogs")
-                        .HasForeignKey("ElderlyPersonId1");
-
                     b.HasOne("ElderlyCareApp.Models.User", "User")
-                        .WithMany()
+                        .WithMany("ActivityLogs")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ElderlyPerson");
@@ -441,19 +371,15 @@ namespace ElderlyCareApp.Migrations
             modelBuilder.Entity("ElderlyCareApp.Models.AppointmentLog", b =>
                 {
                     b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
-                        .WithMany()
+                        .WithMany("AppointmentLogs")
                         .HasForeignKey("ElderlyPersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", null)
-                        .WithMany("AppointmentLogs")
-                        .HasForeignKey("ElderlyPersonId1");
-
                     b.HasOne("ElderlyCareApp.Models.User", "User")
-                        .WithMany()
+                        .WithMany("AppointmentLogs")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ElderlyPerson");
@@ -464,19 +390,15 @@ namespace ElderlyCareApp.Migrations
             modelBuilder.Entity("ElderlyCareApp.Models.CareNote", b =>
                 {
                     b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
-                        .WithMany()
+                        .WithMany("CareNotes")
                         .HasForeignKey("ElderlyPersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", null)
-                        .WithMany("CareNotes")
-                        .HasForeignKey("ElderlyPersonId1");
-
                     b.HasOne("ElderlyCareApp.Models.User", "User")
-                        .WithMany()
+                        .WithMany("CareNotes")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ElderlyPerson");
@@ -484,41 +406,18 @@ namespace ElderlyCareApp.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ElderlyCareApp.Models.CaregiverAssignment", b =>
-                {
-                    b.HasOne("ElderlyCareApp.Models.User", "Caregiver")
-                        .WithMany()
-                        .HasForeignKey("CaregiverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
-                        .WithMany()
-                        .HasForeignKey("ElderlyPersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Caregiver");
-
-                    b.Navigation("ElderlyPerson");
-                });
-
             modelBuilder.Entity("ElderlyCareApp.Models.MealLog", b =>
                 {
                     b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
-                        .WithMany()
+                        .WithMany("MealLogs")
                         .HasForeignKey("ElderlyPersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", null)
-                        .WithMany("MealLogs")
-                        .HasForeignKey("ElderlyPersonId1");
-
                     b.HasOne("ElderlyCareApp.Models.User", "User")
-                        .WithMany()
+                        .WithMany("MealLogs")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ElderlyPerson");
@@ -529,19 +428,15 @@ namespace ElderlyCareApp.Migrations
             modelBuilder.Entity("ElderlyCareApp.Models.MedicationLog", b =>
                 {
                     b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
-                        .WithMany()
+                        .WithMany("MedicationLogs")
                         .HasForeignKey("ElderlyPersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", null)
-                        .WithMany("MedicationLogs")
-                        .HasForeignKey("ElderlyPersonId1");
-
                     b.HasOne("ElderlyCareApp.Models.User", "User")
-                        .WithMany()
+                        .WithMany("MedicationLogs")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ElderlyPerson");
@@ -550,6 +445,19 @@ namespace ElderlyCareApp.Migrations
                 });
 
             modelBuilder.Entity("ElderlyCareApp.Models.ElderlyPerson", b =>
+                {
+                    b.Navigation("ActivityLogs");
+
+                    b.Navigation("AppointmentLogs");
+
+                    b.Navigation("CareNotes");
+
+                    b.Navigation("MealLogs");
+
+                    b.Navigation("MedicationLogs");
+                });
+
+            modelBuilder.Entity("ElderlyCareApp.Models.User", b =>
                 {
                     b.Navigation("ActivityLogs");
 

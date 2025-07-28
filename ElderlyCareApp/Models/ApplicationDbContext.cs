@@ -4,165 +4,118 @@ namespace ElderlyCareApp.Models
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
 
-        // Core entities
         public DbSet<User> Users { get; set; }
         public DbSet<ElderlyPerson> ElderlyPeople { get; set; }
-        
-        // Log entities
         public DbSet<ActivityLog> ActivityLogs { get; set; }
         public DbSet<MedicationLog> MedicationLogs { get; set; }
         public DbSet<MealLog> MealLogs { get; set; }
-        public DbSet<SocialInteractionLog> SocialInteractionLogs { get; set; }
-        public DbSet<VitalSignsLog> VitalSignsLogs { get; set; }
         public DbSet<AppointmentLog> AppointmentLogs { get; set; }
-        public DbSet<SymptomLog> SymptomLogs { get; set; }
-        
-        // Care management entities
-        public DbSet<CarePlan> CarePlans { get; set; }
-        public DbSet<TaskSchedule> TaskSchedules { get; set; }
-        
+        public DbSet<CareNote> CareNotes { get; set; }
+        public DbSet<CaregiverAssignment> CaregiverAssignments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
-            // Configure relationships and constraints
-            
-            // User - ElderlyPerson relationship (many-to-many through logs)
+
+            // User configuration
             modelBuilder.Entity<User>()
-                .HasMany(u => u.ActivityLogs)
-                .WithOne(al => al.User)
-                .HasForeignKey(al => al.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-                
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.MedicationLogs)
-                .WithOne(ml => ml.User)
-                .HasForeignKey(ml => ml.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-                
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.MealLogs)
-                .WithOne(ml => ml.User)
-                .HasForeignKey(ml => ml.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-                
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.SocialInteractionLogs)
-                .WithOne(sil => sil.User)
-                .HasForeignKey(sil => sil.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-                
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.VitalSignsLogs)
-                .WithOne(vsl => vsl.User)
-                .HasForeignKey(vsl => vsl.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-                
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.AppointmentLogs)
-                .WithOne(al => al.User)
-                .HasForeignKey(al => al.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-                
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.SymptomLogs)
-                .WithOne(sl => sl.User)
-                .HasForeignKey(sl => sl.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-                
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.CarePlans)
-                .WithOne(cp => cp.User)
-                .HasForeignKey(cp => cp.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-            
-            // ElderlyPerson - Logs relationships
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
+            // ElderlyPerson configuration
             modelBuilder.Entity<ElderlyPerson>()
-                .HasMany(ep => ep.ActivityLogs)
-                .WithOne(al => al.ElderlyPerson)
-                .HasForeignKey(al => al.ElderlyPersonId)
-                .OnDelete(DeleteBehavior.Cascade);
-                
-            modelBuilder.Entity<ElderlyPerson>()
-                .HasMany(ep => ep.MedicationLogs)
-                .WithOne(ml => ml.ElderlyPerson)
-                .HasForeignKey(ml => ml.ElderlyPersonId)
-                .OnDelete(DeleteBehavior.Cascade);
-                
-            modelBuilder.Entity<ElderlyPerson>()
-                .HasMany(ep => ep.MealLogs)
-                .WithOne(ml => ml.ElderlyPerson)
-                .HasForeignKey(ml => ml.ElderlyPersonId)
-                .OnDelete(DeleteBehavior.Cascade);
-                
-            modelBuilder.Entity<ElderlyPerson>()
-                .HasMany(ep => ep.SocialInteractionLogs)
-                .WithOne(sil => sil.ElderlyPerson)
-                .HasForeignKey(sil => sil.ElderlyPersonId)
-                .OnDelete(DeleteBehavior.Cascade);
-                
-            modelBuilder.Entity<ElderlyPerson>()
-                .HasMany(ep => ep.VitalSignsLogs)
-                .WithOne(vsl => vsl.ElderlyPerson)
-                .HasForeignKey(vsl => vsl.ElderlyPersonId)
-                .OnDelete(DeleteBehavior.Cascade);
-                
-            modelBuilder.Entity<ElderlyPerson>()
-                .HasMany(ep => ep.AppointmentLogs)
-                .WithOne(al => al.ElderlyPerson)
-                .HasForeignKey(al => al.ElderlyPersonId)
-                .OnDelete(DeleteBehavior.Cascade);
-                
-            modelBuilder.Entity<ElderlyPerson>()
-                .HasMany(ep => ep.SymptomLogs)
-                .WithOne(sl => sl.ElderlyPerson)
-                .HasForeignKey(sl => sl.ElderlyPersonId)
-                .OnDelete(DeleteBehavior.Cascade);
-            
-            // CarePlan - TaskSchedule relationship
-            modelBuilder.Entity<CarePlan>()
-                .HasMany(cp => cp.TaskSchedules)
-                .WithOne(ts => ts.CarePlan)
-                .HasForeignKey(ts => ts.CarePlanId)
-                .OnDelete(DeleteBehavior.SetNull);
-            
-            // TaskSchedule - ElderlyPerson relationship (change to NO ACTION to avoid cascade cycles)
-            modelBuilder.Entity<TaskSchedule>()
-                .HasOne(ts => ts.ElderlyPerson)
-                .WithMany()
-                .HasForeignKey(ts => ts.ElderlyPersonId)
-                .OnDelete(DeleteBehavior.NoAction);
-            
-            // TaskSchedule - User relationship (change to NO ACTION to avoid cascade cycles)
-            modelBuilder.Entity<TaskSchedule>()
-                .HasOne(ts => ts.User)
-                .WithMany()
-                .HasForeignKey(ts => ts.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
-            
-            // Configure indexes for better performance
+                .Property(p => p.Name)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            // ActivityLog configuration
             modelBuilder.Entity<ActivityLog>()
-                .HasIndex(al => new { al.ElderlyPersonId, al.StartTime });
-                
+                .HasOne(a => a.ElderlyPerson)
+                .WithMany()
+                .HasForeignKey(a => a.ElderlyPersonId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ActivityLog>()
+                .HasOne(a => a.User)
+                .WithMany()
+                .HasForeignKey(a => a.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // MedicationLog configuration
             modelBuilder.Entity<MedicationLog>()
-                .HasIndex(ml => new { ml.ElderlyPersonId, ml.ScheduledTime });
-                
+                .HasOne(m => m.ElderlyPerson)
+                .WithMany()
+                .HasForeignKey(m => m.ElderlyPersonId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<MedicationLog>()
+                .HasOne(m => m.User)
+                .WithMany()
+                .HasForeignKey(m => m.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // MealLog configuration
             modelBuilder.Entity<MealLog>()
-                .HasIndex(ml => new { ml.ElderlyPersonId, ml.MealTime });
-                
-            modelBuilder.Entity<VitalSignsLog>()
-                .HasIndex(vsl => new { vsl.ElderlyPersonId, vsl.MeasurementTime });
-                
+                .HasOne(m => m.ElderlyPerson)
+                .WithMany()
+                .HasForeignKey(m => m.ElderlyPersonId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<MealLog>()
+                .HasOne(m => m.User)
+                .WithMany()
+                .HasForeignKey(m => m.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // AppointmentLog configuration
             modelBuilder.Entity<AppointmentLog>()
-                .HasIndex(al => new { al.ElderlyPersonId, al.ScheduledDateTime });
-                
-            modelBuilder.Entity<TaskSchedule>()
-                .HasIndex(ts => new { ts.ElderlyPersonId, ts.ScheduledTime });
-                
-            modelBuilder.Entity<TaskSchedule>()
-                .HasIndex(ts => new { ts.Status, ts.ScheduledTime });
+                .HasOne(a => a.ElderlyPerson)
+                .WithMany()
+                .HasForeignKey(a => a.ElderlyPersonId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AppointmentLog>()
+                .HasOne(a => a.User)
+                .WithMany()
+                .HasForeignKey(a => a.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // CareNote configuration
+            modelBuilder.Entity<CareNote>()
+                .HasOne(n => n.ElderlyPerson)
+                .WithMany()
+                .HasForeignKey(n => n.ElderlyPersonId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CareNote>()
+                .HasOne(n => n.User)
+                .WithMany()
+                .HasForeignKey(n => n.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // CaregiverAssignment configuration
+            modelBuilder.Entity<CaregiverAssignment>()
+                .HasOne(ca => ca.Caregiver)
+                .WithMany()
+                .HasForeignKey(ca => ca.CaregiverId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CaregiverAssignment>()
+                .HasOne(ca => ca.ElderlyPerson)
+                .WithMany()
+                .HasForeignKey(ca => ca.ElderlyPersonId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Ensure unique assignments (one active assignment per caregiver per patient)
+            modelBuilder.Entity<CaregiverAssignment>()
+                .HasIndex(ca => new { ca.CaregiverId, ca.ElderlyPersonId, ca.IsActive })
+                .IsUnique()
+                .HasFilter("[IsActive] = 1");
         }
     }
 } 

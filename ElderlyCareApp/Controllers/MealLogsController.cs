@@ -48,26 +48,25 @@ namespace ElderlyCareApp.Controllers
         // GET: MealLogs/Create
         public IActionResult Create()
         {
-            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Id");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Name");
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name");
             return View();
         }
 
         // POST: MealLogs/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ElderlyPersonId,UserId,MealType,Description,Timestamp")] MealLog mealLog)
+        public async Task<IActionResult> Create([Bind("ElderlyPersonId,UserId,MealType,MealName,Description,MealTime,Notes")] MealLog mealLog)
         {
             if (ModelState.IsValid)
             {
+                mealLog.CreatedAt = DateTime.Now;
                 _context.Add(mealLog);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Id", mealLog.ElderlyPersonId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", mealLog.UserId);
+            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Name", mealLog.ElderlyPersonId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", mealLog.UserId);
             return View(mealLog);
         }
 
@@ -84,17 +83,15 @@ namespace ElderlyCareApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Id", mealLog.ElderlyPersonId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", mealLog.UserId);
+            ViewBag.ElderlyPeople = await _context.ElderlyPeople.Where(p => p.IsActive).ToListAsync();
+            ViewBag.Users = await _context.Users.Where(u => u.IsActive).ToListAsync();
             return View(mealLog);
         }
 
         // POST: MealLogs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ElderlyPersonId,UserId,MealType,Description,Timestamp")] MealLog mealLog)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ElderlyPersonId,UserId,MealType,Description,MealTime,Notes")] MealLog mealLog)
         {
             if (id != mealLog.Id)
             {
@@ -121,8 +118,8 @@ namespace ElderlyCareApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Id", mealLog.ElderlyPersonId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", mealLog.UserId);
+            ViewBag.ElderlyPeople = await _context.ElderlyPeople.Where(p => p.IsActive).ToListAsync();
+            ViewBag.Users = await _context.Users.Where(u => u.IsActive).ToListAsync();
             return View(mealLog);
         }
 
@@ -155,9 +152,8 @@ namespace ElderlyCareApp.Controllers
             if (mealLog != null)
             {
                 _context.MealLogs.Remove(mealLog);
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
