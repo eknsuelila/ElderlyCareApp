@@ -49,8 +49,8 @@ namespace ElderlyCareApp.Controllers
         // GET: CareNotes/Create
         public async Task<IActionResult> Create()
         {
-            ViewBag.ElderlyPeople = await _context.ElderlyPeople.Where(p => p.IsActive).ToListAsync();
-            ViewBag.Users = await _context.Users.Where(u => u.IsActive).ToListAsync();
+            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople.Where(p => p.IsActive), "Id", "Name");
+            ViewData["UserId"] = new SelectList(_context.Users.Where(u => u.IsActive), "Id", "Name");
             return View();
         }
 
@@ -66,8 +66,8 @@ namespace ElderlyCareApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.ElderlyPeople = await _context.ElderlyPeople.Where(p => p.IsActive).ToListAsync();
-            ViewBag.Users = await _context.Users.Where(u => u.IsActive).ToListAsync();
+            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople.Where(p => p.IsActive), "Id", "Name", careNote.ElderlyPersonId);
+            ViewData["UserId"] = new SelectList(_context.Users.Where(u => u.IsActive), "Id", "Name", careNote.UserId);
             return View(careNote);
         }
 
@@ -84,8 +84,8 @@ namespace ElderlyCareApp.Controllers
             {
                 return NotFound();
             }
-            ViewBag.ElderlyPeople = await _context.ElderlyPeople.Where(p => p.IsActive).ToListAsync();
-            ViewBag.Users = await _context.Users.Where(u => u.IsActive).ToListAsync();
+            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople.Where(p => p.IsActive), "Id", "Name", careNote.ElderlyPersonId);
+            ViewData["UserId"] = new SelectList(_context.Users.Where(u => u.IsActive), "Id", "Name", careNote.UserId);
             return View(careNote);
         }
 
@@ -119,8 +119,8 @@ namespace ElderlyCareApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.ElderlyPeople = await _context.ElderlyPeople.Where(p => p.IsActive).ToListAsync();
-            ViewBag.Users = await _context.Users.Where(u => u.IsActive).ToListAsync();
+            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople.Where(p => p.IsActive), "Id", "Name", careNote.ElderlyPersonId);
+            ViewData["UserId"] = new SelectList(_context.Users.Where(u => u.IsActive), "Id", "Name", careNote.UserId);
             return View(careNote);
         }
 

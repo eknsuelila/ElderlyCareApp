@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ElderlyCareApp.Models;
+using ElderlyCareApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,13 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
+});
+
+// Add AI Health Service
+builder.Services.AddHttpClient<AIHealthService>(client =>
+{
+    client.Timeout = TimeSpan.FromMinutes(2); // 2 minute timeout
+    client.DefaultRequestHeaders.Add("User-Agent", "ElderlyCareApp/1.0");
 });
 
 var app = builder.Build();
@@ -296,6 +304,202 @@ static void SeedData(ApplicationDbContext context)
         // No formal assignment needed as family owns the app
     };
     context.CaregiverAssignments.AddRange(caregiverAssignments);
+    
+    context.SaveChanges();
+    
+    // Add recent data for today and yesterday
+    var today = DateTime.Now.Date;
+    var yesterday = DateTime.Now.AddDays(-1).Date;
+    
+    // Today's activities
+    var todayActivities = new List<ActivityLog>
+    {
+        // Margaret - Today
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, ActivityType = ActivityType.Walk, Description = "Morning walk in garden", StartTime = today.AddHours(8), EndTime = today.AddHours(9), Notes = "Good pace, enjoyed the fresh air" },
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, ActivityType = ActivityType.Reading, Description = "Crossword puzzle", StartTime = today.AddHours(10), EndTime = today.AddHours(11), Notes = "Completed 80% of puzzle" },
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, ActivityType = ActivityType.Social, Description = "Video call with daughter", StartTime = today.AddHours(14), EndTime = today.AddHours(14).AddMinutes(30), Notes = "Very happy to see family" },
+        
+        // Robert - Today
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[1].Id, UserId = allUsers[1].Id, ActivityType = ActivityType.Exercise, Description = "Gentle stretching", StartTime = today.AddHours(9), EndTime = today.AddHours(9).AddMinutes(30), Notes = "Helped with arthritis pain" },
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[1].Id, UserId = allUsers[1].Id, ActivityType = ActivityType.Reading, Description = "Mystery novel", StartTime = today.AddHours(11), EndTime = today.AddHours(12), Notes = "Read 2 chapters" },
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[1].Id, UserId = allUsers[1].Id, ActivityType = ActivityType.Social, Description = "Neighbor visit", StartTime = today.AddHours(15), EndTime = today.AddHours(16), Notes = "Good conversation" },
+        
+        // Eleanor - Today
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, ActivityType = ActivityType.Walk, Description = "Garden walk", StartTime = today.AddHours(8), EndTime = today.AddHours(8).AddMinutes(45), Notes = "Enjoyed the flowers" },
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, ActivityType = ActivityType.Social, Description = "Grandchildren video call", StartTime = today.AddHours(13), EndTime = today.AddHours(13).AddMinutes(45), Notes = "Very excited to see kids" },
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, ActivityType = ActivityType.Exercise, Description = "Light yoga", StartTime = today.AddHours(16), EndTime = today.AddHours(16).AddMinutes(30), Notes = "Good for flexibility" },
+        
+        // James - Today
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, ActivityType = ActivityType.Exercise, Description = "Physical therapy exercises", StartTime = today.AddHours(10), EndTime = today.AddHours(10).AddMinutes(45), Notes = "Focused on balance" },
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, ActivityType = ActivityType.Social, Description = "Music therapy session", StartTime = today.AddHours(14), EndTime = today.AddHours(14).AddMinutes(30), Notes = "Very responsive to classical music" },
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, ActivityType = ActivityType.Rest, Description = "Afternoon rest", StartTime = today.AddHours(15), EndTime = today.AddHours(16), Notes = "Needed after therapy" }
+    };
+    context.ActivityLogs.AddRange(todayActivities);
+    
+    // Yesterday's activities
+    var yesterdayActivities = new List<ActivityLog>
+    {
+        // Margaret - Yesterday
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, ActivityType = ActivityType.Walk, Description = "Short walk around house", StartTime = yesterday.AddHours(9), EndTime = yesterday.AddHours(9).AddMinutes(30), Notes = "Felt tired, shorter walk" },
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, ActivityType = ActivityType.Reading, Description = "Magazine reading", StartTime = yesterday.AddHours(11), EndTime = yesterday.AddHours(12), Notes = "Read health articles" },
+        
+        // Robert - Yesterday
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[1].Id, UserId = allUsers[1].Id, ActivityType = ActivityType.Exercise, Description = "Chair exercises", StartTime = yesterday.AddHours(10), EndTime = yesterday.AddHours(10).AddMinutes(20), Notes = "Knee pain, modified exercises" },
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[1].Id, UserId = allUsers[1].Id, ActivityType = ActivityType.Reading, Description = "Newspaper reading", StartTime = yesterday.AddHours(14), EndTime = yesterday.AddHours(15), Notes = "Read local news" },
+        
+        // Eleanor - Yesterday
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, ActivityType = ActivityType.Walk, Description = "Indoor walking", StartTime = yesterday.AddHours(8), EndTime = yesterday.AddHours(8).AddMinutes(40), Notes = "Rainy day, walked indoors" },
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, ActivityType = ActivityType.Social, Description = "Phone call with friend", StartTime = yesterday.AddHours(13), EndTime = yesterday.AddHours(13).AddMinutes(25), Notes = "Good conversation" },
+        
+        // James - Yesterday
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, ActivityType = ActivityType.Exercise, Description = "Balance exercises", StartTime = yesterday.AddHours(9), EndTime = yesterday.AddHours(9).AddMinutes(30), Notes = "Stable during exercises" },
+        new ActivityLog { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, ActivityType = ActivityType.Rest, Description = "Morning rest", StartTime = yesterday.AddHours(11), EndTime = yesterday.AddHours(12), Notes = "Needed rest after exercises" }
+    };
+    context.ActivityLogs.AddRange(yesterdayActivities);
+    
+    // Today's medications
+    var todayMedications = new List<MedicationLog>
+    {
+        // Margaret - Today
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, MedicationName = "Metformin", Dosage = "500mg", Taken = true, Timestamp = today.AddHours(8), Notes = "Taken with breakfast" },
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, MedicationName = "Lisinopril", Dosage = "10mg", Taken = true, Timestamp = today.AddHours(8), Notes = "Taken with breakfast" },
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, MedicationName = "Metformin", Dosage = "500mg", Taken = true, Timestamp = today.AddHours(20), Notes = "Taken with dinner" },
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, MedicationName = "Lisinopril", Dosage = "10mg", Taken = false, Timestamp = today.AddHours(20), Notes = "Forgot evening dose" },
+        
+        // Robert - Today
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[1].Id, UserId = allUsers[1].Id, MedicationName = "Ibuprofen", Dosage = "400mg", Taken = true, Timestamp = today.AddHours(8), Notes = "For arthritis pain" },
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[1].Id, UserId = allUsers[1].Id, MedicationName = "Ibuprofen", Dosage = "400mg", Taken = true, Timestamp = today.AddHours(20), Notes = "Evening dose" },
+        
+        // Eleanor - Today
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, MedicationName = "Amlodipine", Dosage = "5mg", Taken = true, Timestamp = today.AddHours(8), Notes = "Blood pressure medication" },
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, MedicationName = "Calcium", Dosage = "600mg", Taken = true, Timestamp = today.AddHours(8), Notes = "For osteoporosis" },
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, MedicationName = "Amlodipine", Dosage = "5mg", Taken = true, Timestamp = today.AddHours(20), Notes = "Evening dose" },
+        
+        // James - Today
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, MedicationName = "Levodopa", Dosage = "100mg", Taken = true, Timestamp = today.AddHours(8), Notes = "Parkinson's medication" },
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, MedicationName = "Levodopa", Dosage = "100mg", Taken = true, Timestamp = today.AddHours(12), Notes = "Midday dose" },
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, MedicationName = "Levodopa", Dosage = "100mg", Taken = true, Timestamp = today.AddHours(16), Notes = "Afternoon dose" },
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, MedicationName = "Levodopa", Dosage = "100mg", Taken = false, Timestamp = today.AddHours(20), Notes = "Missed evening dose" }
+    };
+    context.MedicationLogs.AddRange(todayMedications);
+    
+    // Yesterday's medications
+    var yesterdayMedications = new List<MedicationLog>
+    {
+        // Margaret - Yesterday
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, MedicationName = "Metformin", Dosage = "500mg", Taken = true, Timestamp = yesterday.AddHours(8), Notes = "Taken with breakfast" },
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, MedicationName = "Lisinopril", Dosage = "10mg", Taken = true, Timestamp = yesterday.AddHours(8), Notes = "Taken with breakfast" },
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, MedicationName = "Metformin", Dosage = "500mg", Taken = true, Timestamp = yesterday.AddHours(20), Notes = "Taken with dinner" },
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, MedicationName = "Lisinopril", Dosage = "10mg", Taken = true, Timestamp = yesterday.AddHours(20), Notes = "Taken with dinner" },
+        
+        // Robert - Yesterday
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[1].Id, UserId = allUsers[1].Id, MedicationName = "Ibuprofen", Dosage = "400mg", Taken = true, Timestamp = yesterday.AddHours(8), Notes = "For arthritis pain" },
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[1].Id, UserId = allUsers[1].Id, MedicationName = "Ibuprofen", Dosage = "400mg", Taken = true, Timestamp = yesterday.AddHours(20), Notes = "Evening dose" },
+        
+        // Eleanor - Yesterday
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, MedicationName = "Amlodipine", Dosage = "5mg", Taken = true, Timestamp = yesterday.AddHours(8), Notes = "Blood pressure medication" },
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, MedicationName = "Calcium", Dosage = "600mg", Taken = true, Timestamp = yesterday.AddHours(8), Notes = "For osteoporosis" },
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, MedicationName = "Amlodipine", Dosage = "5mg", Taken = true, Timestamp = yesterday.AddHours(20), Notes = "Evening dose" },
+        
+        // James - Yesterday
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, MedicationName = "Levodopa", Dosage = "100mg", Taken = true, Timestamp = yesterday.AddHours(8), Notes = "Parkinson's medication" },
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, MedicationName = "Levodopa", Dosage = "100mg", Taken = true, Timestamp = yesterday.AddHours(12), Notes = "Midday dose" },
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, MedicationName = "Levodopa", Dosage = "100mg", Taken = true, Timestamp = yesterday.AddHours(16), Notes = "Afternoon dose" },
+        new MedicationLog { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, MedicationName = "Levodopa", Dosage = "100mg", Taken = true, Timestamp = yesterday.AddHours(20), Notes = "Evening dose" }
+    };
+    context.MedicationLogs.AddRange(yesterdayMedications);
+    
+    // Today's meals
+    var todayMeals = new List<MealLog>
+    {
+        // Margaret - Today
+        new MealLog { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, MealType = MealType.Breakfast, MealName = "Oatmeal with berries", Description = "Healthy breakfast", MealTime = today.AddHours(8), Notes = "Good appetite, ate 90%" },
+        new MealLog { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, MealType = MealType.Lunch, MealName = "Grilled chicken salad", Description = "Light lunch", MealTime = today.AddHours(12), Notes = "Enjoyed the salad, ate 85%" },
+        new MealLog { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, MealType = MealType.Dinner, MealName = "Salmon with vegetables", Description = "Healthy dinner", MealTime = today.AddHours(18), Notes = "Good appetite, finished meal" },
+        
+        // Robert - Today
+        new MealLog { ElderlyPersonId = allElderlyPeople[1].Id, UserId = allUsers[1].Id, MealType = MealType.Breakfast, MealName = "Toast and coffee", Description = "Simple breakfast", MealTime = today.AddHours(8), Notes = "Enjoyed the coffee, ate 75%" },
+        new MealLog { ElderlyPersonId = allElderlyPeople[1].Id, UserId = allUsers[1].Id, MealType = MealType.Lunch, MealName = "Soup and sandwich", Description = "Warm soup with turkey sandwich", MealTime = today.AddHours(12), Notes = "Preferred the soup, ate 80%" },
+        new MealLog { ElderlyPersonId = allElderlyPeople[1].Id, UserId = allUsers[1].Id, MealType = MealType.Dinner, MealName = "Pasta with meat sauce", Description = "Warm dinner", MealTime = today.AddHours(18), Notes = "Good appetite, finished the meal" },
+        
+        // Eleanor - Today
+        new MealLog { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, MealType = MealType.Breakfast, MealName = "Yogurt with granola", Description = "Light breakfast", MealTime = today.AddHours(8), Notes = "Good appetite" },
+        new MealLog { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, MealType = MealType.Lunch, MealName = "Vegetable soup and crackers", Description = "Light lunch", MealTime = today.AddHours(12), Notes = "Enjoyed the soup" },
+        new MealLog { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, MealType = MealType.Dinner, MealName = "Grilled chicken with vegetables", Description = "Healthy dinner", MealTime = today.AddHours(18), Notes = "Good appetite, ate 85%" },
+        
+        // James - Today
+        new MealLog { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, MealType = MealType.Breakfast, MealName = "Scrambled eggs and toast", Description = "Protein-rich breakfast", MealTime = today.AddHours(8), Notes = "Needed assistance, ate 70%" },
+        new MealLog { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, MealType = MealType.Lunch, MealName = "Pureed soup and soft bread", Description = "Easy to eat meal", MealTime = today.AddHours(12), Notes = "Ate slowly but finished" },
+        new MealLog { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, MealType = MealType.Dinner, MealName = "Soft fish with mashed potatoes", Description = "Soft food dinner", MealTime = today.AddHours(18), Notes = "Needed assistance, ate 60%" }
+    };
+    context.MealLogs.AddRange(todayMeals);
+    
+    // Yesterday's meals
+    var yesterdayMeals = new List<MealLog>
+    {
+        // Margaret - Yesterday
+        new MealLog { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, MealType = MealType.Breakfast, MealName = "Cereal with milk", Description = "Quick breakfast", MealTime = yesterday.AddHours(8), Notes = "Ate 80%" },
+        new MealLog { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, MealType = MealType.Lunch, MealName = "Tuna sandwich", Description = "Light lunch", MealTime = yesterday.AddHours(12), Notes = "Good appetite" },
+        new MealLog { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, MealType = MealType.Dinner, MealName = "Baked chicken with rice", Description = "Warm dinner", MealTime = yesterday.AddHours(18), Notes = "Enjoyed the meal" },
+        
+        // Robert - Yesterday
+        new MealLog { ElderlyPersonId = allElderlyPeople[1].Id, UserId = allUsers[1].Id, MealType = MealType.Breakfast, MealName = "Pancakes and coffee", Description = "Comfortable breakfast", MealTime = yesterday.AddHours(8), Notes = "Enjoyed the pancakes" },
+        new MealLog { ElderlyPersonId = allElderlyPeople[1].Id, UserId = allUsers[1].Id, MealType = MealType.Lunch, MealName = "Ham and cheese sandwich", Description = "Simple lunch", MealTime = yesterday.AddHours(12), Notes = "Good appetite" },
+        new MealLog { ElderlyPersonId = allElderlyPeople[1].Id, UserId = allUsers[1].Id, MealType = MealType.Dinner, MealName = "Beef stew with bread", Description = "Warm comfort food", MealTime = yesterday.AddHours(18), Notes = "Liked the stew" },
+        
+        // Eleanor - Yesterday
+        new MealLog { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, MealType = MealType.Breakfast, MealName = "Fruit and yogurt", Description = "Light breakfast", MealTime = yesterday.AddHours(8), Notes = "Good appetite" },
+        new MealLog { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, MealType = MealType.Lunch, MealName = "Chicken noodle soup", Description = "Warm soup", MealTime = yesterday.AddHours(12), Notes = "Enjoyed the soup" },
+        new MealLog { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, MealType = MealType.Dinner, MealName = "Baked fish with vegetables", Description = "Healthy dinner", MealTime = yesterday.AddHours(18), Notes = "Good appetite" },
+        
+        // James - Yesterday
+        new MealLog { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, MealType = MealType.Breakfast, MealName = "Oatmeal with honey", Description = "Soft breakfast", MealTime = yesterday.AddHours(8), Notes = "Needed assistance, ate 65%" },
+        new MealLog { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, MealType = MealType.Lunch, MealName = "Cream of mushroom soup", Description = "Easy to eat", MealTime = yesterday.AddHours(12), Notes = "Ate slowly but finished" },
+        new MealLog { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, MealType = MealType.Dinner, MealName = "Soft meatloaf with gravy", Description = "Soft food dinner", MealTime = yesterday.AddHours(18), Notes = "Needed assistance, ate 55%" }
+    };
+    context.MealLogs.AddRange(yesterdayMeals);
+    
+    // Today's care notes
+    var todayCareNotes = new List<CareNote>
+    {
+        // Margaret - Today
+        new CareNote { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, NoteType = NoteType.Health, Title = "Blood sugar check", Content = "Blood sugar was 135 mg/dL this morning, which is within normal range. Continue monitoring.", CreatedAt = today.AddHours(8) },
+        new CareNote { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, NoteType = NoteType.Mood, Title = "Excellent mood today", Content = "Margaret was very cheerful today, especially after the video call with her daughter. She completed her crossword puzzle and enjoyed her garden walk.", CreatedAt = today.AddHours(16) },
+        
+        // Robert - Today
+        new CareNote { ElderlyPersonId = allElderlyPeople[1].Id, UserId = allUsers[1].Id, NoteType = NoteType.Health, Title = "Arthritis management", Content = "Robert's knee pain was manageable today. The morning stretching exercises helped. Applied heat therapy as needed.", CreatedAt = today.AddHours(10) },
+        new CareNote { ElderlyPersonId = allElderlyPeople[1].Id, UserId = allUsers[1].Id, NoteType = NoteType.Behavior, Title = "Good social interaction", Content = "Robert had a pleasant visit with his neighbor today. They discussed books and shared coffee. This social interaction is very beneficial for his mood.", CreatedAt = today.AddHours(16) },
+        
+        // Eleanor - Today
+        new CareNote { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, NoteType = NoteType.Health, Title = "Blood pressure monitoring", Content = "Eleanor's blood pressure was 128/78 today, which is excellent. Continue current medication regimen.", CreatedAt = today.AddHours(9) },
+        new CareNote { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, NoteType = NoteType.Behavior, Title = "Very active and social", Content = "Eleanor was very active today. She enjoyed her garden walk, had a wonderful video call with her grandchildren, and did light yoga. Her mood was excellent throughout the day.", CreatedAt = today.AddHours(17) },
+        
+        // James - Today
+        new CareNote { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, NoteType = NoteType.Health, Title = "Parkinson's symptoms", Content = "James's tremors were moderate today, especially in the morning. The medication timing is working well, with symptoms improving after each dose.", CreatedAt = today.AddHours(11) },
+        new CareNote { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, NoteType = NoteType.Behavior, Title = "Excellent response to music therapy", Content = "James had an excellent music therapy session today. He was very responsive to classical music, showing reduced tremors and improved mood during the session.", CreatedAt = today.AddHours(15) }
+    };
+    context.CareNotes.AddRange(todayCareNotes);
+    
+    // Yesterday's care notes
+    var yesterdayCareNotes = new List<CareNote>
+    {
+        // Margaret - Yesterday
+        new CareNote { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, NoteType = NoteType.Health, Title = "Blood sugar monitoring", Content = "Blood sugar was 142 mg/dL yesterday morning, slightly elevated but within acceptable range. Continue monitoring.", CreatedAt = yesterday.AddHours(8) },
+        new CareNote { ElderlyPersonId = allElderlyPeople[0].Id, UserId = allUsers[0].Id, NoteType = NoteType.Mood, Title = "Tired but content", Content = "Margaret felt a bit tired yesterday but was content. She enjoyed reading her magazine and had a good appetite for meals.", CreatedAt = yesterday.AddHours(16) },
+        
+        // Robert - Yesterday
+        new CareNote { ElderlyPersonId = allElderlyPeople[1].Id, UserId = allUsers[1].Id, NoteType = NoteType.Health, Title = "Arthritis flare-up", Content = "Robert experienced some knee pain yesterday, especially in the morning. Applied heat therapy and gave ibuprofen as prescribed. Pain improved by afternoon.", CreatedAt = yesterday.AddHours(9) },
+        new CareNote { ElderlyPersonId = allElderlyPeople[1].Id, UserId = allUsers[1].Id, NoteType = NoteType.Behavior, Title = "Good spirits despite pain", Content = "Despite the arthritis pain, Robert maintained good spirits yesterday. He enjoyed reading the newspaper and had a pleasant phone conversation.", CreatedAt = yesterday.AddHours(15) },
+        
+        // Eleanor - Yesterday
+        new CareNote { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, NoteType = NoteType.Health, Title = "Blood pressure stable", Content = "Eleanor's blood pressure was 132/80 yesterday, which is well-controlled. Continue current medication regimen.", CreatedAt = yesterday.AddHours(9) },
+        new CareNote { ElderlyPersonId = allElderlyPeople[2].Id, UserId = allUsers[1].Id, NoteType = NoteType.Behavior, Title = "Good social interaction", Content = "Eleanor had a pleasant phone call with her friend yesterday. She also enjoyed indoor walking despite the rainy weather.", CreatedAt = yesterday.AddHours(14) },
+        
+        // James - Yesterday
+        new CareNote { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, NoteType = NoteType.Health, Title = "Parkinson's management", Content = "James's Parkinson's symptoms were well-controlled yesterday. All medications were taken on time, and he had good symptom control throughout the day.", CreatedAt = yesterday.AddHours(10) },
+        new CareNote { ElderlyPersonId = allElderlyPeople[3].Id, UserId = allUsers[1].Id, NoteType = NoteType.Behavior, Title = "Stable and responsive", Content = "James was stable and responsive yesterday. He completed his balance exercises well and rested appropriately. His medication compliance was excellent.", CreatedAt = yesterday.AddHours(16) }
+    };
+    context.CareNotes.AddRange(yesterdayCareNotes);
     
     context.SaveChanges();
 }

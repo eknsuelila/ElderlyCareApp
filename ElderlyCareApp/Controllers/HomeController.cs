@@ -1,16 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ElderlyCareApp.Models;
+using ElderlyCareApp.Services;
 
 namespace ElderlyCareApp.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly AIHealthService _aiService;
 
-        public HomeController(ApplicationDbContext context)
+        public HomeController(ApplicationDbContext context, AIHealthService aiService)
         {
             _context = context;
+            _aiService = aiService;
         }
 
         public async Task<IActionResult> Index()
@@ -187,6 +190,93 @@ namespace ElderlyCareApp.Controllers
             };
 
             return View("SystemOverview", viewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAIInsights(int patientId)
+        {
+            var currentUserId = HttpContext.Session.GetInt32("CurrentUserId");
+            var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
+            
+            if (!currentUserId.HasValue)
+            {
+                return Unauthorized();
+            }
+
+            // Only Family users can access AI insights
+            if (currentUserRole != "Family")
+            {
+                return Json(new { 
+                    success = false, 
+                    error = "Access denied. AI insights are only available to family members." 
+                });
+            }
+
+            try
+            {
+                // Get patient data
+                var patient = await _context.ElderlyPeople
+                    .FirstOrDefaultAsync(p => p.Id == patientId);
+
+                if (patient == null)
+                {
+                    return NotFound("Patient not found");
+                }
+
+                // Get recent data for the patient
+                var activities = await _context.ActivityLogs
+                    .Where(a => a.ElderlyPersonId == patientId)
+                    .OrderByDescending(a => a.StartTime)
+                    .Take(5)
+                    .ToListAsync();
+
+                var medications = await _context.MedicationLogs
+                    .Where(m => m.ElderlyPersonId == patientId)
+                    .OrderByDescending(m => m.Timestamp)
+                    .Take(5)
+                    .ToListAsync();
+
+                var meals = await _context.MealLogs
+                    .Where(m => m.ElderlyPersonId == patientId)
+                    .OrderByDescending(m => m.MealTime)
+                    .Take(5)
+                    .ToListAsync();
+
+                var appointments = await _context.AppointmentLogs
+                    .Where(a => a.ElderlyPersonId == patientId)
+                    .OrderByDescending(a => a.ScheduledDateTime)
+                    .Take(5)
+                    .ToListAsync();
+
+                // Create AI session and get insights
+                var sessionId = await _aiService.CreateAISessionAsync();
+                var aiMessages = await _aiService.GetAIInsightsAsync(sessionId, patient, activities, medications, meals, appointments);
+
+                // Return all AI messages with metadata about which is which
+                var insights = aiMessages.ToList();
+                var responseInfo = new
+                {
+                    totalResponses = aiMessages.Count,
+                    firstResponse = aiMessages.Count > 0 ? aiMessages[0] : null,
+                    secondResponse = aiMessages.Count > 1 ? aiMessages[1] : null,
+                    selectedResponse = aiMessages.Count > 1 ? aiMessages[1] : (aiMessages.Count > 0 ? aiMessages[0] : null)
+                };
+
+                // Return as JSON with the insights
+                return Json(new { 
+                    success = true, 
+                    insights = insights,
+                    responseInfo = responseInfo,
+                    recommendations = new List<string>() // Empty for now, handled in frontend
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { 
+                    success = false, 
+                    error = $"Error: {ex.Message}" 
+                });
+            }
         }
 
         public IActionResult Privacy()

@@ -83,8 +83,8 @@ namespace ElderlyCareApp.Controllers
             {
                 return NotFound();
             }
-            ViewBag.ElderlyPeople = await _context.ElderlyPeople.Where(p => p.IsActive).ToListAsync();
-            ViewBag.Users = await _context.Users.Where(u => u.IsActive).ToListAsync();
+            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople.Where(p => p.IsActive), "Id", "Name", activityLog.ElderlyPersonId);
+            ViewData["UserId"] = new SelectList(_context.Users.Where(u => u.IsActive), "Id", "Name", activityLog.UserId);
             return View(activityLog);
         }
 
@@ -118,8 +118,8 @@ namespace ElderlyCareApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.ElderlyPeople = await _context.ElderlyPeople.Where(p => p.IsActive).ToListAsync();
-            ViewBag.Users = await _context.Users.Where(u => u.IsActive).ToListAsync();
+            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople.Where(p => p.IsActive), "Id", "Name", activityLog.ElderlyPersonId);
+            ViewData["UserId"] = new SelectList(_context.Users.Where(u => u.IsActive), "Id", "Name", activityLog.UserId);
             return View(activityLog);
         }
 

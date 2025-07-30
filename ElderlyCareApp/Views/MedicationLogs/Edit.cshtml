@@ -83,8 +83,8 @@
                             <button type="submit" class="btn btn-warning">
                                 <i class="fas fa-save"></i> Save Changes
                             </button>
-                            <a asp-action="Index" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left"></i> Back to List
+                            <a asp-controller="Home" asp-action="PatientDashboard" asp-route-id="@Model.ElderlyPersonId" class="btn btn-info">
+                                <i class="fas fa-user"></i> Return to Patient Dashboard
                             </a>
                         </div>
                     </form>
