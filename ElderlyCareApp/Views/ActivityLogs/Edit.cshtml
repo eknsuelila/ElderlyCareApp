@@ -1,102 +1,99 @@
 @model ElderlyCareApp.Models.ActivityLog
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Activity";
 }
 
-<h1>Edit</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <i class="fas fa-edit"></i> Edit Activity
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="CreatedAt" />
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="ElderlyPersonId" class="form-label">Patient</label>
+                                    <select asp-for="ElderlyPersonId" class="form-select" asp-items="ViewBag.ElderlyPersonId"></select>
+                                    <span asp-validation-for="ElderlyPersonId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="UserId" class="form-label">Logged By</label>
+                                    <select asp-for="UserId" class="form-select" asp-items="ViewBag.UserId"></select>
+                                    <span asp-validation-for="UserId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
 
-<h4>ActivityLog</h4>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            
-            <div class="form-group">
-                <label asp-for="ElderlyPersonId" class="control-label">Elderly Person</label>
-                <select asp-for="ElderlyPersonId" class="form-control" asp-items="ViewBag.ElderlyPersonId"></select>
-                <span asp-validation-for="ElderlyPersonId" class="text-danger"></span>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="ActivityType" class="form-label">Activity Type</label>
+                                    <select asp-for="ActivityType" class="form-select" asp-items="Html.GetEnumSelectList<ActivityType>()"></select>
+                                    <span asp-validation-for="ActivityType" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="StartTime" class="form-label">Start Time</label>
+                                    <input asp-for="StartTime" class="form-control" type="datetime-local" />
+                                    <span asp-validation-for="StartTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="EndTime" class="form-label">End Time (Optional)</label>
+                                    <input asp-for="EndTime" class="form-control" type="datetime-local" />
+                                    <span asp-validation-for="EndTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="DurationMinutes" class="form-label">Duration (minutes)</label>
+                                    <input asp-for="DurationMinutes" class="form-control" type="number" min="1" />
+                                    <span asp-validation-for="DurationMinutes" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Notes" class="form-label">Notes</label>
+                            <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                            <a asp-controller="Home" asp-action="PatientDashboard" asp-route-id="@Model.ElderlyPersonId" class="btn btn-info">
+                                <i class="fas fa-user"></i> Return to Patient Dashboard
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label">Caregiver</label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="ActivityType" class="control-label">Activity Type</label>
-                <input asp-for="ActivityType" class="form-control" />
-                <span asp-validation-for="ActivityType" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Category" class="control-label">Category</label>
-                <select asp-for="Category" class="form-control" asp-items="Html.GetEnumSelectList<ActivityCategory>()"></select>
-                <span asp-validation-for="Category" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Description" class="control-label">Description</label>
-                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="StartTime" class="control-label">Start Time</label>
-                <input asp-for="StartTime" class="form-control" type="datetime-local" />
-                <span asp-validation-for="StartTime" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="EndTime" class="control-label">End Time</label>
-                <input asp-for="EndTime" class="form-control" type="datetime-local" />
-                <span asp-validation-for="EndTime" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="DurationMinutes" class="control-label">Duration (Minutes)</label>
-                <input asp-for="DurationMinutes" class="form-control" type="number" />
-                <span asp-validation-for="DurationMinutes" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Location" class="control-label">Location</label>
-                <input asp-for="Location" class="form-control" />
-                <span asp-validation-for="Location" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="EnergyLevel" class="control-label">Energy Level (1-10)</label>
-                <input asp-for="EnergyLevel" class="form-control" type="number" min="1" max="10" />
-                <span asp-validation-for="EnergyLevel" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="EnjoymentLevel" class="control-label">Enjoyment Level (1-10)</label>
-                <input asp-for="EnjoymentLevel" class="form-control" type="number" min="1" max="10" />
-                <span asp-validation-for="EnjoymentLevel" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Notes" class="control-label">Notes</label>
-                <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
-                <span asp-validation-for="Notes" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsCompleted" /> @Html.DisplayNameFor(model => model.IsCompleted)
-                </label>
-            </div>
-            
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 

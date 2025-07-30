@@ -4,14 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ElderlyCareApp.Models
 {
-    public enum ActivityCategory
+    public enum ActivityType
     {
+        Walk,
         Exercise,
+        Reading,
         Social,
-        Cognitive,
-        PersonalCare,
-        Recreation,
-        Medical,
+        Rest,
         Other
     }
 
@@ -31,10 +30,7 @@ namespace ElderlyCareApp.Models
         public virtual User User { get; set; } = null!;
         
         [Required]
-        [StringLength(100)]
-        public string ActivityType { get; set; } = string.Empty;
-        
-        public ActivityCategory Category { get; set; } = ActivityCategory.Other;
+        public ActivityType ActivityType { get; set; }
         
         [StringLength(500)]
         public string? Description { get; set; }
@@ -45,22 +41,9 @@ namespace ElderlyCareApp.Models
         
         public int? DurationMinutes { get; set; }
         
-        [StringLength(100)]
-        public string? Location { get; set; }
-        
-        [Range(1, 10)]
-        public int? EnergyLevel { get; set; } // 1-10 scale
-        
-        [Range(1, 10)]
-        public int? EnjoymentLevel { get; set; } // 1-10 scale
-        
         [StringLength(500)]
         public string? Notes { get; set; }
         
-        public bool IsCompleted { get; set; } = true;
-        
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        
-        public DateTime? UpdatedAt { get; set; }
     }
 } 

@@ -1,151 +1,96 @@
 @model ElderlyCareApp.Models.MedicationLog
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Medication";
 }
 
-<h1>Edit</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <i class="fas fa-edit"></i> Edit Medication
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="CreatedAt" />
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="ElderlyPersonId" class="form-label">Patient</label>
+                                    <select asp-for="ElderlyPersonId" class="form-select" asp-items="ViewBag.ElderlyPersonId"></select>
+                                    <span asp-validation-for="ElderlyPersonId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="UserId" class="form-label">Logged By</label>
+                                    <select asp-for="UserId" class="form-select" asp-items="ViewBag.UserId"></select>
+                                    <span asp-validation-for="UserId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
 
-<h4>MedicationLog</h4>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            
-            <div class="form-group">
-                <label asp-for="ElderlyPersonId" class="control-label">Elderly Person</label>
-                <select asp-for="ElderlyPersonId" class="form-control" asp-items="ViewBag.ElderlyPersonId"></select>
-                <span asp-validation-for="ElderlyPersonId" class="text-danger"></span>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="MedicationName" class="form-label">Medication Name</label>
+                                    <input asp-for="MedicationName" class="form-control" />
+                                    <span asp-validation-for="MedicationName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Dosage" class="form-label">Dosage</label>
+                                    <input asp-for="Dosage" class="form-control" placeholder="e.g., 500mg" />
+                                    <span asp-validation-for="Dosage" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Timestamp" class="form-label">Time Taken</label>
+                                    <input asp-for="Timestamp" class="form-control" type="datetime-local" />
+                                    <span asp-validation-for="Timestamp" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Taken" class="form-label">Status</label>
+                                    <div class="form-check">
+                                        <input asp-for="Taken" class="form-check-input" />
+                                        <label asp-for="Taken" class="form-check-label">Medication was taken</label>
+                                    </div>
+                                    <span asp-validation-for="Taken" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Notes" class="form-label">Notes</label>
+                            <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Any additional notes about the medication..."></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                            <a asp-controller="Home" asp-action="PatientDashboard" asp-route-id="@Model.ElderlyPersonId" class="btn btn-info">
+                                <i class="fas fa-user"></i> Return to Patient Dashboard
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label">Caregiver</label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="MedicationName" class="control-label">Medication Name</label>
-                <input asp-for="MedicationName" class="form-control" />
-                <span asp-validation-for="MedicationName" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Dosage" class="control-label">Dosage</label>
-                <input asp-for="Dosage" class="form-control" />
-                <span asp-validation-for="Dosage" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Frequency" class="control-label">Frequency</label>
-                <input asp-for="Frequency" class="form-control" placeholder="e.g., Twice daily, Every 8 hours" />
-                <span asp-validation-for="Frequency" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Route" class="control-label">Route</label>
-                <select asp-for="Route" class="form-control">
-                    <option value="">Select Route</option>
-                    <option value="Oral">Oral</option>
-                    <option value="Topical">Topical</option>
-                    <option value="Injection">Injection</option>
-                    <option value="Inhalation">Inhalation</option>
-                    <option value="Sublingual">Sublingual</option>
-                </select>
-                <span asp-validation-for="Route" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="PrescribedBy" class="control-label">Prescribed By</label>
-                <input asp-for="PrescribedBy" class="form-control" />
-                <span asp-validation-for="PrescribedBy" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="PrescriptionDate" class="control-label">Prescription Date</label>
-                <input asp-for="PrescriptionDate" class="form-control" type="date" />
-                <span asp-validation-for="PrescriptionDate" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="ExpiryDate" class="control-label">Expiry Date</label>
-                <input asp-for="ExpiryDate" class="form-control" type="date" />
-                <span asp-validation-for="ExpiryDate" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Pharmacy" class="control-label">Pharmacy</label>
-                <input asp-for="Pharmacy" class="form-control" />
-                <span asp-validation-for="Pharmacy" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="PharmacyPhone" class="control-label">Pharmacy Phone</label>
-                <input asp-for="PharmacyPhone" class="form-control" />
-                <span asp-validation-for="PharmacyPhone" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Instructions" class="control-label">Instructions</label>
-                <textarea asp-for="Instructions" class="form-control" rows="3"></textarea>
-                <span asp-validation-for="Instructions" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Status" class="control-label">Status</label>
-                <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<MedicationStatus>()"></select>
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="ScheduledTime" class="control-label">Scheduled Time</label>
-                <input asp-for="ScheduledTime" class="form-control" type="datetime-local" />
-                <span asp-validation-for="ScheduledTime" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="ActualTime" class="control-label">Actual Time Taken</label>
-                <input asp-for="ActualTime" class="form-control" type="datetime-local" />
-                <span asp-validation-for="ActualTime" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="SideEffects" class="control-label">Side Effects</label>
-                <textarea asp-for="SideEffects" class="form-control" rows="3"></textarea>
-                <span asp-validation-for="SideEffects" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Interactions" class="control-label">Drug Interactions</label>
-                <textarea asp-for="Interactions" class="form-control" rows="3"></textarea>
-                <span asp-validation-for="Interactions" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Notes" class="control-label">Notes</label>
-                <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
-                <span asp-validation-for="Notes" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="RequiresRefill" /> @Html.DisplayNameFor(model => model.RequiresRefill)
-                </label>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="RefillReminderDate" class="control-label">Refill Reminder Date</label>
-                <input asp-for="RefillReminderDate" class="form-control" type="date" />
-                <span asp-validation-for="RefillReminderDate" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 

@@ -334,4 +334,5 @@ C:\Users\eknsu\Documents\FSDM\Term 3\ASP.NET\Project\ElderlyCareApp\ElderlyCareA
 C:\Users\eknsu\Documents\FSDM\Term 3\ASP.NET\Project\ElderlyCareApp\ElderlyCareApp\bin\Debug\net9.0\tr\Microsoft.CodeAnalysis.Scripting.resources.dll
 C:\Users\eknsu\Documents\FSDM\Term 3\ASP.NET\Project\ElderlyCareApp\ElderlyCareApp\bin\Debug\net9.0\zh-Hans\Microsoft.CodeAnalysis.Scripting.resources.dll
 C:\Users\eknsu\Documents\FSDM\Term 3\ASP.NET\Project\ElderlyCareApp\ElderlyCareApp\bin\Debug\net9.0\zh-Hant\Microsoft.CodeAnalysis.Scripting.resources.dll
+C:\Users\eknsu\Documents\FSDM\Term 3\ASP.NET\Project\ElderlyCareApp\ElderlyCareApp\obj\Debug\net9.0\ElderlyCareApp.sourcelink.json
 C:\Users\eknsu\Documents\FSDM\Term 3\ASP.NET\Project\ElderlyCareApp\ElderlyCareApp\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

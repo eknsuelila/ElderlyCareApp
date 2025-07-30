@@ -50,39 +50,6 @@
                             </ul>
                         </li>
 
-                        <!-- Care Management -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="careDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-clipboard-list me-1"></i>Care Management
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="careDropdown">
-                                <li><a class="dropdown-item" asp-controller="CarePlans" asp-action="Index">
-                                    <i class="fas fa-clipboard me-2"></i>Care Plans
-                                </a></li>
-                                <li><a class="dropdown-item" asp-controller="TaskSchedules" asp-action="Index">
-                                    <i class="fas fa-tasks me-2"></i>Task Schedules
-                                </a></li>
-                            </ul>
-                        </li>
-
-                        <!-- Health Monitoring -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="healthDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-heartbeat me-1"></i>Health
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="healthDropdown">
-                                <li><a class="dropdown-item" asp-controller="VitalSignsLogs" asp-action="Index">
-                                    <i class="fas fa-stethoscope me-2"></i>Vital Signs
-                                </a></li>
-                                <li><a class="dropdown-item" asp-controller="SymptomLogs" asp-action="Index">
-                                    <i class="fas fa-thermometer-half me-2"></i>Symptoms
-                                </a></li>
-                                <li><a class="dropdown-item" asp-controller="AppointmentLogs" asp-action="Index">
-                                    <i class="fas fa-calendar-check me-2"></i>Appointments
-                                </a></li>
-                            </ul>
-                        </li>
-
                         <!-- Daily Activities -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="activitiesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -98,8 +65,20 @@
                                 <li><a class="dropdown-item" asp-controller="MealLogs" asp-action="Index">
                                     <i class="fas fa-utensils me-2"></i>Meals
                                 </a></li>
-                                <li><a class="dropdown-item" asp-controller="SocialInteractionLogs" asp-action="Index">
-                                    <i class="fas fa-comments me-2"></i>Social Interactions
+                                <li><a class="dropdown-item" asp-controller="CareNotes" asp-action="Index">
+                                    <i class="fas fa-sticky-note me-2"></i>Care Notes
+                                </a></li>
+                            </ul>
+                        </li>
+
+                        <!-- Health & Appointments -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="healthDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-heartbeat me-1"></i>Health
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="healthDropdown">
+                                <li><a class="dropdown-item" asp-controller="AppointmentLogs" asp-action="Index">
+                                    <i class="fas fa-calendar-check me-2"></i>Appointments
                                 </a></li>
                             </ul>
                         </li>
@@ -110,18 +89,18 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-user-circle me-1"></i>
-                                @Context.Session.GetString("CurrentUserName") ?? "User"
+                                @(Context.Session.GetString("CurrentUserName") ?? "User")
                                 <span class="badge bg-light text-dark ms-1">
-                                    @Context.Session.GetString("CurrentUserRole") ?? "Unknown"
+                                    @(Context.Session.GetString("CurrentUserRole") ?? "Unknown")
                                 </span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li><h6 class="dropdown-header">Signed in as</h6></li>
                                 <li><span class="dropdown-item-text">
-                                    <i class="fas fa-user me-2"></i>@Context.Session.GetString("CurrentUserName")
+                                    <i class="fas fa-user me-2"></i>@(Context.Session.GetString("CurrentUserName") ?? "Unknown User")
                                 </span></li>
                                 <li><span class="dropdown-item-text">
-                                    <i class="fas fa-user-tag me-2"></i>@Context.Session.GetString("CurrentUserRole")
+                                    <i class="fas fa-user-tag me-2"></i>@(Context.Session.GetString("CurrentUserRole") ?? "Unknown Role")
                                 </span></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">

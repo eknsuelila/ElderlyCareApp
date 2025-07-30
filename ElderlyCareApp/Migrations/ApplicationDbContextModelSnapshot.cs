@@ -30,12 +30,7 @@ namespace ElderlyCareApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ActivityType")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("Category")
+                    b.Property<int>("ActivityType")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -51,21 +46,11 @@ namespace ElderlyCareApp.Migrations
                     b.Property<int>("ElderlyPersonId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ElderlyPersonId1")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("EndTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("EnergyLevel")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("EnjoymentLevel")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Location")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Notes")
                         .HasMaxLength(500)
@@ -74,17 +59,16 @@ namespace ElderlyCareApp.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ElderlyPersonId");
 
-                    b.HasIndex("ElderlyPersonId", "StartTime");
+                    b.HasIndex("ElderlyPersonId1");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ActivityLogs");
                 });
@@ -97,9 +81,6 @@ namespace ElderlyCareApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("ActualDateTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("AppointmentType")
                         .HasColumnType("int");
 
@@ -110,22 +91,11 @@ namespace ElderlyCareApp.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("Diagnosis")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("DurationMinutes")
-                        .HasColumnType("int");
-
                     b.Property<int>("ElderlyPersonId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("FollowUpDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FollowUpInstructions")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                    b.Property<int?>("ElderlyPersonId1")
+                        .HasColumnType("int");
 
                     b.Property<string>("Location")
                         .HasMaxLength(200)
@@ -135,32 +105,9 @@ namespace ElderlyCareApp.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("Prescriptions")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
                     b.Property<string>("ProviderName")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("ProviderSpecialty")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Reason")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Recommendations")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool>("RequiresTransportation")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime>("ScheduledDateTime")
                         .HasColumnType("datetime2");
@@ -168,139 +115,10 @@ namespace ElderlyCareApp.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<string>("Symptoms")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("TransportationNotes")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Treatment")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("ElderlyPersonId", "ScheduledDateTime");
-
-                    b.ToTable("AppointmentLogs");
-                });
-
-            modelBuilder.Entity("ElderlyCareApp.Models.CarePlan", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Barriers")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<int>("ElderlyPersonId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Equipment")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Goals")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Interventions")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<bool>("IsRecurring")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Objectives")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Precautions")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProgressNotes")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("ProgressPercentage")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RecurrencePattern")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Resources")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("RiskFactors")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Solutions")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SuccessCriteria")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime?>("TargetDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -309,9 +127,95 @@ namespace ElderlyCareApp.Migrations
 
                     b.HasIndex("ElderlyPersonId");
 
+                    b.HasIndex("ElderlyPersonId1");
+
                     b.HasIndex("UserId");
 
-                    b.ToTable("CarePlans");
+                    b.ToTable("AppointmentLogs");
+                });
+
+            modelBuilder.Entity("ElderlyCareApp.Models.CareNote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ElderlyPersonId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ElderlyPersonId1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NoteType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ElderlyPersonId");
+
+                    b.HasIndex("ElderlyPersonId1");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CareNotes");
+                });
+
+            modelBuilder.Entity("ElderlyCareApp.Models.CaregiverAssignment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CaregiverId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ElderlyPersonId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ElderlyPersonId");
+
+                    b.HasIndex("CaregiverId", "ElderlyPersonId", "IsActive")
+                        .IsUnique()
+                        .HasFilter("[IsActive] = 1");
+
+                    b.ToTable("CaregiverAssignments");
                 });
 
             modelBuilder.Entity("ElderlyCareApp.Models.ElderlyPerson", b =>
@@ -322,35 +226,15 @@ namespace ElderlyCareApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
                     b.Property<string>("Allergies")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("BloodType")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.Property<string>("CarePreferences")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("City")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("DietaryRestrictions")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("EmergencyContactName")
                         .HasMaxLength(100)
@@ -360,26 +244,10 @@ namespace ElderlyCareApp.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("EmergencyContactRelationship")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("InsurancePolicyNumber")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("InsuranceProvider")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("MedicalConditions")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("MobilityAids")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -396,21 +264,6 @@ namespace ElderlyCareApp.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("PhysicianPhone")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("PostalCode")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("PrimaryCarePhysician")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
 
                     b.ToTable("ElderlyPeople");
@@ -424,17 +277,6 @@ namespace ElderlyCareApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AllergiesNoted")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("AppetiteLevel")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Beverages")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -442,22 +284,11 @@ namespace ElderlyCareApp.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("DietaryCompliance")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("DurationMinutes")
-                        .HasColumnType("int");
-
                     b.Property<int>("ElderlyPersonId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Foods")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("bit");
+                    b.Property<int?>("ElderlyPersonId1")
+                        .HasColumnType("int");
 
                     b.Property<string>("MealName")
                         .HasMaxLength(200)
@@ -473,27 +304,16 @@ namespace ElderlyCareApp.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<int?>("PercentageEaten")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quality")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Supplements")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ElderlyPersonId");
 
-                    b.HasIndex("ElderlyPersonId", "MealTime");
+                    b.HasIndex("ElderlyPersonId1");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("MealLogs");
                 });
@@ -506,9 +326,6 @@ namespace ElderlyCareApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("ActualTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -519,20 +336,8 @@ namespace ElderlyCareApp.Migrations
                     b.Property<int>("ElderlyPersonId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ExpiryDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Frequency")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Instructions")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Interactions")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                    b.Property<int?>("ElderlyPersonId1")
+                        .HasColumnType("int");
 
                     b.Property<string>("MedicationName")
                         .IsRequired()
@@ -543,42 +348,10 @@ namespace ElderlyCareApp.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("Pharmacy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("PharmacyPhone")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("PrescribedBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("PrescriptionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("RefillReminderDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("RequiresRefill")
+                    b.Property<bool>("Taken")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Route")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("ScheduledTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SideEffects")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
+                    b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
@@ -586,371 +359,13 @@ namespace ElderlyCareApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ElderlyPersonId");
 
-                    b.HasIndex("ElderlyPersonId", "ScheduledTime");
+                    b.HasIndex("ElderlyPersonId1");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("MedicationLogs");
-                });
-
-            modelBuilder.Entity("ElderlyCareApp.Models.SocialInteractionLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Activities")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("DurationMinutes")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ElderlyPersonId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("EndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("EngagementLevel")
-                        .HasColumnType("int");
-
-                    b.Property<string>("InteractionTitle")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int>("InteractionType")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Location")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int?>("MoodAfter")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MoodBefore")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Participants")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("Quality")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Relationship")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TopicsDiscussed")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ElderlyPersonId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("SocialInteractionLogs");
-                });
-
-            modelBuilder.Entity("ElderlyCareApp.Models.SymptomLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("AnxietyLevel")
-                        .HasColumnType("int");
-
-                    b.Property<string>("BalanceIssues")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("CardiovascularIssues")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("CognitiveSymptoms")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Confusion")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DepressionLevel")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("DigestiveIssues")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("ElderlyPersonId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("HoursSlept")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsOngoing")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Location")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("LogTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("MedicalActionTaken")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("MedicationCompliance")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("MedicationSideEffects")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("MemoryIssues")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("MobilityIssues")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("Mood")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("PainLevel")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PhysicalSymptoms")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("ReliefMethods")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool>("RequiresMedicalAttention")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ResolvedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RespiratoryIssues")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("Severity")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SleepQuality")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Symptom")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Triggers")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ElderlyPersonId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("SymptomLogs");
-                });
-
-            modelBuilder.Entity("ElderlyCareApp.Models.TaskSchedule", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Barriers")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("CarePlanId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CompletedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CompletionNotes")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("CompletionRating")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("DurationMinutes")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ElderlyPersonId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("HasReminder")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Instructions")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsRecurring")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastReminderSent")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Location")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int?>("MaxOccurrences")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RecurrenceDays")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("RecurrenceEndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("RecurrenceInterval")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RecurrenceType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RelatedActivity")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("RelatedAppointment")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("RelatedMedication")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int?>("ReminderMinutesBefore")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Requirements")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime>("ScheduledTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Solutions")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TaskType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CarePlanId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("ElderlyPersonId", "ScheduledTime");
-
-                    b.HasIndex("Status", "ScheduledTime");
-
-                    b.ToTable("TaskSchedules");
                 });
 
             modelBuilder.Entity("ElderlyCareApp.Models.User", b =>
@@ -961,31 +376,11 @@ namespace ElderlyCareApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("City")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("EmergencyContactName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("EmergencyContactPhone")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("EmergencyContactRelationship")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -995,18 +390,10 @@ namespace ElderlyCareApp.Migrations
                     b.Property<DateTime?>("LastLoginAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("LicenseNumber")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -1017,113 +404,31 @@ namespace ElderlyCareApp.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("PostalCode")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
-                    b.Property<string>("Specializations")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("ElderlyCareApp.Models.VitalSignsLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Abnormalities")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("BloodSugar")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DiastolicPressure")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ElderlyPersonId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("HeartRate")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsNormal")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("MeasurementLocation")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("MeasurementMethod")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("MeasurementTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int?>("OxygenSaturation")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PainLevel")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RespiratoryRate")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SystolicPressure")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("Temperature")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("Weight")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("ElderlyPersonId", "MeasurementTime");
-
-                    b.ToTable("VitalSignsLogs");
                 });
 
             modelBuilder.Entity("ElderlyCareApp.Models.ActivityLog", b =>
                 {
                     b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
-                        .WithMany("ActivityLogs")
+                        .WithMany()
                         .HasForeignKey("ElderlyPersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ElderlyCareApp.Models.User", "User")
+                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", null)
                         .WithMany("ActivityLogs")
+                        .HasForeignKey("ElderlyPersonId1");
+
+                    b.HasOne("ElderlyCareApp.Models.User", "User")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1136,13 +441,17 @@ namespace ElderlyCareApp.Migrations
             modelBuilder.Entity("ElderlyCareApp.Models.AppointmentLog", b =>
                 {
                     b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
-                        .WithMany("AppointmentLogs")
+                        .WithMany()
                         .HasForeignKey("ElderlyPersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ElderlyCareApp.Models.User", "User")
+                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", null)
                         .WithMany("AppointmentLogs")
+                        .HasForeignKey("ElderlyPersonId1");
+
+                    b.HasOne("ElderlyCareApp.Models.User", "User")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1152,7 +461,7 @@ namespace ElderlyCareApp.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ElderlyCareApp.Models.CarePlan", b =>
+            modelBuilder.Entity("ElderlyCareApp.Models.CareNote", b =>
                 {
                     b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
                         .WithMany()
@@ -1160,8 +469,12 @@ namespace ElderlyCareApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", null)
+                        .WithMany("CareNotes")
+                        .HasForeignKey("ElderlyPersonId1");
+
                     b.HasOne("ElderlyCareApp.Models.User", "User")
-                        .WithMany("CarePlans")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1171,16 +484,39 @@ namespace ElderlyCareApp.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ElderlyCareApp.Models.MealLog", b =>
+            modelBuilder.Entity("ElderlyCareApp.Models.CaregiverAssignment", b =>
                 {
+                    b.HasOne("ElderlyCareApp.Models.User", "Caregiver")
+                        .WithMany()
+                        .HasForeignKey("CaregiverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
-                        .WithMany("MealLogs")
+                        .WithMany()
                         .HasForeignKey("ElderlyPersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ElderlyCareApp.Models.User", "User")
+                    b.Navigation("Caregiver");
+
+                    b.Navigation("ElderlyPerson");
+                });
+
+            modelBuilder.Entity("ElderlyCareApp.Models.MealLog", b =>
+                {
+                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
+                        .WithMany()
+                        .HasForeignKey("ElderlyPersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", null)
                         .WithMany("MealLogs")
+                        .HasForeignKey("ElderlyPersonId1");
+
+                    b.HasOne("ElderlyCareApp.Models.User", "User")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1193,108 +529,24 @@ namespace ElderlyCareApp.Migrations
             modelBuilder.Entity("ElderlyCareApp.Models.MedicationLog", b =>
                 {
                     b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
-                        .WithMany("MedicationLogs")
-                        .HasForeignKey("ElderlyPersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ElderlyCareApp.Models.User", "User")
-                        .WithMany("MedicationLogs")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ElderlyPerson");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ElderlyCareApp.Models.SocialInteractionLog", b =>
-                {
-                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
-                        .WithMany("SocialInteractionLogs")
-                        .HasForeignKey("ElderlyPersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ElderlyCareApp.Models.User", "User")
-                        .WithMany("SocialInteractionLogs")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ElderlyPerson");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ElderlyCareApp.Models.SymptomLog", b =>
-                {
-                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
-                        .WithMany("SymptomLogs")
-                        .HasForeignKey("ElderlyPersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ElderlyCareApp.Models.User", "User")
-                        .WithMany("SymptomLogs")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ElderlyPerson");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ElderlyCareApp.Models.TaskSchedule", b =>
-                {
-                    b.HasOne("ElderlyCareApp.Models.CarePlan", "CarePlan")
-                        .WithMany("TaskSchedules")
-                        .HasForeignKey("CarePlanId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
                         .WithMany()
                         .HasForeignKey("ElderlyPersonId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", null)
+                        .WithMany("MedicationLogs")
+                        .HasForeignKey("ElderlyPersonId1");
 
                     b.HasOne("ElderlyCareApp.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("CarePlan");
-
-                    b.Navigation("ElderlyPerson");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ElderlyCareApp.Models.VitalSignsLog", b =>
-                {
-                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
-                        .WithMany("VitalSignsLogs")
-                        .HasForeignKey("ElderlyPersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ElderlyCareApp.Models.User", "User")
-                        .WithMany("VitalSignsLogs")
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("ElderlyPerson");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ElderlyCareApp.Models.CarePlan", b =>
-                {
-                    b.Navigation("TaskSchedules");
                 });
 
             modelBuilder.Entity("ElderlyCareApp.Models.ElderlyPerson", b =>
@@ -1303,34 +555,11 @@ namespace ElderlyCareApp.Migrations
 
                     b.Navigation("AppointmentLogs");
 
-                    b.Navigation("MealLogs");
-
-                    b.Navigation("MedicationLogs");
-
-                    b.Navigation("SocialInteractionLogs");
-
-                    b.Navigation("SymptomLogs");
-
-                    b.Navigation("VitalSignsLogs");
-                });
-
-            modelBuilder.Entity("ElderlyCareApp.Models.User", b =>
-                {
-                    b.Navigation("ActivityLogs");
-
-                    b.Navigation("AppointmentLogs");
-
-                    b.Navigation("CarePlans");
+                    b.Navigation("CareNotes");
 
                     b.Navigation("MealLogs");
 
                     b.Navigation("MedicationLogs");
-
-                    b.Navigation("SocialInteractionLogs");
-
-                    b.Navigation("SymptomLogs");
-
-                    b.Navigation("VitalSignsLogs");
                 });
 #pragma warning restore 612, 618
         }

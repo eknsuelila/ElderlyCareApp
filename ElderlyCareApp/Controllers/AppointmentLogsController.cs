@@ -21,12 +21,8 @@ namespace ElderlyCareApp.Controllers
         // GET: AppointmentLogs
         public async Task<IActionResult> Index()
         {
-            var appointmentLogs = await _context.AppointmentLogs
-                .Include(a => a.ElderlyPerson)
-                .Include(a => a.User)
-                .OrderByDescending(a => a.ScheduledDateTime)
-                .ToListAsync();
-            return View(appointmentLogs);
+            var applicationDbContext = _context.AppointmentLogs.Include(a => a.ElderlyPerson).Include(a => a.User);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: AppointmentLogs/Details/5
@@ -64,6 +60,7 @@ namespace ElderlyCareApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                appointmentLog.CreatedAt = DateTime.Now;
                 _context.Add(appointmentLog);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,15 +83,15 @@ namespace ElderlyCareApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Name", appointmentLog.ElderlyPersonId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", appointmentLog.UserId);
+            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople.Where(p => p.IsActive), "Id", "Name", appointmentLog.ElderlyPersonId);
+            ViewData["UserId"] = new SelectList(_context.Users.Where(u => u.IsActive), "Id", "Name", appointmentLog.UserId);
             return View(appointmentLog);
         }
 
         // POST: AppointmentLogs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ElderlyPersonId,UserId,AppointmentType,Title,Description,ProviderName,Location,ScheduledDateTime,Status,Notes")] AppointmentLog appointmentLog)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ElderlyPersonId,UserId,Title,AppointmentType,ProviderName,Location,ScheduledDateTime,Status,Description,Notes")] AppointmentLog appointmentLog)
         {
             if (id != appointmentLog.Id)
             {
@@ -121,8 +118,8 @@ namespace ElderlyCareApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Name", appointmentLog.ElderlyPersonId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", appointmentLog.UserId);
+            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople.Where(p => p.IsActive), "Id", "Name", appointmentLog.ElderlyPersonId);
+            ViewData["UserId"] = new SelectList(_context.Users.Where(u => u.IsActive), "Id", "Name", appointmentLog.UserId);
             return View(appointmentLog);
         }
 
@@ -155,9 +152,8 @@ namespace ElderlyCareApp.Controllers
             if (appointmentLog != null)
             {
                 _context.AppointmentLogs.Remove(appointmentLog);
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

@@ -81,11 +81,9 @@ namespace ElderlyCareApp.Controllers
         }
 
         // POST: ElderlyPeople/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DateOfBirth,Notes")] ElderlyPerson elderlyPerson)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DateOfBirth,PhoneNumber,EmergencyContactName,EmergencyContactPhone,Allergies,MedicalConditions,Notes,IsActive")] ElderlyPerson elderlyPerson)
         {
             if (id != elderlyPerson.Id)
             {
@@ -142,9 +140,8 @@ namespace ElderlyCareApp.Controllers
             if (elderlyPerson != null)
             {
                 _context.ElderlyPeople.Remove(elderlyPerson);
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

@@ -56,12 +56,32 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWN0aXZpdHlMb2dzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/AppointmentLogs/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRMb2dzXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/AppointmentLogs/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRMb2dzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/CarePlans/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZVBsYW5zXEluZGV4LmNzaHRtbA==
+[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/CareNotes/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZU5vdGVzXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/CareNotes/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZU5vdGVzXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/CareNotes/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZU5vdGVzXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/CareNotes/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZU5vdGVzXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/CareNotes/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZU5vdGVzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/ElderlyPeople/Create.cshtml]
@@ -148,40 +168,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/SocialInteractionLogs/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU29jaWFsSW50ZXJhY3Rpb25Mb2dzXENyZWF0ZS5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/SocialInteractionLogs/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU29jaWFsSW50ZXJhY3Rpb25Mb2dzXERlbGV0ZS5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/SocialInteractionLogs/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU29jaWFsSW50ZXJhY3Rpb25Mb2dzXERldGFpbHMuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/SocialInteractionLogs/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU29jaWFsSW50ZXJhY3Rpb25Mb2dzXEVkaXQuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/SocialInteractionLogs/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU29jaWFsSW50ZXJhY3Rpb25Mb2dzXEluZGV4LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/SymptomLogs/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3ltcHRvbUxvZ3NcSW5kZXguY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/TaskSchedules/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGFza1NjaGVkdWxlc1xJbmRleC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/Users/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcSW5kZXguY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/VitalSignsLogs/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVml0YWxTaWduc0xvZ3NcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/_ViewImports.cshtml]

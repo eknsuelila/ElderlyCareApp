@@ -1,4 +1,4 @@
-@model ElderlyCareApp.Controllers.DashboardViewModel
+@model ElderlyCareApp.Controllers.HomeController.DashboardViewModel
 
 @{
     ViewData["Title"] = "System Overview";
@@ -40,11 +40,11 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <h4 class="mb-0">@Model.TotalUsers</h4>
-                            <small>Care Staff</small>
+                            <h4 class="mb-0">@Model.ActiveElderlyPeople</h4>
+                            <small>Active Patients</small>
                         </div>
                         <div class="align-self-center">
-                            <i class="fas fa-user-md fa-2x"></i>
+                            <i class="fas fa-user-check fa-2x"></i>
                         </div>
                     </div>
                 </div>
@@ -55,11 +55,11 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <h4 class="mb-0">@Model.TotalCarePlans</h4>
-                            <small>Care Plans</small>
+                            <h4 class="mb-0">@Model.TotalActivities</h4>
+                            <small>Activities</small>
                         </div>
                         <div class="align-self-center">
-                            <i class="fas fa-clipboard-list fa-2x"></i>
+                            <i class="fas fa-walking fa-2x"></i>
                         </div>
                     </div>
                 </div>
@@ -70,103 +70,12 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <h4 class="mb-0">@Model.PendingTasks</h4>
-                            <small>Pending Tasks</small>
+                            <h4 class="mb-0">@Model.TotalMedications</h4>
+                            <small>Medications</small>
                         </div>
                         <div class="align-self-center">
-                            <i class="fas fa-tasks fa-2x"></i>
+                            <i class="fas fa-pills fa-2x"></i>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <!-- Today's Tasks -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-calendar-day"></i> Today's Tasks
-                    </h5>
-                </div>
-                <div class="card-body">
-                    @if (Model.TodayTasks.Any())
-                    {
-                        <div class="list-group list-group-flush">
-                            @foreach (var task in Model.TodayTasks)
-                            {
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="mb-1">@task.Title</h6>
-                                        <small class="text-muted">
-                                            <i class="fas fa-user"></i> @task.ElderlyPerson?.Name • 
-                                            <i class="fas fa-clock"></i> @task.ScheduledTime.ToString("HH:mm") • 
-                                            @task.User?.Name
-                                        </small>
-                                    </div>
-                                    @{
-                                        string statusClass = task.Status switch
-                                        {
-                                            ElderlyCareApp.Models.TaskStatus.Completed => "bg-success",
-                                            ElderlyCareApp.Models.TaskStatus.InProgress => "bg-warning",
-                                            ElderlyCareApp.Models.TaskStatus.Scheduled => "bg-info",
-                                            ElderlyCareApp.Models.TaskStatus.Overdue => "bg-danger",
-                                            _ => "bg-secondary"
-                                        };
-                                    }
-                                    <span class="badge @statusClass">@task.Status</span>
-                                </div>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <p class="text-muted text-center py-3">No tasks scheduled for today</p>
-                    }
-                    <div class="mt-3">
-                        <a asp-controller="TaskSchedules" asp-action="Create" class="btn btn-primary btn-sm">
-                            <i class="fas fa-plus"></i> Add Task
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Upcoming Appointments -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-calendar-check"></i> Upcoming Appointments
-                    </h5>
-                </div>
-                <div class="card-body">
-                    @if (Model.UpcomingAppointments.Any())
-                    {
-                        <div class="list-group list-group-flush">
-                            @foreach (var appointment in Model.UpcomingAppointments)
-                            {
-                                <div class="list-group-item">
-                                    <h6 class="mb-1">@appointment.Title</h6>
-                                    <small class="text-muted">
-                                        <i class="fas fa-user"></i> @appointment.ElderlyPerson?.Name • 
-                                        <i class="fas fa-calendar"></i> @appointment.ScheduledDateTime.ToString("MMM dd, yyyy HH:mm") • 
-                                        <i class="fas fa-user-md"></i> @appointment.ProviderName
-                                    </small>
-                                </div>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <p class="text-muted text-center py-3">No upcoming appointments</p>
-                    }
-                    <div class="mt-3">
-                        <a asp-controller="AppointmentLogs" asp-action="Create" class="btn btn-info btn-sm">
-                            <i class="fas fa-plus"></i> Schedule Appointment
-                        </a>
                     </div>
                 </div>
             </div>
@@ -177,41 +86,37 @@
         <!-- Recent Activities -->
         <div class="col-md-6 mb-4">
             <div class="card shadow h-100">
-                <div class="card-header bg-success text-white">
+                <div class="card-header bg-primary text-white">
                     <h5 class="mb-0">
-                        <i class="fas fa-running"></i> Recent Activities
+                        <i class="fas fa-walking"></i> Recent Activities
                     </h5>
                 </div>
                 <div class="card-body">
-                    @if (Model.RecentActivityLogs.Any())
+                    @if (Model.RecentActivities.Any())
                     {
                         <div class="list-group list-group-flush">
-                            @foreach (var activity in Model.RecentActivityLogs)
+                            @foreach (var activity in Model.RecentActivities)
                             {
-                                <div class="list-group-item">
-                                    <h6 class="mb-1">@activity.ActivityType</h6>
-                                    <small class="text-muted">
-                                        <i class="fas fa-user"></i> @activity.ElderlyPerson?.Name • 
-                                        <i class="fas fa-clock"></i> @activity.StartTime.ToString("MMM dd, HH:mm")
-                                    </small>
-                                    @if (!string.IsNullOrEmpty(activity.Description))
-                                    {
-                                        <br />
-                                        <small class="text-muted">@activity.Description</small>
-                                    }
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">@activity.ActivityType</h6>
+                                        <small class="text-muted">
+                                            @activity.ElderlyPerson.Name • @activity.StartTime.ToString("MMM dd, HH:mm")
+                                        </small>
+                                        @if (!string.IsNullOrEmpty(activity.Description))
+                                        {
+                                            <br><small class="text-muted">@activity.Description</small>
+                                        }
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill">@activity.User.Name</span>
                                 </div>
                             }
                         </div>
                     }
                     else
                     {
-                        <p class="text-muted text-center py-3">No recent activities</p>
+                        <p class="text-muted text-center">No recent activities</p>
                     }
-                    <div class="mt-3">
-                        <a asp-controller="ActivityLogs" asp-action="Create" class="btn btn-success btn-sm">
-                            <i class="fas fa-plus"></i> Log Activity
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>
@@ -219,96 +124,117 @@
         <!-- Recent Medications -->
         <div class="col-md-6 mb-4">
             <div class="card shadow h-100">
-                <div class="card-header bg-warning text-dark">
+                <div class="card-header bg-success text-white">
                     <h5 class="mb-0">
                         <i class="fas fa-pills"></i> Recent Medications
                     </h5>
                 </div>
                 <div class="card-body">
-                    @if (Model.RecentMedicationLogs.Any())
+                    @if (Model.RecentMedications.Any())
                     {
                         <div class="list-group list-group-flush">
-                            @foreach (var medication in Model.RecentMedicationLogs)
+                            @foreach (var medication in Model.RecentMedications)
                             {
                                 <div class="list-group-item d-flex justify-content-between align-items-center">
                                     <div>
                                         <h6 class="mb-1">@medication.MedicationName</h6>
                                         <small class="text-muted">
-                                            <i class="fas fa-user"></i> @medication.ElderlyPerson?.Name • 
-                                            <i class="fas fa-clock"></i> @medication.ScheduledTime.ToString("MMM dd, HH:mm") • 
-                                            @medication.Dosage
+                                            @medication.ElderlyPerson.Name • @medication.Timestamp.ToString("MMM dd, HH:mm")
                                         </small>
-                                    </div>
-                                    @{
-                                        string medStatusClass = medication.Status switch
+                                        @if (!string.IsNullOrEmpty(medication.Dosage))
                                         {
-                                            MedicationStatus.Taken => "bg-success",
-                                            MedicationStatus.Scheduled => "bg-info",
-                                            MedicationStatus.Missed => "bg-danger",
-                                            _ => "bg-secondary"
-                                        };
-                                    }
-                                    <span class="badge @medStatusClass">@medication.Status</span>
+                                            <br><small class="text-muted">@medication.Dosage</small>
+                                        }
+                                    </div>
+                                    <span class="badge @(medication.Taken ? "bg-success" : "bg-danger") rounded-pill">
+                                        @(medication.Taken ? "Taken" : "Missed")
+                                    </span>
                                 </div>
                             }
                         </div>
                     }
                     else
                     {
-                        <p class="text-muted text-center py-3">No recent medications</p>
+                        <p class="text-muted text-center">No recent medications</p>
                     }
-                    <div class="mt-3">
-                        <a asp-controller="MedicationLogs" asp-action="Create" class="btn btn-warning btn-sm">
-                            <i class="fas fa-plus"></i> Log Medication
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Quick Actions -->
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card shadow">
-                <div class="card-header bg-dark text-white">
+    <div class="row">
+        <!-- Recent Meals -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header bg-info text-white">
                     <h5 class="mb-0">
-                        <i class="fas fa-bolt"></i> Quick Actions
+                        <i class="fas fa-utensils"></i> Recent Meals
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-2 mb-2">
-                            <a asp-controller="ElderlyPeople" asp-action="Create" class="btn btn-outline-primary w-100">
-                                <i class="fas fa-user-plus"></i><br />Add Patient
-                            </a>
+                    @if (Model.RecentMeals.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var meal in Model.RecentMeals)
+                            {
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">@meal.MealType - @(meal.MealName ?? "Meal")</h6>
+                                        <small class="text-muted">
+                                            @meal.ElderlyPerson.Name • @meal.MealTime.ToString("MMM dd, HH:mm")
+                                        </small>
+                                        @if (!string.IsNullOrEmpty(meal.Description))
+                                        {
+                                            <br><small class="text-muted">@meal.Description</small>
+                                        }
+                                    </div>
+                                    <span class="badge bg-info rounded-pill">@meal.User.Name</span>
+                                </div>
+                            }
                         </div>
-                        <div class="col-md-2 mb-2">
-                            <a asp-controller="Users" asp-action="Create" class="btn btn-outline-success w-100">
-                                <i class="fas fa-user-md"></i><br />Add Staff
-                            </a>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center">No recent meals</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Appointments -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-calendar-alt"></i> Recent Appointments
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentAppointments.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var appointment in Model.RecentAppointments)
+                            {
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">@appointment.Title</h6>
+                                        <small class="text-muted">
+                                            @appointment.ElderlyPerson.Name • @appointment.ScheduledDateTime.ToString("MMM dd, HH:mm")
+                                        </small>
+                                        @if (!string.IsNullOrEmpty(appointment.ProviderName))
+                                        {
+                                            <br><small class="text-muted">@appointment.ProviderName</small>
+                                        }
+                                    </div>
+                                    <span class="badge bg-warning text-dark rounded-pill">@appointment.Status</span>
+                                </div>
+                            }
                         </div>
-                        <div class="col-md-2 mb-2">
-                            <a asp-controller="CarePlans" asp-action="Create" class="btn btn-outline-info w-100">
-                                <i class="fas fa-clipboard"></i><br />Create Care Plan
-                            </a>
-                        </div>
-                        <div class="col-md-2 mb-2">
-                            <a asp-controller="TaskSchedules" asp-action="Create" class="btn btn-outline-warning w-100">
-                                <i class="fas fa-tasks"></i><br />Schedule Task
-                            </a>
-                        </div>
-                        <div class="col-md-2 mb-2">
-                            <a asp-controller="AppointmentLogs" asp-action="Create" class="btn btn-outline-secondary w-100">
-                                <i class="fas fa-calendar"></i><br />Book Appointment
-                            </a>
-                        </div>
-                        <div class="col-md-2 mb-2">
-                            <a asp-controller="VitalSignsLogs" asp-action="Create" class="btn btn-outline-danger w-100">
-                                <i class="fas fa-heartbeat"></i><br />Record Vitals
-                            </a>
-                        </div>
-                    </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center">No recent appointments</p>
+                    }
                 </div>
             </div>
         </div>

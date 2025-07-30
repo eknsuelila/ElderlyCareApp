@@ -48,26 +48,25 @@ namespace ElderlyCareApp.Controllers
         // GET: ActivityLogs/Create
         public IActionResult Create()
         {
-            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Id");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Name");
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name");
             return View();
         }
 
         // POST: ActivityLogs/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ElderlyPersonId,UserId,ActivityType,Description,Timestamp")] ActivityLog activityLog)
+        public async Task<IActionResult> Create([Bind("ElderlyPersonId,UserId,ActivityType,Description,StartTime,EndTime,DurationMinutes,Notes")] ActivityLog activityLog)
         {
             if (ModelState.IsValid)
             {
+                activityLog.CreatedAt = DateTime.Now;
                 _context.Add(activityLog);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Id", activityLog.ElderlyPersonId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", activityLog.UserId);
+            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Name", activityLog.ElderlyPersonId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", activityLog.UserId);
             return View(activityLog);
         }
 
@@ -84,17 +83,15 @@ namespace ElderlyCareApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Id", activityLog.ElderlyPersonId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", activityLog.UserId);
+            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople.Where(p => p.IsActive), "Id", "Name", activityLog.ElderlyPersonId);
+            ViewData["UserId"] = new SelectList(_context.Users.Where(u => u.IsActive), "Id", "Name", activityLog.UserId);
             return View(activityLog);
         }
 
         // POST: ActivityLogs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ElderlyPersonId,UserId,ActivityType,Description,Timestamp")] ActivityLog activityLog)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ElderlyPersonId,UserId,ActivityType,Description,StartTime,EndTime")] ActivityLog activityLog)
         {
             if (id != activityLog.Id)
             {
@@ -121,8 +118,8 @@ namespace ElderlyCareApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Id", activityLog.ElderlyPersonId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", activityLog.UserId);
+            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople.Where(p => p.IsActive), "Id", "Name", activityLog.ElderlyPersonId);
+            ViewData["UserId"] = new SelectList(_context.Users.Where(u => u.IsActive), "Id", "Name", activityLog.UserId);
             return View(activityLog);
         }
 
@@ -155,9 +152,8 @@ namespace ElderlyCareApp.Controllers
             if (activityLog != null)
             {
                 _context.ActivityLogs.Remove(activityLog);
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

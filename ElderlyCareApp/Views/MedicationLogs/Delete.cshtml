@@ -1,49 +1,80 @@
 @model ElderlyCareApp.Models.MedicationLog
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete Medication";
 }
 
-<h1>Delete</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-trash"></i> Delete Medication
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h5><i class="fas fa-exclamation-triangle"></i> Are you sure you want to delete this medication record?</h5>
+                        <p class="mb-0">This action cannot be undone.</p>
+                    </div>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>MedicationLog</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ElderlyPerson)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ElderlyPerson.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MedicationName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MedicationName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Dosage)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Dosage)
-        </dd>
-        <dt class="col-sm-2">Status</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Status)</dd>
-        <dt class="col-sm-2">Scheduled Time</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.ScheduledTime)</dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Medication</dt>
+                                <dd class="col-sm-8">@Model.MedicationName</dd>
+
+                                <dt class="col-sm-4">Dosage</dt>
+                                <dd class="col-sm-8">@(Model.Dosage ?? "Not specified")</dd>
+
+                                <dt class="col-sm-4">Time Taken</dt>
+                                <dd class="col-sm-8">@Model.Timestamp.ToString("MMM dd, yyyy HH:mm")</dd>
+
+                                <dt class="col-sm-4">Status</dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge @(Model.Taken ? "bg-success" : "bg-danger")">
+                                        @(Model.Taken ? "Taken" : "Missed")
+                                    </span>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Patient</dt>
+                                <dd class="col-sm-8">@Model.ElderlyPerson.Name</dd>
+
+                                <dt class="col-sm-4">Logged By</dt>
+                                <dd class="col-sm-8">@Model.User.Name</dd>
+
+                                <dt class="col-sm-4">Created</dt>
+                                <dd class="col-sm-8">@Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Notes))
+                    {
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <h6>Notes</h6>
+                                <p class="text-muted">@Model.Notes</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer">
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
