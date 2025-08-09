@@ -118,6 +118,11 @@ namespace ElderlyCareApp.Services
                 var healthSummary = BuildPatientHealthSummary(patient, activities, medications, meals, appointments);
                 _logger.LogInformation("Built health summary for patient {PatientName}", patient.Name);
 
+                foreach (var med in medications)
+                {
+                    Console.WriteLine($"----------> Medication: {med.MedicationName}, Time: {med.Timestamp}");
+                }
+
                 var url = "http://asl.serveblog.net:8000/run_sse";
                 _logger.LogInformation("Sending AI insights request to: {Url}", url);
 
@@ -328,7 +333,7 @@ namespace ElderlyCareApp.Services
             if (activities.Any())
             {
                 summary += "\nRecent Activities:\n";
-                foreach (var activity in activities.Take(3))
+                foreach (var activity in activities)
                 {
                     summary += $"- {activity.Description} ({activity.StartTime:MM/dd/yyyy})\n";
                 }
@@ -338,10 +343,10 @@ namespace ElderlyCareApp.Services
             if (medications.Any())
             {
                 summary += "\nRecent Medications:\n";
-                foreach (var med in medications.Take(3))
+                foreach (var med in medications)
                 {
                     var takenStatus = med.Taken ? "Taken" : "Missed";
-                    summary += $"- {med.MedicationName} ({takenStatus} on {med.Timestamp:MM/dd/yyyy})\n";
+                    summary += $"- {med.MedicationName} ({takenStatus} on {med.Timestamp:MM/dd/yyyy HH:mm})\n";
                 }
             }
 
@@ -349,7 +354,7 @@ namespace ElderlyCareApp.Services
             if (meals.Any())
             {
                 summary += "\nRecent Meals:\n";
-                foreach (var meal in meals.Take(3))
+                foreach (var meal in meals)
                 {
                     summary += $"- {meal.MealType} on {meal.MealTime:MM/dd/yyyy}\n";
                 }
@@ -359,14 +364,14 @@ namespace ElderlyCareApp.Services
             if (appointments.Any())
             {
                 summary += "\nRecent Appointments:\n";
-                foreach (var appt in appointments.Take(3))
+                foreach (var appt in appointments)
                 {
-                    summary += $"- {appt.AppointmentType} with {appt.ProviderName} on {appt.ScheduledDateTime:MM/dd/yyyy}\n";
+                    summary += $"- {appt.AppointmentType} with {appt.ProviderName} on {appt.ScheduledDateTime:MM/dd/yyyy HH:mm}\n";
                 }
             }
 
             summary += "\nPlease provide insights and recommendations based on this patient's health data.";
-
+            _logger.LogInformation("Health summary ----------> {summaryzation}", summary);
             return summary;
         }
     }

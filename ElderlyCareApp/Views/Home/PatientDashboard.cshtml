@@ -907,7 +907,7 @@ else
             
             // Extract Health Insights section (everything before "### Conclusion")
             const healthInsightsMatch = response.match(/(Health Insights for.*?)(?=### Conclusion|$)/s);
-            const conclusionMatch = response.match(/(### Conclusion.*?)$/s);
+            const conclusionMatch = response.match(/(### Concerns.*?)$/s);
             
             let formattedHTML = '';
             
