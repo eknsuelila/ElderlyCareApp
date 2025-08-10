@@ -58,13 +58,63 @@ namespace ElderlyCareApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ElderlyPersonId,UserId,AppointmentType,Title,Description,ProviderName,Location,ScheduledDateTime,Status,Notes")] AppointmentLog appointmentLog)
         {
-            if (ModelState.IsValid)
+            // Add debugging information
+            if (!ModelState.IsValid)
             {
-                appointmentLog.CreatedAt = DateTime.Now;
-                _context.Add(appointmentLog);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                foreach (var error in errors)
+                {
+                    ModelState.AddModelError("", error);
+                }
             }
+
+            // Debug: Log the received data
+            System.Diagnostics.Debug.WriteLine($"Received AppointmentLog: ElderlyPersonId={appointmentLog.ElderlyPersonId}, UserId={appointmentLog.UserId}, AppointmentType={appointmentLog.AppointmentType}, ScheduledDateTime={appointmentLog.ScheduledDateTime}");
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    // Ensure ScheduledDateTime has a value
+                    if (appointmentLog.ScheduledDateTime == default(DateTime))
+                    {
+                        appointmentLog.ScheduledDateTime = DateTime.Now;
+                        System.Diagnostics.Debug.WriteLine($"ScheduledDateTime was default, set to: {appointmentLog.ScheduledDateTime}");
+                    }
+                    
+                    appointmentLog.CreatedAt = DateTime.Now;
+                    _context.Add(appointmentLog);
+                    var result = await _context.SaveChangesAsync();
+                    
+                    System.Diagnostics.Debug.WriteLine($"SaveChangesAsync result: {result}");
+                    
+                    if (result > 0)
+                    {
+                        // Redirect to patient dashboard instead of index
+                        return RedirectToAction("PatientDashboard", "Home", new { patientId = appointmentLog.ElderlyPersonId });
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Failed to save appointment log to database");
+                    }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("ModelState is not valid");
+                    var allErrors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                    foreach (var error in allErrors)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Validation error: {error}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Exception occurred: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                ModelState.AddModelError("", $"Error saving appointment log: {ex.Message}");
+            }
+            
             ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Name", appointmentLog.ElderlyPersonId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", appointmentLog.UserId);
             return View(appointmentLog);
@@ -91,7 +141,7 @@ namespace ElderlyCareApp.Controllers
         // POST: AppointmentLogs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ElderlyPersonId,UserId,Title,AppointmentType,ProviderName,Location,ScheduledDateTime,Status,Description,Notes")] AppointmentLog appointmentLog)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ElderlyPersonId,UserId,Title,Description,AppointmentType,ScheduledDateTime,Status,ProviderName,Location,Notes")] AppointmentLog appointmentLog)
         {
             if (id != appointmentLog.Id)
             {
@@ -104,6 +154,8 @@ namespace ElderlyCareApp.Controllers
                 {
                     _context.Update(appointmentLog);
                     await _context.SaveChangesAsync();
+                    // Redirect to patient dashboard instead of index
+                    return RedirectToAction("PatientDashboard", "Home", new { patientId = appointmentLog.ElderlyPersonId });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -116,7 +168,6 @@ namespace ElderlyCareApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople.Where(p => p.IsActive), "Id", "Name", appointmentLog.ElderlyPersonId);
             ViewData["UserId"] = new SelectList(_context.Users.Where(u => u.IsActive), "Id", "Name", appointmentLog.UserId);

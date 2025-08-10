@@ -76,17 +76,35 @@
                     }
                 </div>
                 <div class="card-footer">
-                    <form asp-action="Delete">
+                    <form asp-action="Delete" method="post" class="d-inline">
                         <input type="hidden" asp-for="Id" />
                         <button type="submit" class="btn btn-danger">
-                            <i class="fas fa-trash"></i> Delete
+                            <i class="fas fa-trash"></i> Confirm Delete
                         </button>
-                        <a asp-action="Index" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Back to List
-                        </a>
                     </form>
+                    <a href="#" onclick="returnToPatientDashboard()" class="btn btn-info">
+                        <i class="fas fa-user"></i> Return to Patient Dashboard
+                    </a>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Cancel
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function returnToPatientDashboard() {
+            var patientId = @Model.ElderlyPersonId;
+            if (patientId) {
+                window.location.href = '@Url.Action("PatientDashboard", "Home")?patientId=' + patientId;
+            } else {
+                // Fallback to index if no patient ID
+                window.location.href = '@Url.Action("Index", "Home")';
+            }
+            return false;
+        }
+    </script>
+}

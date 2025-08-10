@@ -1,0 +1,169 @@
+@model ElderlyCareApp.Models.User
+
+@{
+    ViewData["Title"] = "Delete User";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1><i class="fas fa-user-times text-danger"></i> Delete User</h1>
+            <p class="text-muted">Remove user from the system</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-info">
+                <i class="fas fa-eye"></i> View Details
+            </a>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning" role="alert">
+                        <h6 class="alert-heading"><i class="fas fa-exclamation-triangle"></i> Warning!</h6>
+                        <p class="mb-0">You are about to delete the user <strong>@Model.Name</strong>. This action cannot be undone.</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4 fw-bold">Full Name:</dt>
+                                <dd class="col-sm-8">@Model.Name</dd>
+                                
+                                <dt class="col-sm-4 fw-bold">Email Address:</dt>
+                                <dd class="col-sm-8">@Model.Email</dd>
+                                
+                                <dt class="col-sm-4 fw-bold">User Role:</dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge @(Model.Role == UserRole.Caregiver ? "bg-info" : "bg-success") fs-6">
+                                        @Model.Role
+                                    </span>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4 fw-bold">Phone Number:</dt>
+                                <dd class="col-sm-8">
+                                    @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                                    {
+                                        @Model.PhoneNumber
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Not provided</span>
+                                    }
+                                </dd>
+                                
+                                <dt class="col-sm-4 fw-bold">Status:</dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger") fs-6">
+                                        @(Model.IsActive ? "Active" : "Inactive")
+                                    </span>
+                                </dd>
+                                
+                                <dt class="col-sm-4 fw-bold">Created:</dt>
+                                <dd class="col-sm-8">@Model.CreatedAt.ToString("MMM dd, yyyy")</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <dl class="row">
+                                <dt class="col-sm-2 fw-bold">Last Login:</dt>
+                                <dd class="col-sm-10">
+                                    @if (Model.LastLoginAt.HasValue)
+                                    {
+                                        <span class="text-muted">
+                                            <i class="fas fa-clock"></i> @Model.LastLoginAt.Value.ToString("MMM dd, yyyy HH:mm")
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Never logged in</span>
+                                    }
+                                </dd>
+                                
+                                <dt class="col-sm-2 fw-bold">User ID:</dt>
+                                <dd class="col-sm-10">
+                                    <span class="text-muted">#@Model.Id</span>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer bg-light">
+                    <form asp-action="Delete" method="post" class="d-inline">
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Confirm Delete
+                        </button>
+                    </form>
+                    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-info">
+                        <i class="fas fa-eye"></i> View Details
+                    </a>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Cancel
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h6 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Deletion Impact</h6>
+                </div>
+                <div class="card-body">
+                    <h6>What will happen:</h6>
+                    <ul class="list-unstyled small">
+                        <li><i class="fas fa-times text-danger"></i> User account will be permanently removed</li>
+                        <li><i class="fas fa-times text-danger"></i> User will no longer be able to login</li>
+                        <li><i class="fas fa-times text-danger"></i> All associated data will be lost</li>
+                        <li><i class="fas fa-times text-danger"></i> This action cannot be undone</li>
+                    </ul>
+                    
+                    <hr>
+                    
+                    <h6>Before deleting, consider:</h6>
+                    <ul class="list-unstyled small">
+                        <li><i class="fas fa-check text-success"></i> Is the user no longer needed?</li>
+                        <li><i class="fas fa-check text-success"></i> Have you backed up important data?</li>
+                        <li><i class="fas fa-check text-success"></i> Are there no active assignments?</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card shadow mt-3">
+                <div class="card-header bg-warning text-dark">
+                    <h6 class="mb-0"><i class="fas fa-lightbulb"></i> Alternative Actions</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Edit Instead
+                        </a>
+                        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-info btn-sm">
+                            <i class="fas fa-eye"></i> Review Details
+                        </a>
+                        <a asp-action="Index" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

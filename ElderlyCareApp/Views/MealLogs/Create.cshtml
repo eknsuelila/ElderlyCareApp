@@ -1,51 +1,92 @@
 @model ElderlyCareApp.Models.MealLog
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Add Meal Log";
 }
 
-<h1>Create</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-utensils"></i> Add Meal Log
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="ElderlyPersonId" class="form-label">Patient</label>
+                                    <select asp-for="ElderlyPersonId" class="form-select" asp-items="ViewBag.ElderlyPersonId"></select>
+                                    <span asp-validation-for="ElderlyPersonId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="UserId" class="form-label">Logged By</label>
+                                    <select asp-for="UserId" class="form-select" asp-items="ViewBag.UserId"></select>
+                                    <span asp-validation-for="UserId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
 
-<h4>MealLog</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ElderlyPersonId" class="control-label"></label>
-                <select asp-for="ElderlyPersonId" class ="form-control" asp-items="ViewBag.ElderlyPersonId"></select>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="MealType" class="form-label">Meal Type</label>
+                                    <input asp-for="MealType" class="form-control" placeholder="e.g., Breakfast, Lunch, Dinner, Snack" />
+                                    <span asp-validation-for="MealType" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="MealTime" class="form-label">Meal Time</label>
+                                    <input asp-for="MealTime" class="form-control" type="datetime-local" />
+                                    <span asp-validation-for="MealTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Describe the meal, food items, portions..."></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-plus"></i> Create Meal Log
+                            </button>
+                            <a href="#" onclick="returnToPatientDashboard()" class="btn btn-info">
+                                <i class="fas fa-user"></i> Return to Patient Dashboard
+                            </a>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to List
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="MealType" class="control-label"></label>
-                <input asp-for="MealType" class="form-control" />
-                <span asp-validation-for="MealType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MealTime" class="control-label">Meal Time</label>
-                <input asp-for="MealTime" class="form-control" type="datetime-local" />
-                <span asp-validation-for="MealTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function returnToPatientDashboard() {
+            var patientId = document.getElementById('ElderlyPersonId').value;
+            if (patientId) {
+                window.location.href = '@Url.Action("PatientDashboard", "Home")?patientId=' + patientId;
+            } else {
+                // Fallback to index if no patient ID
+                window.location.href = '@Url.Action("Index", "Home")';
+            }
+            return false;
+        }
+    </script>
 }

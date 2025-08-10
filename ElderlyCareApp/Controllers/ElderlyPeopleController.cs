@@ -53,13 +53,14 @@ namespace ElderlyCareApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,DateOfBirth,Notes")] ElderlyPerson elderlyPerson)
+        public async Task<IActionResult> Create([Bind("Name,DateOfBirth,PhoneNumber,EmergencyContactName,EmergencyContactPhone,Allergies,MedicalConditions,Notes,IsActive")] ElderlyPerson elderlyPerson)
         {
             if (ModelState.IsValid)
             {
+                elderlyPerson.CreatedAt = DateTime.Now;
                 _context.Add(elderlyPerson);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("PatientDashboard", "Home", new { patientId = elderlyPerson.Id });
             }
             return View(elderlyPerson);
         }
@@ -83,7 +84,7 @@ namespace ElderlyCareApp.Controllers
         // POST: ElderlyPeople/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DateOfBirth,PhoneNumber,EmergencyContactName,EmergencyContactPhone,Allergies,MedicalConditions,Notes,IsActive")] ElderlyPerson elderlyPerson)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DateOfBirth,PhoneNumber,EmergencyContactName,EmergencyContactPhone,Allergies,MedicalConditions,Notes,IsActive,CreatedAt")] ElderlyPerson elderlyPerson)
         {
             if (id != elderlyPerson.Id)
             {
@@ -108,7 +109,7 @@ namespace ElderlyCareApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("PatientDashboard", "Home", new { patientId = elderlyPerson.Id });
             }
             return View(elderlyPerson);
         }

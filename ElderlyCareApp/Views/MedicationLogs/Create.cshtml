@@ -15,7 +15,7 @@
                 </div>
                 <div class="card-body">
                     <form asp-action="Create">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div asp-validation-summary="All" class="text-danger"></div>
                         
                         <div class="row">
                             <div class="col-md-6">
@@ -79,8 +79,11 @@
 
                         <div class="card-footer">
                             <button type="submit" class="btn btn-success">
-                                <i class="fas fa-save"></i> Create Medication
+                                <i class="fas fa-plus"></i> Create Medication Log
                             </button>
+                            <a href="#" onclick="returnToPatientDashboard()" class="btn btn-info">
+                                <i class="fas fa-user"></i> Return to Patient Dashboard
+                            </a>
                             <a asp-action="Index" class="btn btn-secondary">
                                 <i class="fas fa-arrow-left"></i> Back to List
                             </a>
@@ -94,4 +97,16 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function returnToPatientDashboard() {
+            var patientId = document.getElementById('ElderlyPersonId').value;
+            if (patientId) {
+                window.location.href = '@Url.Action("PatientDashboard", "Home")?patientId=' + patientId;
+            } else {
+                // Fallback to index if no patient ID
+                window.location.href = '@Url.Action("Index", "Home")';
+            }
+            return false;
+        }
+    </script>
 }

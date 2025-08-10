@@ -36,7 +36,7 @@ namespace ElderlyCareApp.Models
             // ActivityLog configuration
             modelBuilder.Entity<ActivityLog>()
                 .HasOne(a => a.ElderlyPerson)
-                .WithMany()
+                .WithMany(p => p.ActivityLogs)
                 .HasForeignKey(a => a.ElderlyPersonId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -49,7 +49,7 @@ namespace ElderlyCareApp.Models
             // MedicationLog configuration
             modelBuilder.Entity<MedicationLog>()
                 .HasOne(m => m.ElderlyPerson)
-                .WithMany()
+                .WithMany(p => p.MedicationLogs)
                 .HasForeignKey(m => m.ElderlyPersonId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -62,7 +62,7 @@ namespace ElderlyCareApp.Models
             // MealLog configuration
             modelBuilder.Entity<MealLog>()
                 .HasOne(m => m.ElderlyPerson)
-                .WithMany()
+                .WithMany(p => p.MealLogs)
                 .HasForeignKey(m => m.ElderlyPersonId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -75,7 +75,7 @@ namespace ElderlyCareApp.Models
             // AppointmentLog configuration
             modelBuilder.Entity<AppointmentLog>()
                 .HasOne(a => a.ElderlyPerson)
-                .WithMany()
+                .WithMany(p => p.AppointmentLogs)
                 .HasForeignKey(a => a.ElderlyPersonId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -88,7 +88,7 @@ namespace ElderlyCareApp.Models
             // CareNote configuration
             modelBuilder.Entity<CareNote>()
                 .HasOne(n => n.ElderlyPerson)
-                .WithMany()
+                .WithMany(p => p.CareNotes)
                 .HasForeignKey(n => n.ElderlyPersonId)
                 .OnDelete(DeleteBehavior.Cascade);
 

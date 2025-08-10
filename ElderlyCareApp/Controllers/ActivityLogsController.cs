@@ -53,18 +53,86 @@ namespace ElderlyCareApp.Controllers
             return View();
         }
 
+        // GET: ActivityLogs/TestDatabase
+        public async Task<IActionResult> TestDatabase()
+        {
+            try
+            {
+                var elderlyCount = await _context.ElderlyPeople.CountAsync();
+                var userCount = await _context.Users.CountAsync();
+                var activityCount = await _context.ActivityLogs.CountAsync();
+                
+                return Content($"Database connection successful. ElderlyPeople: {elderlyCount}, Users: {userCount}, ActivityLogs: {activityCount}");
+            }
+            catch (Exception ex)
+            {
+                return Content($"Database connection failed: {ex.Message}");
+            }
+        }
+
         // POST: ActivityLogs/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ElderlyPersonId,UserId,ActivityType,Description,StartTime,EndTime,DurationMinutes,Notes")] ActivityLog activityLog)
         {
-            if (ModelState.IsValid)
+            // Add debugging information
+            if (!ModelState.IsValid)
             {
-                activityLog.CreatedAt = DateTime.Now;
-                _context.Add(activityLog);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                // Log or handle validation errors
+                foreach (var error in errors)
+                {
+                    ModelState.AddModelError("", error);
+                }
             }
+
+            // Debug: Log the received data
+            System.Diagnostics.Debug.WriteLine($"Received ActivityLog: ElderlyPersonId={activityLog.ElderlyPersonId}, UserId={activityLog.UserId}, ActivityType={activityLog.ActivityType}, StartTime={activityLog.StartTime}");
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    // Ensure StartTime has a value
+                    if (activityLog.StartTime == default(DateTime))
+                    {
+                        activityLog.StartTime = DateTime.Now;
+                        System.Diagnostics.Debug.WriteLine($"StartTime was default, set to: {activityLog.StartTime}");
+                    }
+                    
+                    activityLog.CreatedAt = DateTime.Now;
+                    _context.Add(activityLog);
+                    var result = await _context.SaveChangesAsync();
+                    
+                    System.Diagnostics.Debug.WriteLine($"SaveChangesAsync result: {result}");
+                    
+                    if (result > 0)
+                    {
+                        // Redirect to patient dashboard instead of index
+                        return RedirectToAction("PatientDashboard", "Home", new { patientId = activityLog.ElderlyPersonId });
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Failed to save activity to database");
+                    }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("ModelState is not valid");
+                    var allErrors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                    foreach (var error in allErrors)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Validation error: {error}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Exception occurred: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                ModelState.AddModelError("", $"Error saving activity: {ex.Message}");
+            }
+            
             ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Name", activityLog.ElderlyPersonId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", activityLog.UserId);
             return View(activityLog);
@@ -91,7 +159,7 @@ namespace ElderlyCareApp.Controllers
         // POST: ActivityLogs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ElderlyPersonId,UserId,ActivityType,Description,StartTime,EndTime")] ActivityLog activityLog)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ElderlyPersonId,UserId,ActivityType,Description,StartTime,EndTime,DurationMinutes,Notes,CreatedAt")] ActivityLog activityLog)
         {
             if (id != activityLog.Id)
             {
@@ -104,6 +172,8 @@ namespace ElderlyCareApp.Controllers
                 {
                     _context.Update(activityLog);
                     await _context.SaveChangesAsync();
+                    // Redirect to patient dashboard instead of index
+                    return RedirectToAction("PatientDashboard", "Home", new { patientId = activityLog.ElderlyPersonId });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -116,10 +186,9 @@ namespace ElderlyCareApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople.Where(p => p.IsActive), "Id", "Name", activityLog.ElderlyPersonId);
-            ViewData["UserId"] = new SelectList(_context.Users.Where(u => u.IsActive), "Id", "Name", activityLog.UserId);
+            ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Name", activityLog.ElderlyPersonId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", activityLog.UserId);
             return View(activityLog);
         }
 

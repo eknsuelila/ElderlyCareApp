@@ -5,13 +5,26 @@
 }
 
 <div class="container-fluid">
-    <div class="row">
+    <div class="row mb-4">
         <div class="col-md-8">
+            <h1><i class="fas fa-user text-primary"></i> Patient Details</h1>
+            <p class="text-muted">View detailed information about the patient</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Edit Patient
+            </a>
+            <a href="#" onclick="returnToPatientDashboard()" class="btn btn-success">
+                <i class="fas fa-tachometer-alt"></i> Return to Patient Dashboard
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
             <div class="card shadow">
                 <div class="card-header bg-info text-white">
-                    <h4 class="mb-0">
-                        <i class="fas fa-user"></i> Patient Details
-                    </h4>
+                    <h4 class="mb-0"><i class="fas fa-user"></i> Patient Details</h4>
                 </div>
                 <div class="card-body">
                     <!-- Personal Information -->
@@ -21,13 +34,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <dl class="row">
-                                <dt class="col-sm-4">Name</dt>
+                                <dt class="col-sm-4 fw-bold">Name</dt>
                                 <dd class="col-sm-8">@Model.Name</dd>
 
-                                <dt class="col-sm-4">Date of Birth</dt>
+                                <dt class="col-sm-4 fw-bold">Date of Birth</dt>
                                 <dd class="col-sm-8">@Model.DateOfBirth.ToString("MMM dd, yyyy")</dd>
 
-                                <dt class="col-sm-4">Age</dt>
+                                <dt class="col-sm-4 fw-bold">Age</dt>
                                 <dd class="col-sm-8">
                                     @{
                                         var age = DateTime.Now.Year - Model.DateOfBirth.Year;
@@ -39,13 +52,31 @@
                         </div>
                         <div class="col-md-6">
                             <dl class="row">
-                                <dt class="col-sm-4">Phone Number</dt>
-                                <dd class="col-sm-8">@(Model.PhoneNumber ?? "Not provided")</dd>
-
-                                <dt class="col-sm-4">Status</dt>
+                                <dt class="col-sm-4 fw-bold">Phone Number</dt>
                                 <dd class="col-sm-8">
-                                    <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger")">
+                                    @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                                    {
+                                        <a href="tel:@Model.PhoneNumber" class="text-decoration-none">
+                                            <i class="fas fa-phone"></i> @Model.PhoneNumber
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Not provided</span>
+                                    }
+                                </dd>
+
+                                <dt class="col-sm-4 fw-bold">Status</dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger") fs-6">
                                         @(Model.IsActive ? "Active" : "Inactive")
+                                    </span>
+                                </dd>
+                                
+                                <dt class="col-sm-4 fw-bold">Created</dt>
+                                <dd class="col-sm-8">
+                                    <span class="text-muted">
+                                        <i class="fas fa-calendar-plus"></i> @Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")
                                     </span>
                                 </dd>
                             </dl>
@@ -59,14 +90,25 @@
                     <div class="row">
                         <div class="col-md-6">
                             <dl class="row">
-                                <dt class="col-sm-4">Contact Name</dt>
+                                <dt class="col-sm-4 fw-bold">Contact Name</dt>
                                 <dd class="col-sm-8">@(Model.EmergencyContactName ?? "Not provided")</dd>
                             </dl>
                         </div>
                         <div class="col-md-6">
                             <dl class="row">
-                                <dt class="col-sm-4">Contact Phone</dt>
-                                <dd class="col-sm-8">@(Model.EmergencyContactPhone ?? "Not provided")</dd>
+                                <dt class="col-sm-4 fw-bold">Contact Phone</dt>
+                                <dd class="col-sm-8">
+                                    @if (!string.IsNullOrEmpty(Model.EmergencyContactPhone))
+                                    {
+                                        <a href="tel:@Model.EmergencyContactPhone" class="text-decoration-none">
+                                            <i class="fas fa-phone"></i> @Model.EmergencyContactPhone
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Not provided</span>
+                                    }
+                                </dd>
                             </dl>
                         </div>
                     </div>
@@ -78,13 +120,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <dl class="row">
-                                <dt class="col-sm-4">Allergies</dt>
+                                <dt class="col-sm-4 fw-bold">Allergies</dt>
                                 <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Allergies) ? "None reported" : Model.Allergies)</dd>
                             </dl>
                         </div>
                         <div class="col-md-6">
                             <dl class="row">
-                                <dt class="col-sm-4">Medical Conditions</dt>
+                                <dt class="col-sm-4 fw-bold">Medical Conditions</dt>
                                 <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.MedicalConditions) ? "None reported" : Model.MedicalConditions)</dd>
                             </dl>
                         </div>
@@ -103,15 +145,34 @@
                         </div>
                     }
                 </div>
-                <div class="card-footer">
-                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
-                        <i class="fas fa-edit"></i> Edit
-                    </a>
-                    <a asp-action="Index" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i> Back to List
-                    </a>
+                <div class="card-footer bg-light">
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                            <i class="fas fa-edit"></i> Edit Patient
+                        </a>
+                        <a href="#" onclick="returnToPatientDashboard()" class="btn btn-success">
+                            <i class="fas fa-tachometer-alt"></i> Return to Patient Dashboard
+                        </a>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function returnToPatientDashboard() {
+            // Get the patient ID from the current page
+            const patientId = @Model.Id;
+            if (patientId) {
+                window.location.href = '/Home/PatientDashboard?patientId=' + patientId;
+            } else {
+                window.location.href = '/Home/Index';
+            }
+        }
+    </script>
+}

@@ -58,13 +58,63 @@ namespace ElderlyCareApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ElderlyPersonId,UserId,MedicationName,Dosage,Taken,Timestamp,Notes")] MedicationLog medicationLog)
         {
-            if (ModelState.IsValid)
+            // Add debugging information
+            if (!ModelState.IsValid)
             {
-                medicationLog.CreatedAt = DateTime.Now;
-                _context.Add(medicationLog);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                foreach (var error in errors)
+                {
+                    ModelState.AddModelError("", error);
+                }
             }
+
+            // Debug: Log the received data
+            System.Diagnostics.Debug.WriteLine($"Received MedicationLog: ElderlyPersonId={medicationLog.ElderlyPersonId}, UserId={medicationLog.UserId}, MedicationName={medicationLog.MedicationName}, Timestamp={medicationLog.Timestamp}");
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    // Ensure Timestamp has a value
+                    if (medicationLog.Timestamp == default(DateTime))
+                    {
+                        medicationLog.Timestamp = DateTime.Now;
+                        System.Diagnostics.Debug.WriteLine($"Timestamp was default, set to: {medicationLog.Timestamp}");
+                    }
+                    
+                    medicationLog.CreatedAt = DateTime.Now;
+                    _context.Add(medicationLog);
+                    var result = await _context.SaveChangesAsync();
+                    
+                    System.Diagnostics.Debug.WriteLine($"SaveChangesAsync result: {result}");
+                    
+                    if (result > 0)
+                    {
+                        // Redirect to patient dashboard instead of index
+                        return RedirectToAction("PatientDashboard", "Home", new { patientId = medicationLog.ElderlyPersonId });
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Failed to save medication log to database");
+                    }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("ModelState is not valid");
+                    var allErrors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                    foreach (var error in allErrors)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Validation error: {error}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Exception occurred: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                ModelState.AddModelError("", $"Error saving medication log: {ex.Message}");
+            }
+            
             ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Name", medicationLog.ElderlyPersonId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", medicationLog.UserId);
             return View(medicationLog);
@@ -104,6 +154,8 @@ namespace ElderlyCareApp.Controllers
                 {
                     _context.Update(medicationLog);
                     await _context.SaveChangesAsync();
+                    // Redirect to patient dashboard instead of index
+                    return RedirectToAction("PatientDashboard", "Home", new { patientId = medicationLog.ElderlyPersonId });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -116,7 +168,6 @@ namespace ElderlyCareApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople.Where(p => p.IsActive), "Id", "Name", medicationLog.ElderlyPersonId);
             ViewData["UserId"] = new SelectList(_context.Users.Where(u => u.IsActive), "Id", "Name", medicationLog.UserId);

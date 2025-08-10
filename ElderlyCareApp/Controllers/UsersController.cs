@@ -51,10 +51,11 @@ namespace ElderlyCareApp.Controllers
         // POST: Users/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Email,Role,PhoneNumber,Address,City,PostalCode,EmergencyContactName,EmergencyContactPhone,EmergencyContactRelationship,Specializations,LicenseNumber,Notes")] User user)
+        public async Task<IActionResult> Create([Bind("Name,Email,Password,PhoneNumber,Role,IsActive")] User user)
         {
             if (ModelState.IsValid)
             {
+                user.CreatedAt = DateTime.Now;
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -81,7 +82,7 @@ namespace ElderlyCareApp.Controllers
         // POST: Users/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email,Role,PhoneNumber,Address,City,PostalCode,EmergencyContactName,EmergencyContactPhone,EmergencyContactRelationship,Specializations,LicenseNumber,Notes")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email,Password,PhoneNumber,Role,IsActive,LastLoginAt,CreatedAt")] User user)
         {
             if (id != user.Id)
             {
