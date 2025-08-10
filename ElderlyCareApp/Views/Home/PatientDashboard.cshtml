@@ -498,335 +498,152 @@ else
         .ai-content {
             font-size: 0.95rem;
             line-height: 1.6;
+            white-space: pre-line;
         }
         
-        .ai-text-content {
-            font-size: 0.9rem;
-            line-height: 1.7;
+        /* AI Insights Styling */
+        .ai-insights-container {
+            padding: 1rem;
         }
         
-        .ai-text-content strong {
-            color: #495057;
+        .ai-main-heading {
+            color: #2c3e50;
             font-weight: 600;
+            border-bottom: 3px solid #f39c12;
+            padding-bottom: 0.5rem;
         }
         
-        .ai-text-content em {
-            color: #6c757d;
-            font-style: italic;
-        }
-        
-        /* Modern AI Insights Styling */
-        .modern-insight-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            overflow: hidden;
-            margin-bottom: 1.5rem;
+        .ai-section-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
         }
         
-        .modern-insight-card:hover {
+        .ai-section-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
         }
         
-        .insight-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .insight-number {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
+        .ai-section-title {
+            color: #495057;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #dee2e6;
             font-size: 1.1rem;
         }
         
-        .insight-title {
-            font-weight: 600;
-            font-size: 1rem;
-            flex-grow: 1;
-        }
-        
-        .insight-content {
-            padding: 1.25rem;
-            background: #f8f9fa;
-            color: #495057;
+        .ai-section-content {
+            color: #6c757d;
             line-height: 1.6;
             font-size: 0.95rem;
         }
         
-        .recommendation-section {
-            background: #e3f2fd;
-            padding: 1.25rem;
-            border-top: 1px solid #e0e0e0;
+        /* Specific section styling */
+        .ai-section-card:nth-child(2) .ai-section-title {
+            border-bottom-color: #dc3545;
+            color: #dc3545;
         }
         
-        .recommendation-header {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
-            color: #1976d2;
-            font-weight: 600;
-            font-size: 0.95rem;
+        .ai-section-card:nth-child(3) .ai-section-title {
+            border-bottom-color: #28a745;
+            color: #28a745;
         }
         
-        .recommendation-header i {
-            color: #ff9800;
+        .ai-section-card:nth-child(4) .ai-section-title {
+            border-bottom-color: #17a2b8;
+            color: #17a2b8;
         }
         
-        .recommendation-content {
-            color: #424242;
-            line-height: 1.6;
-            font-size: 0.9rem;
-        }
-        
-        /* Health Insights Section */
-        .card.border-primary .card-header {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            color: white;
-            border: none;
-        }
-        
-        .card.border-primary .card-header h6 {
-            color: white;
-            font-weight: 600;
-        }
-        
-        /* Conclusion Section */
-        .card.border-success .card-header {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            color: white;
-            border: none;
-        }
-        
-        .card.border-success .card-header h6 {
-            color: white;
-            font-weight: 600;
-        }
-        
-        /* AI Content Cards */
-        .ai-content .card {
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-radius: 12px;
-            border: none;
-            margin-bottom: 1.5rem;
-        }
-        
-        .ai-content .card-header {
-            border-radius: 12px 12px 0 0;
-            padding: 1.25rem;
-            font-weight: 600;
-        }
-        
-        .ai-content .card-body {
-            padding: 1.5rem;
-        }
-        
-        .ai-content h6 {
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-        
-        .ai-content p {
-            margin-bottom: 0.5rem;
-        }
-        
-        /* Loading Animation */
-        .spinner-border {
-            width: 3rem;
-            height: 3rem;
-        }
-        
-        /* Error State */
-        .alert-danger {
-            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-            border-left: 4px solid #dc3545;
-        }
-        
-        /* Minimal AI Insights Styling */
-        .minimal-insight {
-            background: #f8f9fa;
-            border-left: 3px solid #007bff;
-            margin-bottom: 1rem;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .insight-header-minimal {
-            background: #e3f2fd;
-            padding: 0.75rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .insight-number-minimal {
-            background: #007bff;
-            color: white;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-        
-        .insight-title-minimal {
-            font-weight: 600;
-            color: #1976d2;
-            font-size: 0.9rem;
-        }
-        
-        .insight-content-minimal {
-            padding: 0.75rem 1rem;
-            color: #424242;
-            font-size: 0.85rem;
-            line-height: 1.5;
-        }
-        
-        .recommendation-minimal {
-            background: #f1f8e9;
-            padding: 0.75rem 1rem;
-            border-top: 1px solid #e0e0e0;
-            font-size: 0.85rem;
-            line-height: 1.5;
-        }
-        
-        .recommendation-label {
-            color: #2e7d32;
-            font-weight: 600;
-            margin-right: 0.5rem;
-        }
-        
-        .recommendation-text {
-            color: #424242;
-        }
-        
-        /* Health Insights Section */
-        .card.border-primary .card-header {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            color: white;
-            border: none;
-            padding: 1rem;
-        }
-        
-        .card.border-primary .card-header h6 {
-            color: white;
-            font-weight: 600;
-            margin: 0;
-        }
-        
-        /* Conclusion Section */
-        .card.border-success .card-header {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            color: white;
-            border: none;
-            padding: 1rem;
-        }
-        
-        .card.border-success .card-header h6 {
-            color: white;
-            font-weight: 600;
-            margin: 0;
-        }
-        
-        /* AI Content Cards */
-        .ai-content .card {
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            border: none;
-            margin-bottom: 1rem;
-        }
-        
-        .ai-content .card-header {
-            border-radius: 8px 8px 0 0;
-            padding: 1rem;
-            font-weight: 600;
-        }
-        
-        .ai-content .card-body {
-            padding: 1rem;
-        }
-        
-        .ai-content h6 {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        
-        .ai-content p {
-            margin-bottom: 0.25rem;
-        }
-        
-        /* Loading Animation */
-        .spinner-border {
-            width: 2rem;
-            height: 2rem;
-        }
-        
-        /* Error State */
-        .alert-danger {
-            background: #f8d7da;
-            border-left: 4px solid #dc3545;
-            padding: 0.75rem 1rem;
-        }
-        
-        /* Responsive Design */
-        @@media (max-width: 768px) {
-            .modern-insight-card {
-                margin-bottom: 1rem;
-            }
-            
-            .insight-header,
-            .insight-content,
-            .recommendation-section {
-                padding: 1rem;
-            }
-            
-            .insight-number {
-                width: 35px;
-                height: 35px;
-                font-size: 1rem;
-            }
-            
-            .ai-content .card-body {
-                padding: 1rem;
-            }
 
-            .minimal-insight {
-                margin-bottom: 0.75rem;
-            }
-            
-            .insight-header-minimal,
-            .insight-content-minimal,
-            .recommendation-minimal {
-                padding: 0.5rem 0.75rem;
-            }
-            
-            .insight-number-minimal {
-                width: 20px;
-                height: 20px;
-                font-size: 0.7rem;
-            }
-            
-            .ai-content .card-body {
-                padding: 0.75rem;
-            }
-        }
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
     </style>
     
     <script>
@@ -896,327 +713,44 @@ else
         }
 
         function formatAIResponse(response) {
-            console.log('Formatting response:', response); // Debug log
+            // Add main heading
+            let formattedResponse = '<div class="ai-insights-container">';
+            formattedResponse += '<h3 class="ai-main-heading mb-4"><i class="fas fa-lightbulb text-warning me-2"></i>Insights for Patient</h3>';
             
-            // Check if this is the new format with ### sections
-            const hasNewFormat = response.includes('###') && response.includes('Based on the information provided');
+            // Process the response to format Markdown sections
+            let sections = response.split('###');
             
-            if (hasNewFormat) {
-                return formatNewAIResponse(response);
-            }
-            
-            // Extract Health Insights section (everything before "### Conclusion")
-            const healthInsightsMatch = response.match(/(Health Insights for.*?)(?=### Conclusion|$)/s);
-            const conclusionMatch = response.match(/(### Conclusion.*?)$/s);
-            
-            let formattedHTML = '';
-            
-            // Format Health Insights Section (Assessment)
-            if (healthInsightsMatch) {
-                formattedHTML += formatHealthInsightsSection(healthInsightsMatch[1]);
-            }
-            
-            // Format Conclusion Section
-            if (conclusionMatch) {
-                formattedHTML += formatConclusionSection(conclusionMatch[1]);
-            }
-            
-            // If no specific sections found, try to find any structured content
-            if (!healthInsightsMatch && !conclusionMatch) {
-                const hasConcerns = response.match(/\d+\.\s*Concern:/);
-                const hasRecommendations = response.match(/Recommendation:/);
-                
-                if (hasConcerns || hasRecommendations) {
-                    formattedHTML = `
-                        <div class="card mb-4 border-primary">
-                            <div class="card-header bg-primary text-white">
-                                <h6 class="mb-0"><i class="fas fa-stethoscope me-2"></i>Health Assessment</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="ai-text-content">${formatHealthInsightsContent(response)}</div>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    // Fallback to general content
-                    formattedHTML = `
-                        <div class="card mb-4 border-info">
-                            <div class="card-header bg-info text-white">
-                                <h6 class="mb-0"><i class="fas fa-robot me-2"></i>AI Assessment</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="ai-text-content">${formatTextContent(response)}</div>
-                            </div>
-                        </div>
-                    `;
-                }
-            }
-            
-            return formattedHTML;
-        }
-
-        function formatNewAIResponse(response) {
-            // Split the response into parts: introduction, sections, and conclusion
-            const lines = response.split('\n');
-            let introduction = '';
-            let sections = [];
-            let conclusion = '';
-            let currentSection = null;
-            let currentSectionContent = '';
-            let inConclusion = false;
-            
-            for (let i = 0; i < lines.length; i++) {
-                const line = lines[i].trim();
-                
-                // Check if this is a section header (starts with ###)
-                if (line.startsWith('###')) {
-                    // Save previous section if exists
-                    if (currentSection) {
-                        sections.push({
-                            title: currentSection,
-                            content: currentSectionContent.trim()
-                        });
-                    }
+            if (sections.length > 1) {
+                // Process each section
+                for (let i = 1; i < sections.length; i++) {
+                    let section = sections[i].trim();
+                    let lines = section.split('\n');
+                    let sectionTitle = lines[0].trim();
+                    let sectionContent = lines.slice(1).join('\n').trim();
                     
-                    // Start new section
-                    currentSection = line.replace(/^###\s*/, '');
-                    currentSectionContent = '';
+                    // Create section card
+                    formattedResponse += '<div class="ai-section-card mb-3">';
+                    formattedResponse += `<h4 class="ai-section-title">${sectionTitle}</h4>`;
+                    formattedResponse += `<div class="ai-section-content">${sectionContent.replace(/\n/g, '<br>')}</div>`;
+                    formattedResponse += '</div>';
                 }
-                // Check if we're in the conclusion part (look for conclusion keywords)
-                else if (line.toLowerCase().includes('conclusion') || 
-                         line.toLowerCase().includes('summary') || 
-                         line.toLowerCase().includes('final thoughts')) {
-                    inConclusion = true;
-                    conclusion += line + '\n';
-                }
-                // If we have a current section, add to its content
-                else if (currentSection && !inConclusion) {
-                    currentSectionContent += line + '\n';
-                }
-                // If we're in conclusion, add to conclusion
-                else if (inConclusion) {
-                    conclusion += line + '\n';
-                }
-                // If we don't have a section yet, this is introduction
-                else if (!currentSection && !inConclusion) {
-                    introduction += line + '\n';
-                }
-            }
-            
-            // Add the last section if exists
-            if (currentSection) {
-                sections.push({
-                    title: currentSection,
-                    content: currentSectionContent.trim()
-                });
-            }
-            
-            let formattedHTML = '';
-            
-            // Format Introduction
-            if (introduction.trim()) {
-                formattedHTML += `
-                    <div class="card mb-4 border-info">
-                        <div class="card-header bg-info text-white">
-                            <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Introduction</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="ai-text-content">${formatTextContent(introduction.trim())}</div>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            // Format Sections
-            sections.forEach((section, index) => {
-                formattedHTML += `
-                    <div class="card mb-4 border-primary">
-                        <div class="card-header bg-primary text-white">
-                            <h6 class="mb-0"><i class="fas fa-list-alt me-2"></i>${section.title}</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="ai-text-content">${formatTextContent(section.content)}</div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            // Format Conclusion
-            if (conclusion.trim()) {
-                formattedHTML += `
-                    <div class="card mb-4 border-success">
-                        <div class="card-header bg-success text-white">
-                            <h6 class="mb-0"><i class="fas fa-check-circle me-2"></i>Conclusion</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="ai-text-content">${formatTextContent(conclusion.trim())}</div>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            return formattedHTML;
-        }
-
-        function formatHealthInsightsSection(section) {
-            // Extract the patient name from the title
-            const titleMatch = section.match(/Health Insights for (.*?)(?:\n|$)/);
-            const patientName = titleMatch ? titleMatch[1] : 'Patient';
-            
-            // Remove the title from the content
-            const content = section.replace(/Health Insights for.*?\n/, '').trim();
-            
-            return `
-                <div class="card mb-4 border-primary">
-                    <div class="card-header bg-primary text-white">
-                        <h6 class="mb-0"><i class="fas fa-stethoscope me-2"></i>Health Insights for ${patientName}</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="ai-text-content">${formatHealthInsightsContent(content)}</div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function formatConclusionSection(section) {
-            // Extract the patient name from the title
-            const titleMatch = section.match(/### Conclusion for (.*?)(?:\n|$)/);
-            const patientName = titleMatch ? titleMatch[1] : 'Patient';
-
-            // Remove the title and filter out validation content
-            let content = section.replace(/### Conclusion.*?\n/, '').trim();
-            
-            // Filter out field validation lines
-            const lines = content.split('\n');
-            const filteredLines = lines.filter(line => {
-                const trimmedLine = line.trim();
-                return !trimmedLine.includes('Field:') && 
-                       !trimmedLine.includes('Value:') && 
-                       !trimmedLine.includes('Status:') &&
-                       !trimmedLine.includes('VALID') &&
-                       !trimmedLine.includes('INVALID') &&
-                       !trimmedLine.match(/^\d+\.\s*Field:/) &&
-                       !trimmedLine.match(/^\d+\.\s*Value:/) &&
-                       !trimmedLine.match(/^\d+\.\s*Status:/);
-            });
-            
-            content = filteredLines.join('\n').trim();
-
-            return `
-                <div class="card mb-4 border-success">
-                    <div class="card-header bg-success text-white">
-                        <h6 class="mb-0"><i class="fas fa-check-circle me-2"></i>Conclusion for ${patientName}</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="ai-text-content">${formatTextContent(content)}</div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function formatHealthInsightsContent(content) {
-            // Filter out field validation content
-            const lines = content.split('\n');
-            const filteredLines = [];
-            let skipUntilNextConcern = false;
-            
-            lines.forEach(line => {
-                const trimmedLine = line.trim();
-                
-                // Skip field validation sections
-                if (trimmedLine.includes('Field:') || 
-                    trimmedLine.includes('Value:') || 
-                    trimmedLine.includes('Status:') ||
-                    trimmedLine.includes('VALID') ||
-                    trimmedLine.includes('INVALID') ||
-                    trimmedLine.match(/^\d+\.\s*Field:/) ||
-                    trimmedLine.match(/^\d+\.\s*Value:/) ||
-                    trimmedLine.match(/^\d+\.\s*Status:/)) {
-                    skipUntilNextConcern = true;
-                    return;
-                }
-                
-                // If we encounter a new concern, stop skipping
-                if (trimmedLine.match(/^\d+\.\s*Concern:/)) {
-                    skipUntilNextConcern = false;
-                }
-                
-                // Only add lines that are not part of field validation
-                if (!skipUntilNextConcern || trimmedLine.match(/^\d+\.\s*Concern:/) || trimmedLine.startsWith('Recommendation:')) {
-                    filteredLines.push(line);
-                }
-            });
-            
-            // Process the filtered content
-            const concerns = [];
-            let currentConcern = null;
-            
-            filteredLines.forEach(line => {
-                const trimmedLine = line.trim();
-                if (trimmedLine.match(/^\d+\.\s*Concern:/)) {
-                    if (currentConcern) {
-                        concerns.push(currentConcern);
-                    }
-                    const concernTitle = trimmedLine.replace(/^\d+\.\s*Concern:\s*/, '');
-                    currentConcern = { title: concernTitle, content: '', recommendation: '' };
-                } else if (trimmedLine.startsWith('Recommendation:')) {
-                    if (currentConcern) {
-                        currentConcern.recommendation = trimmedLine.replace('Recommendation:', '').trim();
-                        concerns.push(currentConcern);
-                        currentConcern = null;
-                    }
-                } else if (currentConcern && trimmedLine && !trimmedLine.startsWith('-')) {
-                    currentConcern.content += (currentConcern.content ? '\n' : '') + trimmedLine;
-                }
-            });
-            
-            if (currentConcern) {
-                concerns.push(currentConcern);
-            }
-            
-            let formattedHTML = '';
-            
-            if (concerns.length > 0) {
-                concerns.forEach((concern, index) => {
-                    formattedHTML += `
-                        <div class="minimal-insight">
-                            <div class="insight-header-minimal">
-                                <span class="insight-number-minimal">${index + 1}</span>
-                                <span class="insight-title-minimal">${concern.title}</span>
-                            </div>
-                            <div class="insight-content-minimal">
-                                ${formatTextContent(concern.content)}
-                            </div>
-                            ${concern.recommendation ? `
-                                <div class="recommendation-minimal">
-                                    <span class="recommendation-label">💡 Recommendation:</span>
-                                    <span class="recommendation-text">${formatTextContent(concern.recommendation)}</span>
-                                </div>
-                            ` : ''}
-                        </div>
-                    `;
-                });
             } else {
-                // If no structured concerns, just display the filtered content
-                const cleanContent = filteredLines.join('\n').trim();
-                if (cleanContent) {
-                    formattedHTML = `<div class="ai-text-content">${formatTextContent(cleanContent)}</div>`;
-                } else {
-                    formattedHTML = `<div class="ai-text-content">No health insights available.</div>`;
-                }
+                // If no sections, just display as plain text
+                formattedResponse += `<div class="ai-content">${response.replace(/\n/g, '<br>')}</div>`;
             }
             
-            return formattedHTML;
+            formattedResponse += '</div>';
+            return formattedResponse;
         }
 
-        function formatTextContent(text) {
-            // Convert markdown-style formatting to HTML
-            return text
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/\n/g, '<br>')
-                .replace(/(\d+\.\s)/g, '<br><strong>$1</strong>')
-                .replace(/^<br>/, '');
-        }
+
+
+
+
+
+
+
+
+
     </script>
 } 

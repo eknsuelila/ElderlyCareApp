@@ -26,6 +26,8 @@ builder.Services.AddHttpClient<AIHealthService>(client =>
     client.DefaultRequestHeaders.Add("User-Agent", "ElderlyCareApp/1.0");
 });
 
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
