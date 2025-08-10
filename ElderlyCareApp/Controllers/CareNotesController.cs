@@ -59,13 +59,56 @@ namespace ElderlyCareApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ElderlyPersonId,UserId,NoteType,Title,Content")] CareNote careNote)
         {
-            if (ModelState.IsValid)
+            // Add debugging information
+            if (!ModelState.IsValid)
             {
-                careNote.CreatedAt = DateTime.Now;
-                _context.Add(careNote);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                foreach (var error in errors)
+                {
+                    ModelState.AddModelError("", error);
+                }
             }
+
+            // Debug: Log the received data
+            System.Diagnostics.Debug.WriteLine($"Received CareNote: ElderlyPersonId={careNote.ElderlyPersonId}, UserId={careNote.UserId}, NoteType={careNote.NoteType}, Title={careNote.Title}");
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    careNote.CreatedAt = DateTime.Now;
+                    _context.Add(careNote);
+                    var result = await _context.SaveChangesAsync();
+                    
+                    System.Diagnostics.Debug.WriteLine($"SaveChangesAsync result: {result}");
+                    
+                    if (result > 0)
+                    {
+                        // Redirect to patient dashboard instead of index
+                        return RedirectToAction("PatientDashboard", "Home", new { patientId = careNote.ElderlyPersonId });
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Failed to save care note to database");
+                    }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("ModelState is not valid");
+                    var allErrors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                    foreach (var error in allErrors)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Validation error: {error}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Exception occurred: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                ModelState.AddModelError("", $"Error saving care note: {ex.Message}");
+            }
+            
             ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople.Where(p => p.IsActive), "Id", "Name", careNote.ElderlyPersonId);
             ViewData["UserId"] = new SelectList(_context.Users.Where(u => u.IsActive), "Id", "Name", careNote.UserId);
             return View(careNote);
@@ -92,7 +135,7 @@ namespace ElderlyCareApp.Controllers
         // POST: CareNotes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ElderlyPersonId,UserId,NoteType,Title,Content,CreatedAt")] CareNote careNote)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ElderlyPersonId,UserId,Title,Content,Notes")] CareNote careNote)
         {
             if (id != careNote.Id)
             {
@@ -105,6 +148,8 @@ namespace ElderlyCareApp.Controllers
                 {
                     _context.Update(careNote);
                     await _context.SaveChangesAsync();
+                    // Redirect to patient dashboard instead of index
+                    return RedirectToAction("PatientDashboard", "Home", new { patientId = careNote.ElderlyPersonId });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -117,7 +162,6 @@ namespace ElderlyCareApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople.Where(p => p.IsActive), "Id", "Name", careNote.ElderlyPersonId);
             ViewData["UserId"] = new SelectList(_context.Users.Where(u => u.IsActive), "Id", "Name", careNote.UserId);

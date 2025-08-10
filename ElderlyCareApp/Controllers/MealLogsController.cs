@@ -58,13 +58,63 @@ namespace ElderlyCareApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ElderlyPersonId,UserId,MealType,MealName,Description,MealTime,Notes")] MealLog mealLog)
         {
-            if (ModelState.IsValid)
+            // Add debugging information
+            if (!ModelState.IsValid)
             {
-                mealLog.CreatedAt = DateTime.Now;
-                _context.Add(mealLog);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                foreach (var error in errors)
+                {
+                    ModelState.AddModelError("", error);
+                }
             }
+
+            // Debug: Log the received data
+            System.Diagnostics.Debug.WriteLine($"Received MealLog: ElderlyPersonId={mealLog.ElderlyPersonId}, UserId={mealLog.UserId}, MealType={mealLog.MealType}, MealTime={mealLog.MealTime}");
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    // Ensure MealTime has a value
+                    if (mealLog.MealTime == default(DateTime))
+                    {
+                        mealLog.MealTime = DateTime.Now;
+                        System.Diagnostics.Debug.WriteLine($"MealTime was default, set to: {mealLog.MealTime}");
+                    }
+                    
+                    mealLog.CreatedAt = DateTime.Now;
+                    _context.Add(mealLog);
+                    var result = await _context.SaveChangesAsync();
+                    
+                    System.Diagnostics.Debug.WriteLine($"SaveChangesAsync result: {result}");
+                    
+                    if (result > 0)
+                    {
+                        // Redirect to patient dashboard instead of index
+                        return RedirectToAction("PatientDashboard", "Home", new { patientId = mealLog.ElderlyPersonId });
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Failed to save meal log to database");
+                    }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("ModelState is not valid");
+                    var allErrors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                    foreach (var error in allErrors)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Validation error: {error}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Exception occurred: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                ModelState.AddModelError("", $"Error saving meal log: {ex.Message}");
+            }
+            
             ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople, "Id", "Name", mealLog.ElderlyPersonId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", mealLog.UserId);
             return View(mealLog);
@@ -104,6 +154,8 @@ namespace ElderlyCareApp.Controllers
                 {
                     _context.Update(mealLog);
                     await _context.SaveChangesAsync();
+                    // Redirect to patient dashboard instead of index
+                    return RedirectToAction("PatientDashboard", "Home", new { patientId = mealLog.ElderlyPersonId });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -116,7 +168,6 @@ namespace ElderlyCareApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             ViewData["ElderlyPersonId"] = new SelectList(_context.ElderlyPeople.Where(p => p.IsActive), "Id", "Name", mealLog.ElderlyPersonId);
             ViewData["UserId"] = new SelectList(_context.Users.Where(u => u.IsActive), "Id", "Name", mealLog.UserId);

@@ -1,36 +1,38 @@
 @model ElderlyCareApp.Models.AppointmentLog
 
 @{
-    ViewData["Title"] = "Edit Appointment";
+    ViewData["Title"] = "Schedule Appointment";
 }
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8">
             <div class="card shadow">
-                <div class="card-header bg-warning text-dark">
+                <div class="card-header bg-primary text-white">
                     <h4 class="mb-0">
-                        <i class="fas fa-edit"></i> Edit Appointment
+                        <i class="fas fa-calendar-plus"></i> Schedule Appointment
                     </h4>
                 </div>
                 <div class="card-body">
-                    <form asp-action="Edit">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="Id" />
-                        <input type="hidden" asp-for="CreatedAt" />
+                    <form asp-action="Create">
+                        <div asp-validation-summary="All" class="text-danger"></div>
                         
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label asp-for="ElderlyPersonId" class="form-label">Patient</label>
-                                    <select asp-for="ElderlyPersonId" class="form-select" asp-items="ViewBag.ElderlyPersonId"></select>
+                                    <select asp-for="ElderlyPersonId" class="form-select" asp-items="ViewBag.ElderlyPersonId">
+                                        <option value="">-- Select Patient --</option>
+                                    </select>
                                     <span asp-validation-for="ElderlyPersonId" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label asp-for="UserId" class="form-label">Logged By</label>
-                                    <select asp-for="UserId" class="form-select" asp-items="ViewBag.UserId"></select>
+                                    <select asp-for="UserId" class="form-select" asp-items="ViewBag.UserId">
+                                        <option value="">-- Select User --</option>
+                                    </select>
                                     <span asp-validation-for="UserId" class="text-danger"></span>
                                 </div>
                             </div>
@@ -39,16 +41,20 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label asp-for="Title" class="form-label">Appointment Title</label>
-                                    <input asp-for="Title" class="form-control" placeholder="e.g., Annual Checkup" />
-                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                    <label asp-for="AppointmentType" class="form-label">Appointment Type</label>
+                                    <select asp-for="AppointmentType" class="form-select" asp-items="Html.GetEnumSelectList<AppointmentType>()">
+                                        <option value="">-- Select Type --</option>
+                                    </select>
+                                    <span asp-validation-for="AppointmentType" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label asp-for="AppointmentType" class="form-label">Appointment Type</label>
-                                    <select asp-for="AppointmentType" class="form-select" asp-items="Html.GetEnumSelectList<AppointmentType>()"></select>
-                                    <span asp-validation-for="AppointmentType" class="text-danger"></span>
+                                    <label asp-for="Status" class="form-label">Status</label>
+                                    <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<AppointmentStatus>()">
+                                        <option value="">-- Select Status --</option>
+                                    </select>
+                                    <span asp-validation-for="Status" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -56,52 +62,52 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label asp-for="ProviderName" class="form-label">Provider Name</label>
-                                    <input asp-for="ProviderName" class="form-control" placeholder="e.g., Dr. Smith" />
+                                    <label asp-for="Title" class="form-label">Appointment Title</label>
+                                    <input asp-for="Title" class="form-control" placeholder="e.g., Annual Checkup, Dental Cleaning" />
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="ScheduledDateTime" class="form-label">Date & Time</label>
+                                    <input asp-for="ScheduledDateTime" class="form-control" type="datetime-local" />
+                                    <span asp-validation-for="ScheduledDateTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="ProviderName" class="form-label">Healthcare Provider</label>
+                                    <input asp-for="ProviderName" class="form-control" placeholder="e.g., Dr. Smith, City Hospital" />
                                     <span asp-validation-for="ProviderName" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label asp-for="Location" class="form-label">Location</label>
-                                    <input asp-for="Location" class="form-control" placeholder="e.g., Medical Center" />
+                                    <input asp-for="Location" class="form-control" placeholder="e.g., Room 205, Building A" />
                                     <span asp-validation-for="Location" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label asp-for="ScheduledDateTime" class="form-label">Scheduled Date & Time</label>
-                                    <input asp-for="ScheduledDateTime" class="form-control" type="datetime-local" />
-                                    <span asp-validation-for="ScheduledDateTime" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label asp-for="Status" class="form-label">Status</label>
-                                    <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<AppointmentStatus>()"></select>
-                                    <span asp-validation-for="Status" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Description" class="form-label">Description</label>
-                            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Brief description of the appointment..."></textarea>
+                            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Describe the appointment purpose and details..."></textarea>
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Notes" class="form-label">Notes</label>
-                            <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Any additional notes about the appointment..."></textarea>
+                            <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Any additional notes, special instructions, or reminders..."></textarea>
                             <span asp-validation-for="Notes" class="text-danger"></span>
                         </div>
 
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-warning">
-                                <i class="fas fa-save"></i> Save Changes
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-plus"></i> Create Appointment
                             </button>
                             <a href="#" onclick="returnToPatientDashboard()" class="btn btn-info">
                                 <i class="fas fa-user"></i> Return to Patient Dashboard
@@ -131,4 +137,4 @@
             return false;
         }
     </script>
-} 
+}

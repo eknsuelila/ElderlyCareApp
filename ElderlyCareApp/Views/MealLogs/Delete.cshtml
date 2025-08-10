@@ -1,47 +1,85 @@
 @model ElderlyCareApp.Models.MealLog
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete Meal Log";
 }
 
-<h1>Delete</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-trash"></i> Delete Meal Log
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Warning:</strong> Are you sure you want to delete this meal log? This action cannot be undone.
+                    </div>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>MealLog</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ElderlyPerson)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ElderlyPerson.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MealType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MealType)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">Meal Time</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.MealTime)</dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Patient</dt>
+                                <dd class="col-sm-8">@Model.ElderlyPerson?.Name</dd>
+
+                                <dt class="col-sm-4">Logged By</dt>
+                                <dd class="col-sm-8">@Model.User?.Name</dd>
+
+                                <dt class="col-sm-4">Meal Type</dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge bg-info">@Model.MealType</span>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Meal Name</dt>
+                                <dd class="col-sm-8">@(Model.MealName ?? "Not specified")</dd>
+
+                                <dt class="col-sm-4">Meal Time</dt>
+                                <dd class="col-sm-8">@Model.MealTime.ToString("MMM dd, yyyy HH:mm")</dd>
+
+                                <dt class="col-sm-4">Created</dt>
+                                <dd class="col-sm-8">@Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <h6>Description</h6>
+                                <p class="text-muted">@Model.Description</p>
+                            </div>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.Notes))
+                    {
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <h6>Notes</h6>
+                                <p class="text-muted">@Model.Notes</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer">
+                    <form asp-action="Delete" method="post" class="d-inline">
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Confirm Delete
+                        </button>
+                    </form>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Cancel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

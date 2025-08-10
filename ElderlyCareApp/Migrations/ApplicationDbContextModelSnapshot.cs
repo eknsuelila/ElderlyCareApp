@@ -70,7 +70,7 @@ namespace ElderlyCareApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ActivityLogs");
+                    b.ToTable("ActivityLogs", (string)null);
                 });
 
             modelBuilder.Entity("ElderlyCareApp.Models.AppointmentLog", b =>
@@ -131,7 +131,7 @@ namespace ElderlyCareApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AppointmentLogs");
+                    b.ToTable("AppointmentLogs", (string)null);
                 });
 
             modelBuilder.Entity("ElderlyCareApp.Models.CareNote", b =>
@@ -174,7 +174,7 @@ namespace ElderlyCareApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CareNotes");
+                    b.ToTable("CareNotes", (string)null);
                 });
 
             modelBuilder.Entity("ElderlyCareApp.Models.CaregiverAssignment", b =>
@@ -215,7 +215,7 @@ namespace ElderlyCareApp.Migrations
                         .IsUnique()
                         .HasFilter("[IsActive] = 1");
 
-                    b.ToTable("CaregiverAssignments");
+                    b.ToTable("CaregiverAssignments", (string)null);
                 });
 
             modelBuilder.Entity("ElderlyCareApp.Models.ElderlyPerson", b =>
@@ -266,7 +266,7 @@ namespace ElderlyCareApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ElderlyPeople");
+                    b.ToTable("ElderlyPeople", (string)null);
                 });
 
             modelBuilder.Entity("ElderlyCareApp.Models.MealLog", b =>
@@ -315,7 +315,7 @@ namespace ElderlyCareApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("MealLogs");
+                    b.ToTable("MealLogs", (string)null);
                 });
 
             modelBuilder.Entity("ElderlyCareApp.Models.MedicationLog", b =>
@@ -365,7 +365,7 @@ namespace ElderlyCareApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("MedicationLogs");
+                    b.ToTable("MedicationLogs", (string)null);
                 });
 
             modelBuilder.Entity("ElderlyCareApp.Models.User", b =>
@@ -412,7 +412,7 @@ namespace ElderlyCareApp.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("ElderlyCareApp.Models.ActivityLog", b =>

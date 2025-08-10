@@ -1,0 +1,162 @@
+@model ElderlyCareApp.Models.User
+
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1><i class="fas fa-user text-primary"></i> User Details</h1>
+            <p class="text-muted">View detailed information about the user</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Edit User
+            </a>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-user"></i> User Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4 fw-bold">Full Name:</dt>
+                                <dd class="col-sm-8">@Model.Name</dd>
+                                
+                                <dt class="col-sm-4 fw-bold">Email Address:</dt>
+                                <dd class="col-sm-8">
+                                    <a href="mailto:@Model.Email" class="text-decoration-none">
+                                        <i class="fas fa-envelope"></i> @Model.Email
+                                    </a>
+                                </dd>
+                                
+                                <dt class="col-sm-4 fw-bold">User Role:</dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge @(Model.Role == UserRole.Caregiver ? "bg-info" : "bg-success") fs-6">
+                                        @Model.Role
+                                    </span>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4 fw-bold">Phone Number:</dt>
+                                <dd class="col-sm-8">
+                                    @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                                    {
+                                        <a href="tel:@Model.PhoneNumber" class="text-decoration-none">
+                                            <i class="fas fa-phone"></i> @Model.PhoneNumber
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Not provided</span>
+                                    }
+                                </dd>
+                                
+                                <dt class="col-sm-4 fw-bold">Status:</dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger") fs-6">
+                                        @(Model.IsActive ? "Active" : "Inactive")
+                                    </span>
+                                </dd>
+                                
+                                <dt class="col-sm-4 fw-bold">Last Login:</dt>
+                                <dd class="col-sm-8">
+                                    @if (Model.LastLoginAt.HasValue)
+                                    {
+                                        <span class="text-muted">
+                                            <i class="fas fa-clock"></i> @Model.LastLoginAt.Value.ToString("MMM dd, yyyy HH:mm")
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Never logged in</span>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <dl class="row">
+                                <dt class="col-sm-2 fw-bold">Created:</dt>
+                                <dd class="col-sm-10">
+                                    <span class="text-muted">
+                                        <i class="fas fa-calendar-plus"></i> @Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")
+                                    </span>
+                                </dd>
+                                
+                                <dt class="col-sm-2 fw-bold">User ID:</dt>
+                                <dd class="col-sm-10">
+                                    <span class="text-muted">#@Model.Id</span>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0"><i class="fas fa-info-circle"></i> Quick Actions</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                            <i class="fas fa-edit"></i> Edit User
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Delete User
+                        </a>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card shadow mt-3">
+                <div class="card-header bg-success text-white">
+                    <h6 class="mb-0"><i class="fas fa-shield-alt"></i> User Permissions</h6>
+                </div>
+                <div class="card-body">
+                    @if (Model.Role == UserRole.Caregiver)
+                    {
+                        <p class="mb-2"><strong>Caregiver Access:</strong></p>
+                        <ul class="list-unstyled small">
+                            <li><i class="fas fa-check text-success"></i> Full patient access</li>
+                            <li><i class="fas fa-check text-success"></i> Create and edit logs</li>
+                            <li><i class="fas fa-check text-success"></i> View all patient data</li>
+                            <li><i class="fas fa-check text-success"></i> Manage appointments</li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="mb-2"><strong>Family Member Access:</strong></p>
+                        <ul class="list-unstyled small">
+                            <li><i class="fas fa-check text-success"></i> View patient information</li>
+                            <li><i class="fas fa-check text-success"></i> Read-only access to logs</li>
+                            <li><i class="fas fa-check text-success"></i> Limited patient data access</li>
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

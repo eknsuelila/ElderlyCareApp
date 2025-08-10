@@ -15,7 +15,7 @@
                 </div>
                 <div class="card-body">
                     <form asp-action="Create">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div asp-validation-summary="All" class="text-danger"></div>
                         
                         <div class="row">
                             <div class="col-md-6">
@@ -45,8 +45,9 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label asp-for="StartTime" class="form-label">Start Time</label>
-                                    <input asp-for="StartTime" class="form-control" type="datetime-local" />
+                                    <input asp-for="StartTime" class="form-control" type="datetime-local" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
                                     <span asp-validation-for="StartTime" class="text-danger"></span>
+                                    <small class="form-text text-muted">Current time: @DateTime.Now.ToString("yyyy-MM-dd HH:mm")</small>
                                 </div>
                             </div>
                         </div>
@@ -82,8 +83,11 @@
 
                         <div class="card-footer">
                             <button type="submit" class="btn btn-success">
-                                <i class="fas fa-save"></i> Create Activity
+                                <i class="fas fa-plus"></i> Create Activity
                             </button>
+                            <a href="#" onclick="returnToPatientDashboard()" class="btn btn-info">
+                                <i class="fas fa-user"></i> Return to Patient Dashboard
+                            </a>
                             <a asp-action="Index" class="btn btn-secondary">
                                 <i class="fas fa-arrow-left"></i> Back to List
                             </a>
@@ -97,4 +101,31 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function() {
+            $('form').on('submit', function(e) {
+                console.log('Form submitted');
+                var formData = $(this).serialize();
+                console.log('Form data:', formData);
+                console.log('ElderlyPersonId:', $('#ElderlyPersonId').val());
+                console.log('UserId:', $('#UserId').val());
+                console.log('ActivityType:', $('#ActivityType').val());
+                console.log('StartTime:', $('#StartTime').val());
+                console.log('EndTime:', $('#EndTime').val());
+                console.log('DurationMinutes:', $('#DurationMinutes').val());
+                console.log('Notes:', $('#Notes').val());
+            });
+        });
+
+        function returnToPatientDashboard() {
+            var patientId = document.getElementById('ElderlyPersonId').value;
+            if (patientId) {
+                window.location.href = '@Url.Action("PatientDashboard", "Home")?patientId=' + patientId;
+            } else {
+                // Fallback to index if no patient ID
+                window.location.href = '@Url.Action("Index", "Home")';
+            }
+            return false;
+        }
+    </script>
 }

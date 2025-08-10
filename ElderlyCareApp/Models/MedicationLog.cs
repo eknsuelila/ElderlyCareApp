@@ -12,12 +12,12 @@ namespace ElderlyCareApp.Models
         [Required]
         public int ElderlyPersonId { get; set; }
         [ForeignKey("ElderlyPersonId")]
-        public virtual ElderlyPerson ElderlyPerson { get; set; } = null!;
+        public virtual ElderlyPerson? ElderlyPerson { get; set; }
         
         [Required]
         public int UserId { get; set; }
         [ForeignKey("UserId")]
-        public virtual User User { get; set; } = null!;
+        public virtual User? User { get; set; }
         
         [Required]
         [StringLength(100)]
