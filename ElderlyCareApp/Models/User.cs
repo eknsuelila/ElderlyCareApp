@@ -48,13 +48,9 @@ namespace ElderlyCareApp.Models
         
         [Required]
         public int CaregiverId { get; set; }
-        [ForeignKey("CaregiverId")]
-        public virtual User Caregiver { get; set; } = null!;
         
         [Required]
         public int ElderlyPersonId { get; set; }
-        [ForeignKey("ElderlyPersonId")]
-        public virtual ElderlyPerson ElderlyPerson { get; set; } = null!;
         
         [Required]
         public DateTime StartDate { get; set; }
@@ -67,5 +63,12 @@ namespace ElderlyCareApp.Models
         public bool IsActive { get; set; } = true;
         
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        
+        // Navigation properties
+        [ForeignKey("CaregiverId")]
+        public virtual User Caregiver { get; set; } = null!;
+        
+        [ForeignKey("ElderlyPersonId")]
+        public virtual ElderlyPerson ElderlyPerson { get; set; } = null!;
     }
 } 

@@ -1,0 +1,140 @@
+@model ElderlyCareApp.Models.CaregiverAssignment
+
+@{
+    ViewData["Title"] = "Create Caregiver Assignment";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-user-plus fa-2x text-primary me-3"></i>
+                        <div>
+                            <h4 class="mb-0">Create New Caregiver Assignment</h4>
+                            <p class="text-muted mb-0">Assign a caregiver to a patient</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="CaregiverId" class="form-label fw-bold">
+                                        <i class="fas fa-user-md me-2"></i>Caregiver
+                                    </label>
+                                    <select asp-for="CaregiverId" class="form-select" required>
+                                        <option value="">-- Select Caregiver --</option>
+                                        @foreach (var caregiver in ViewBag.Caregivers)
+                                        {
+                                            <option value="@caregiver.Id">@caregiver.Name (@caregiver.Email)</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="CaregiverId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="ElderlyPersonId" class="form-label fw-bold">
+                                        <i class="fas fa-user me-2"></i>Patient
+                                    </label>
+                                    <select asp-for="ElderlyPersonId" class="form-select" required>
+                                        <option value="">-- Select Patient --</option>
+                                        @foreach (var patient in ViewBag.ElderlyPeople)
+                                        {
+                                            <option value="@patient.Id">@patient.Name (@patient.DateOfBirth.ToString("MMM dd, yyyy"))</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="ElderlyPersonId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="StartDate" class="form-label fw-bold">
+                                        <i class="fas fa-calendar-plus me-2"></i>Start Date
+                                    </label>
+                                    <input asp-for="StartDate" type="date" class="form-control" required />
+                                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                                    <small class="form-text text-muted">When the caregiver will start caring for this patient</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="EndDate" class="form-label fw-bold">
+                                        <i class="fas fa-calendar-minus me-2"></i>End Date (Optional)
+                                    </label>
+                                    <input asp-for="EndDate" type="date" class="form-control" />
+                                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                                    <small class="form-text text-muted">Leave blank for ongoing assignment</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Notes" class="form-label fw-bold">
+                                <i class="fas fa-sticky-note me-2"></i>Notes
+                            </label>
+                            <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Any special instructions or notes about this assignment..."></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                            <small class="form-text text-muted">Optional notes about the assignment</small>
+                        </div>
+
+                        <div class="alert alert-info" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Important:</strong> This will create an active assignment. The caregiver will be able to view and manage this patient's care records.
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to List
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Create Assignment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            // Set default start date to today
+            var today = new Date().toISOString().split('T')[0];
+            $('#StartDate').val(today);
+            
+            // Ensure end date is after start date
+            $('#StartDate').on('change', function() {
+                var startDate = $(this).val();
+                if (startDate) {
+                    $('#EndDate').attr('min', startDate);
+                }
+            });
+            
+            // Form validation
+            $('form').on('submit', function() {
+                var startDate = $('#StartDate').val();
+                var endDate = $('#EndDate').val();
+                
+                if (endDate && endDate <= startDate) {
+                    alert('End date must be after start date.');
+                    return false;
+                }
+                
+                return true;
+            });
+        });
+    </script>
+}

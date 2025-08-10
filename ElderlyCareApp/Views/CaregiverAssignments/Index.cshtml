@@ -1,0 +1,146 @@
+@model IEnumerable<ElderlyCareApp.Models.CaregiverAssignment>
+
+@{
+    ViewData["Title"] = "Caregiver Assignments";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h4 class="mb-0">
+                                <i class="fas fa-user-plus me-2"></i>Caregiver Assignments
+                            </h4>
+                            <p class="text-muted mb-0">Manage caregiver assignments to patients</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <a asp-action="Create" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> New Assignment
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (!Model.Any())
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-user-plus fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No caregiver assignments found</h5>
+                            <p class="text-muted">Start by creating a new assignment to connect caregivers with patients.</p>
+                            <a asp-action="Create" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Create First Assignment
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Caregiver</th>
+                                        <th>Patient</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Status</th>
+                                        <th>Notes</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar-sm bg-primary rounded-circle d-flex align-items-center justify-content-center me-2">
+                                                        <span class="text-white fw-bold">@item.Caregiver.Name.Substring(0, 1).ToUpper()</span>
+                                                    </div>
+                                                    <div>
+                                                        <div class="fw-bold">@item.Caregiver.Name</div>
+                                                        <small class="text-muted">@item.Caregiver.Email</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar-sm bg-info rounded-circle d-flex align-items-center justify-content-center me-2">
+                                                        <span class="text-white fw-bold">@item.ElderlyPerson.Name.Substring(0, 1).ToUpper()</span>
+                                                    </div>
+                                                    <div>
+                                                        <div class="fw-bold">@item.ElderlyPerson.Name</div>
+                                                        <small class="text-muted">@item.ElderlyPerson.DateOfBirth.ToString("MMM dd, yyyy")</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-success">@item.StartDate.ToString("MMM dd, yyyy")</span>
+                                            </td>
+                                            <td>
+                                                @if (item.EndDate.HasValue)
+                                                {
+                                                    <span class="badge bg-warning">@item.EndDate.Value.ToString("MMM dd, yyyy")</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-info">Ongoing</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.IsActive)
+                                                {
+                                                    <span class="badge bg-success">Active</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">Inactive</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.Notes))
+                                                {
+                                                    <span class="text-truncate d-inline-block" style="max-width: 150px;" title="@item.Notes">
+                                                        @item.Notes
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">No notes</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm" title="View Details">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm" title="Edit Assignment">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm" title="Delete Assignment">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Add any additional JavaScript functionality here
+            console.log('Caregiver Assignments page loaded');
+        });
+    </script>
+}

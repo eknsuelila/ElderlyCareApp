@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElderlyCareApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250728022743_AddCaregiverAssignments")]
-    partial class AddCaregiverAssignments
+    [Migration("20250810214131_FreshStart")]
+    partial class FreshStart
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,9 +49,6 @@ namespace ElderlyCareApp.Migrations
                     b.Property<int>("ElderlyPersonId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ElderlyPersonId1")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("EndTime")
                         .HasColumnType("datetime2");
 
@@ -68,8 +65,6 @@ namespace ElderlyCareApp.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ElderlyPersonId");
-
-                    b.HasIndex("ElderlyPersonId1");
 
                     b.HasIndex("UserId");
 
@@ -95,9 +90,6 @@ namespace ElderlyCareApp.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("ElderlyPersonId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ElderlyPersonId1")
                         .HasColumnType("int");
 
                     b.Property<string>("Location")
@@ -130,8 +122,6 @@ namespace ElderlyCareApp.Migrations
 
                     b.HasIndex("ElderlyPersonId");
 
-                    b.HasIndex("ElderlyPersonId1");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("AppointmentLogs");
@@ -155,9 +145,6 @@ namespace ElderlyCareApp.Migrations
                     b.Property<int>("ElderlyPersonId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ElderlyPersonId1")
-                        .HasColumnType("int");
-
                     b.Property<int>("NoteType")
                         .HasColumnType("int");
 
@@ -172,8 +159,6 @@ namespace ElderlyCareApp.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ElderlyPersonId");
-
-                    b.HasIndex("ElderlyPersonId1");
 
                     b.HasIndex("UserId");
 
@@ -290,9 +275,6 @@ namespace ElderlyCareApp.Migrations
                     b.Property<int>("ElderlyPersonId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ElderlyPersonId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("MealName")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -313,8 +295,6 @@ namespace ElderlyCareApp.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ElderlyPersonId");
-
-                    b.HasIndex("ElderlyPersonId1");
 
                     b.HasIndex("UserId");
 
@@ -339,9 +319,6 @@ namespace ElderlyCareApp.Migrations
                     b.Property<int>("ElderlyPersonId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ElderlyPersonId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("MedicationName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -363,8 +340,6 @@ namespace ElderlyCareApp.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ElderlyPersonId");
-
-                    b.HasIndex("ElderlyPersonId1");
 
                     b.HasIndex("UserId");
 
@@ -421,14 +396,10 @@ namespace ElderlyCareApp.Migrations
             modelBuilder.Entity("ElderlyCareApp.Models.ActivityLog", b =>
                 {
                     b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
-                        .WithMany()
+                        .WithMany("ActivityLogs")
                         .HasForeignKey("ElderlyPersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", null)
-                        .WithMany("ActivityLogs")
-                        .HasForeignKey("ElderlyPersonId1");
 
                     b.HasOne("ElderlyCareApp.Models.User", "User")
                         .WithMany()
@@ -444,14 +415,10 @@ namespace ElderlyCareApp.Migrations
             modelBuilder.Entity("ElderlyCareApp.Models.AppointmentLog", b =>
                 {
                     b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
-                        .WithMany()
+                        .WithMany("AppointmentLogs")
                         .HasForeignKey("ElderlyPersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", null)
-                        .WithMany("AppointmentLogs")
-                        .HasForeignKey("ElderlyPersonId1");
 
                     b.HasOne("ElderlyCareApp.Models.User", "User")
                         .WithMany()
@@ -467,14 +434,10 @@ namespace ElderlyCareApp.Migrations
             modelBuilder.Entity("ElderlyCareApp.Models.CareNote", b =>
                 {
                     b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
-                        .WithMany()
+                        .WithMany("CareNotes")
                         .HasForeignKey("ElderlyPersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", null)
-                        .WithMany("CareNotes")
-                        .HasForeignKey("ElderlyPersonId1");
 
                     b.HasOne("ElderlyCareApp.Models.User", "User")
                         .WithMany()
@@ -509,14 +472,10 @@ namespace ElderlyCareApp.Migrations
             modelBuilder.Entity("ElderlyCareApp.Models.MealLog", b =>
                 {
                     b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
-                        .WithMany()
+                        .WithMany("MealLogs")
                         .HasForeignKey("ElderlyPersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", null)
-                        .WithMany("MealLogs")
-                        .HasForeignKey("ElderlyPersonId1");
 
                     b.HasOne("ElderlyCareApp.Models.User", "User")
                         .WithMany()
@@ -532,14 +491,10 @@ namespace ElderlyCareApp.Migrations
             modelBuilder.Entity("ElderlyCareApp.Models.MedicationLog", b =>
                 {
                     b.HasOne("ElderlyCareApp.Models.ElderlyPerson", "ElderlyPerson")
-                        .WithMany()
+                        .WithMany("MedicationLogs")
                         .HasForeignKey("ElderlyPersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ElderlyCareApp.Models.ElderlyPerson", null)
-                        .WithMany("MedicationLogs")
-                        .HasForeignKey("ElderlyPersonId1");
 
                     b.HasOne("ElderlyCareApp.Models.User", "User")
                         .WithMany()
