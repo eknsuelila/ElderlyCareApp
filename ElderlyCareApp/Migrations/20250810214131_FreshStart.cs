@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ElderlyCareApp.Migrations
 {
     /// <inheritdoc />
-    public partial class AddCaregiverAssignments : Migration
+    public partial class FreshStart : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,36 +30,6 @@ namespace ElderlyCareApp.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_MedicationLogs_Users_UserId",
                 table: "MedicationLogs");
-
-            migrationBuilder.AddColumn<int>(
-                name: "ElderlyPersonId1",
-                table: "MedicationLogs",
-                type: "int",
-                nullable: true);
-
-            migrationBuilder.AddColumn<int>(
-                name: "ElderlyPersonId1",
-                table: "MealLogs",
-                type: "int",
-                nullable: true);
-
-            migrationBuilder.AddColumn<int>(
-                name: "ElderlyPersonId1",
-                table: "CareNotes",
-                type: "int",
-                nullable: true);
-
-            migrationBuilder.AddColumn<int>(
-                name: "ElderlyPersonId1",
-                table: "AppointmentLogs",
-                type: "int",
-                nullable: true);
-
-            migrationBuilder.AddColumn<int>(
-                name: "ElderlyPersonId1",
-                table: "ActivityLogs",
-                type: "int",
-                nullable: true);
 
             migrationBuilder.CreateTable(
                 name: "CaregiverAssignments",
@@ -99,31 +69,6 @@ namespace ElderlyCareApp.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_MedicationLogs_ElderlyPersonId1",
-                table: "MedicationLogs",
-                column: "ElderlyPersonId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MealLogs_ElderlyPersonId1",
-                table: "MealLogs",
-                column: "ElderlyPersonId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CareNotes_ElderlyPersonId1",
-                table: "CareNotes",
-                column: "ElderlyPersonId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AppointmentLogs_ElderlyPersonId1",
-                table: "AppointmentLogs",
-                column: "ElderlyPersonId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ActivityLogs_ElderlyPersonId1",
-                table: "ActivityLogs",
-                column: "ElderlyPersonId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CaregiverAssignments_CaregiverId_ElderlyPersonId_IsActive",
                 table: "CaregiverAssignments",
                 columns: new[] { "CaregiverId", "ElderlyPersonId", "IsActive" },
@@ -136,26 +81,12 @@ namespace ElderlyCareApp.Migrations
                 column: "ElderlyPersonId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ActivityLogs_ElderlyPeople_ElderlyPersonId1",
-                table: "ActivityLogs",
-                column: "ElderlyPersonId1",
-                principalTable: "ElderlyPeople",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
                 name: "FK_ActivityLogs_Users_UserId",
                 table: "ActivityLogs",
                 column: "UserId",
                 principalTable: "Users",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_AppointmentLogs_ElderlyPeople_ElderlyPersonId1",
-                table: "AppointmentLogs",
-                column: "ElderlyPersonId1",
-                principalTable: "ElderlyPeople",
-                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AppointmentLogs_Users_UserId",
@@ -166,13 +97,6 @@ namespace ElderlyCareApp.Migrations
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_CareNotes_ElderlyPeople_ElderlyPersonId1",
-                table: "CareNotes",
-                column: "ElderlyPersonId1",
-                principalTable: "ElderlyPeople",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
                 name: "FK_CareNotes_Users_UserId",
                 table: "CareNotes",
                 column: "UserId",
@@ -181,26 +105,12 @@ namespace ElderlyCareApp.Migrations
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_MealLogs_ElderlyPeople_ElderlyPersonId1",
-                table: "MealLogs",
-                column: "ElderlyPersonId1",
-                principalTable: "ElderlyPeople",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
                 name: "FK_MealLogs_Users_UserId",
                 table: "MealLogs",
                 column: "UserId",
                 principalTable: "Users",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_MedicationLogs_ElderlyPeople_ElderlyPersonId1",
-                table: "MedicationLogs",
-                column: "ElderlyPersonId1",
-                principalTable: "ElderlyPeople",
-                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_MedicationLogs_Users_UserId",
@@ -215,40 +125,20 @@ namespace ElderlyCareApp.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_ActivityLogs_ElderlyPeople_ElderlyPersonId1",
-                table: "ActivityLogs");
-
-            migrationBuilder.DropForeignKey(
                 name: "FK_ActivityLogs_Users_UserId",
                 table: "ActivityLogs");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_AppointmentLogs_ElderlyPeople_ElderlyPersonId1",
-                table: "AppointmentLogs");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_AppointmentLogs_Users_UserId",
                 table: "AppointmentLogs");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_CareNotes_ElderlyPeople_ElderlyPersonId1",
-                table: "CareNotes");
-
-            migrationBuilder.DropForeignKey(
                 name: "FK_CareNotes_Users_UserId",
                 table: "CareNotes");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_MealLogs_ElderlyPeople_ElderlyPersonId1",
-                table: "MealLogs");
-
-            migrationBuilder.DropForeignKey(
                 name: "FK_MealLogs_Users_UserId",
                 table: "MealLogs");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_MedicationLogs_ElderlyPeople_ElderlyPersonId1",
-                table: "MedicationLogs");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_MedicationLogs_Users_UserId",
@@ -260,46 +150,6 @@ namespace ElderlyCareApp.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_Users_Email",
                 table: "Users");
-
-            migrationBuilder.DropIndex(
-                name: "IX_MedicationLogs_ElderlyPersonId1",
-                table: "MedicationLogs");
-
-            migrationBuilder.DropIndex(
-                name: "IX_MealLogs_ElderlyPersonId1",
-                table: "MealLogs");
-
-            migrationBuilder.DropIndex(
-                name: "IX_CareNotes_ElderlyPersonId1",
-                table: "CareNotes");
-
-            migrationBuilder.DropIndex(
-                name: "IX_AppointmentLogs_ElderlyPersonId1",
-                table: "AppointmentLogs");
-
-            migrationBuilder.DropIndex(
-                name: "IX_ActivityLogs_ElderlyPersonId1",
-                table: "ActivityLogs");
-
-            migrationBuilder.DropColumn(
-                name: "ElderlyPersonId1",
-                table: "MedicationLogs");
-
-            migrationBuilder.DropColumn(
-                name: "ElderlyPersonId1",
-                table: "MealLogs");
-
-            migrationBuilder.DropColumn(
-                name: "ElderlyPersonId1",
-                table: "CareNotes");
-
-            migrationBuilder.DropColumn(
-                name: "ElderlyPersonId1",
-                table: "AppointmentLogs");
-
-            migrationBuilder.DropColumn(
-                name: "ElderlyPersonId1",
-                table: "ActivityLogs");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_ActivityLogs_Users_UserId",

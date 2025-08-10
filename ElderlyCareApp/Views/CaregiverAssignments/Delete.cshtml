@@ -1,0 +1,142 @@
+@model ElderlyCareApp.Models.CaregiverAssignment
+
+@{
+    ViewData["Title"] = "Delete Assignment";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+                        <div>
+                            <h4 class="mb-0">Delete Caregiver Assignment</h4>
+                            <p class="mb-0">Are you sure you want to delete this assignment?</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Warning:</strong> This action cannot be undone. Deleting this assignment will immediately remove the caregiver's access to the patient's care records.
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card border-primary mb-3">
+                                <div class="card-header bg-primary text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-user-md me-2"></i>Caregiver
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-sm bg-primary rounded-circle d-flex align-items-center justify-content-center me-2">
+                                            <span class="text-white fw-bold">@Model.Caregiver.Name.Substring(0, 1).ToUpper()</span>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1">@Model.Caregiver.Name</h6>
+                                            <small class="text-muted">@Model.Caregiver.Email</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-info mb-3">
+                                <div class="card-header bg-info text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-user me-2"></i>Patient
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-sm bg-info rounded-circle d-flex align-items-center justify-content-center me-2">
+                                            <span class="text-white fw-bold">@Model.ElderlyPerson.Name.Substring(0, 1).ToUpper()</span>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1">@Model.ElderlyPerson.Name</h6>
+                                            <small class="text-muted">@Model.ElderlyPerson.DateOfBirth.ToString("MMM dd, yyyy")</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card border-secondary mb-3">
+                        <div class="card-header bg-secondary text-white">
+                            <h6 class="mb-0">
+                                <i class="fas fa-calendar-alt me-2"></i>Assignment Details
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <small class="text-muted">Start Date</small>
+                                    <p class="mb-0">@Model.StartDate.ToString("MMM dd, yyyy")</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="text-muted">Status</small>
+                                    <p class="mb-0">
+                                        @if (Model.IsActive)
+                                        {
+                                            <span class="badge bg-success">Active</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Inactive</span>
+                                        }
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="text-muted">Created</small>
+                                    <p class="mb-0">@Model.CreatedAt.ToString("MMM dd, yyyy")</p>
+                                </div>
+                            </div>
+                            
+                            @if (!string.IsNullOrEmpty(Model.Notes))
+                            {
+                                <div class="mt-3">
+                                    <small class="text-muted">Notes</small>
+                                    <p class="mb-0">@Model.Notes</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Impact of Deletion:</strong>
+                        <ul class="mb-0 mt-2">
+                            <li>The caregiver will lose access to this patient's care records</li>
+                            <li>All activity logs, medication logs, and care notes will become inaccessible to this caregiver</li>
+                            <li>This action cannot be undone</li>
+                        </ul>
+                    </div>
+
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-2"></i>Delete Assignment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .avatar-sm {
+        width: 40px;
+        height: 40px;
+    }
+</style>

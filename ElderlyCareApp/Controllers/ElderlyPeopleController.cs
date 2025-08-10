@@ -21,12 +21,18 @@ namespace ElderlyCareApp.Controllers
         // GET: ElderlyPeople
         public async Task<IActionResult> Index()
         {
+            var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
+            
+            // All users can view the list
             return View(await _context.ElderlyPeople.ToListAsync());
         }
 
         // GET: ElderlyPeople/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
+            
+            // All users can view details
             if (id == null)
             {
                 return NotFound();
@@ -45,6 +51,14 @@ namespace ElderlyCareApp.Controllers
         // GET: ElderlyPeople/Create
         public IActionResult Create()
         {
+            var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
+            
+            // Only Family users can create new elderly people
+            if (currentUserRole == "Caregiver")
+            {
+                return Unauthorized("Access denied. Caregivers cannot create new elderly people.");
+            }
+            
             return View();
         }
 
@@ -55,6 +69,14 @@ namespace ElderlyCareApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,DateOfBirth,PhoneNumber,EmergencyContactName,EmergencyContactPhone,Allergies,MedicalConditions,Notes,IsActive")] ElderlyPerson elderlyPerson)
         {
+            var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
+            
+            // Only Family users can create new elderly people
+            if (currentUserRole == "Caregiver")
+            {
+                return Unauthorized("Access denied. Caregivers cannot create new elderly people.");
+            }
+            
             if (ModelState.IsValid)
             {
                 elderlyPerson.CreatedAt = DateTime.Now;
@@ -68,6 +90,9 @@ namespace ElderlyCareApp.Controllers
         // GET: ElderlyPeople/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
+            
+            // All users can edit elderly people
             if (id == null)
             {
                 return NotFound();
@@ -86,6 +111,9 @@ namespace ElderlyCareApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DateOfBirth,PhoneNumber,EmergencyContactName,EmergencyContactPhone,Allergies,MedicalConditions,Notes,IsActive,CreatedAt")] ElderlyPerson elderlyPerson)
         {
+            var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
+            
+            // All users can edit elderly people
             if (id != elderlyPerson.Id)
             {
                 return NotFound();
@@ -117,6 +145,14 @@ namespace ElderlyCareApp.Controllers
         // GET: ElderlyPeople/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
+            
+            // Caregivers cannot delete elderly people
+            if (currentUserRole == "Caregiver")
+            {
+                return Unauthorized("Access denied. Caregivers cannot delete elderly people.");
+            }
+            
             if (id == null)
             {
                 return NotFound();
@@ -137,6 +173,14 @@ namespace ElderlyCareApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
+            
+            // Caregivers cannot delete elderly people
+            if (currentUserRole == "Caregiver")
+            {
+                return Unauthorized("Access denied. Caregivers cannot delete elderly people.");
+            }
+            
             var elderlyPerson = await _context.ElderlyPeople.FindAsync(id);
             if (elderlyPerson != null)
             {

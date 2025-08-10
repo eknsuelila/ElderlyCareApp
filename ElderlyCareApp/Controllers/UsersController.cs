@@ -21,12 +21,18 @@ namespace ElderlyCareApp.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
+            var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
+            
+            // All users can view the list
             return View(await _context.Users.ToListAsync());
         }
 
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
+            
+            // All users can view details
             if (id == null)
             {
                 return NotFound();
@@ -45,6 +51,14 @@ namespace ElderlyCareApp.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
+            var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
+            
+            // Only Family users can create new users
+            if (currentUserRole == "Caregiver")
+            {
+                return Unauthorized("Access denied. Caregivers cannot create new users.");
+            }
+            
             return View();
         }
 
@@ -53,6 +67,14 @@ namespace ElderlyCareApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Email,Password,PhoneNumber,Role,IsActive")] User user)
         {
+            var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
+            
+            // Only Family users can create new users
+            if (currentUserRole == "Caregiver")
+            {
+                return Unauthorized("Access denied. Caregivers cannot create new users.");
+            }
+            
             if (ModelState.IsValid)
             {
                 user.CreatedAt = DateTime.Now;
@@ -66,6 +88,9 @@ namespace ElderlyCareApp.Controllers
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
+            
+            // All users can edit user information
             if (id == null)
             {
                 return NotFound();
@@ -84,6 +109,9 @@ namespace ElderlyCareApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email,Password,PhoneNumber,Role,IsActive,LastLoginAt,CreatedAt")] User user)
         {
+            var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
+            
+            // All users can edit user information
             if (id != user.Id)
             {
                 return NotFound();
@@ -115,6 +143,14 @@ namespace ElderlyCareApp.Controllers
         // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
+            
+            // Caregivers cannot delete users
+            if (currentUserRole == "Caregiver")
+            {
+                return Unauthorized("Access denied. Caregivers cannot delete users.");
+            }
+            
             if (id == null)
             {
                 return NotFound();
@@ -135,6 +171,14 @@ namespace ElderlyCareApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var currentUserRole = HttpContext.Session.GetString("CurrentUserRole");
+            
+            // Caregivers cannot delete users
+            if (currentUserRole == "Caregiver")
+            {
+                return Unauthorized("Access denied. Caregivers cannot delete users.");
+            }
+            
             var user = await _context.Users.FindAsync(id);
             if (user != null)
             {

@@ -1,0 +1,173 @@
+@model ElderlyCareApp.Models.CaregiverAssignment
+
+@{
+    ViewData["Title"] = "Edit Caregiver Assignment";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-edit fa-2x text-warning me-3"></i>
+                        <div>
+                            <h4 class="mb-0">Edit Caregiver Assignment</h4>
+                            <p class="text-muted mb-0">Modify assignment details</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="CreatedAt" />
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="CaregiverId" class="form-label fw-bold">
+                                        <i class="fas fa-user-md me-2"></i>Caregiver
+                                    </label>
+                                    <select asp-for="CaregiverId" class="form-select" required>
+                                        <option value="">-- Select Caregiver --</option>
+                                        @foreach (var caregiver in ViewBag.Caregivers)
+                                        {
+                                            <option value="@caregiver.Id" selected="@(caregiver.Id == Model.CaregiverId)">
+                                                @caregiver.Name (@caregiver.Email)
+                                            </option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="CaregiverId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="ElderlyPersonId" class="form-label fw-bold">
+                                        <i class="fas fa-user me-2"></i>Patient
+                                    </label>
+                                    <select asp-for="ElderlyPersonId" class="form-select" required>
+                                        <option value="">-- Select Patient --</option>
+                                        @foreach (var patient in ViewBag.ElderlyPeople)
+                                        {
+                                            <option value="@patient.Id" selected="@(patient.Id == Model.ElderlyPersonId)">
+                                                @patient.Name (@patient.DateOfBirth.ToString("MMM dd, yyyy"))
+                                            </option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="ElderlyPersonId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="StartDate" class="form-label fw-bold">
+                                        <i class="fas fa-calendar-plus me-2"></i>Start Date
+                                    </label>
+                                    <input asp-for="StartDate" type="date" class="form-control" required />
+                                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                                    <small class="form-text text-muted">When the caregiver started caring for this patient</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="EndDate" class="form-label fw-bold">
+                                        <i class="fas fa-calendar-minus me-2"></i>End Date (Optional)
+                                    </label>
+                                    <input asp-for="EndDate" type="date" class="form-control" />
+                                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                                    <small class="form-text text-muted">Leave blank for ongoing assignment</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="IsActive" class="form-label fw-bold">
+                                        <i class="fas fa-toggle-on me-2"></i>Assignment Status
+                                    </label>
+                                    <div class="form-check form-switch">
+                                        <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                                        <label asp-for="IsActive" class="form-check-label">
+                                            Active Assignment
+                                        </label>
+                                    </div>
+                                    <small class="form-text text-muted">Inactive assignments won't allow the caregiver to access patient records</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-calendar me-2"></i>Created Date
+                                    </label>
+                                    <input type="text" class="form-control" value="@Model.CreatedAt.ToString("MMM dd, yyyy 'at' h:mm tt")" readonly />
+                                    <small class="form-text text-muted">When this assignment was first created</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Notes" class="form-label fw-bold">
+                                <i class="fas fa-sticky-note me-2"></i>Notes
+                            </label>
+                            <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Any special instructions or notes about this assignment..."></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                            <small class="form-text text-muted">Optional notes about the assignment</small>
+                        </div>
+
+                        <div class="alert alert-warning" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Note:</strong> Changing the assignment status or dates may affect the caregiver's access to patient records.
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to List
+                            </a>
+                            <div>
+                                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">
+                                    <i class="fas fa-eye me-2"></i>View Details
+                                </a>
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="fas fa-save me-2"></i>Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            // Ensure end date is after start date
+            $('#StartDate').on('change', function() {
+                var startDate = $(this).val();
+                if (startDate) {
+                    $('#EndDate').attr('min', startDate);
+                }
+            });
+            
+            // Form validation
+            $('form').on('submit', function() {
+                var startDate = $('#StartDate').val();
+                var endDate = $('#EndDate').val();
+                
+                if (endDate && endDate <= startDate) {
+                    alert('End date must be after start date.');
+                    return false;
+                }
+                
+                return true;
+            });
+        });
+    </script>
+}

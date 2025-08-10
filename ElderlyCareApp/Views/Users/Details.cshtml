@@ -121,9 +121,12 @@
                         <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
                             <i class="fas fa-edit"></i> Edit User
                         </a>
-                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
-                            <i class="fas fa-trash"></i> Delete User
-                        </a>
+                        @if (Context.Session.GetString("CurrentUserRole") != "Caregiver")
+                        {
+                            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Delete User
+                            </a>
+                        }
                         <a asp-action="Index" class="btn btn-secondary">
                             <i class="fas fa-arrow-left"></i> Back to List
                         </a>
