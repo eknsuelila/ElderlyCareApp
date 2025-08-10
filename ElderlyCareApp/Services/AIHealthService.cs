@@ -46,7 +46,6 @@ namespace ElderlyCareApp.Services
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<AIHealthService> _logger;
-        private readonly bool _useMockService = false; // Set to true for mock, false for real AI service
 
         public AIHealthService(HttpClient httpClient, ILogger<AIHealthService> logger)
         {
@@ -56,11 +55,6 @@ namespace ElderlyCareApp.Services
 
         public async Task<string> CreateAISessionAsync()
         {
-            if (_useMockService)
-            {
-                return "mock-session-" + Guid.NewGuid().ToString("N")[..8];
-            }
-
             try
             {
                 var url = "http://asl.serveblog.net:8000/apps/manager/users/k8k_id/sessions";
@@ -107,11 +101,6 @@ namespace ElderlyCareApp.Services
             List<ActivityLog> activities, List<MedicationLog> medications, 
             List<MealLog> meals, List<AppointmentLog> appointments)
         {
-            if (_useMockService)
-            {
-                return await GetMockAIInsightsAsync(patient, activities, medications, meals, appointments);
-            }
-
             try
             {
                 // Build patient health summary
@@ -196,119 +185,6 @@ namespace ElderlyCareApp.Services
             }
         }
 
-        private async Task<List<string>> GetMockAIInsightsAsync(ElderlyPerson patient, 
-            List<ActivityLog> activities, List<MedicationLog> medications, 
-            List<MealLog> meals, List<AppointmentLog> appointments)
-        {
-            try
-            {
-                _logger.LogInformation("Mock AI service called for patient: {PatientName}", patient.Name);
-                
-                var age = DateTime.Now.Year - patient.DateOfBirth.Year;
-                if (patient.DateOfBirth > DateTime.Now.AddYears(-age)) age--;
-
-                var concerns = new List<string>();
-                var recommendations = new List<string>();
-
-                // Analyze activities
-                if (activities.Any())
-                {
-                    var totalActivityHours = activities
-                        .Where(a => a.EndTime.HasValue)
-                        .Sum(a => (a.EndTime.Value - a.StartTime).TotalHours);
-                    
-                    if (totalActivityHours < 2)
-                    {
-                        concerns.Add($"Incomplete Activity Log: {patient.Name} has been less active than recommended. Only {totalActivityHours:F1} hours of activity recorded recently.");
-                        recommendations.Add("Consider encouraging more physical activity for better health outcomes and maintaining mobility.");
-                    }
-                    else
-                    {
-                        concerns.Add($"Good Activity Level: {patient.Name} has been maintaining a healthy activity level with {totalActivityHours:F1} hours of recent activities.");
-                        recommendations.Add("Continue with the current activity routine as it's beneficial for overall well-being.");
-                    }
-                }
-
-                // Analyze medications
-                if (medications.Any())
-                {
-                    var missedMedications = medications.Count(m => !m.Taken);
-                    var totalMedications = medications.Count;
-                    
-                    if (missedMedications > 0)
-                    {
-                        concerns.Add($"Medication Compliance Issue: {patient.Name} has missed {missedMedications} out of {totalMedications} recent medication doses.");
-                        recommendations.Add("Implement medication reminders and consider involving a caregiver to ensure timely administration.");
-                    }
-                    else
-                    {
-                        concerns.Add($"Excellent Medication Compliance: {patient.Name} has taken all {totalMedications} recent medications on time.");
-                        recommendations.Add("Maintain the current medication schedule as it's crucial for managing chronic conditions effectively.");
-                    }
-                }
-
-                // Analyze meals
-                if (meals.Any())
-                {
-                    var mealTypes = meals.Select(m => m.MealType).Distinct().ToList();
-                    if (mealTypes.Count < 3)
-                    {
-                        concerns.Add($"Meal Pattern Concern: {patient.Name} has been skipping some meals (only {string.Join(", ", mealTypes)} recorded).");
-                        recommendations.Add("Ensure regular meal intake is important for maintaining energy and health. Consider meal planning or assistance.");
-                    }
-                    else
-                    {
-                        concerns.Add($"Good Meal Compliance: {patient.Name} has been eating regular meals including {string.Join(", ", mealTypes)}.");
-                        recommendations.Add("Continue with the current meal pattern as it supports overall nutrition and health.");
-                    }
-                }
-
-                // Analyze medical conditions
-                if (!string.IsNullOrEmpty(patient.MedicalConditions))
-                {
-                    if (patient.MedicalConditions.Contains("Diabetes") || patient.MedicalConditions.Contains("diabetes"))
-                    {
-                        concerns.Add($"Diabetes Management: {patient.Name} has diabetes requiring careful monitoring.");
-                        recommendations.Add("Regular blood sugar monitoring and medication compliance are crucial. Consider checking blood sugar levels more frequently.");
-                    }
-                    
-                    if (patient.MedicalConditions.Contains("Hypertension") || patient.MedicalConditions.Contains("hypertension"))
-                    {
-                        concerns.Add($"Blood Pressure Monitoring: {patient.Name} has hypertension requiring attention.");
-                        recommendations.Add("Regular blood pressure checks and medication adherence are essential for cardiovascular health.");
-                    }
-                }
-
-                // Add general health insights
-                if (age > 80)
-                {
-                    concerns.Add($"Senior Health Focus: At {age} years old, {patient.Name} requires specialized care.");
-                    recommendations.Add("Prioritize regular health check-ups, medication management, and fall prevention measures.");
-                }
-
-                // Build the formatted response
-                var response = $"Health Insights for {patient.Name}\n\n";
-                response += $"Upon reviewing {patient.Name}'s health summary, several concerns have been identified. Here are the insights and recommendations based on the available data:\n\n";
-
-                for (int i = 0; i < concerns.Count; i++)
-                {
-                    response += $"{i + 1}. Concern: {concerns[i]}\n\n";
-                    response += $"Recommendation: {recommendations[i]}\n\n";
-                }
-
-                response += "### Conclusion\n\n";
-                response += $"While some aspects of {patient.Name}'s care are well-documented, addressing the identified gaps will contribute to more comprehensive management of their health conditions. Engaging with healthcare providers for regular assessments and updates can further enhance the care plan.";
-
-                _logger.LogInformation("Mock AI service generated response with {ConcernCount} concerns", concerns.Count);
-                return new List<string> { response };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error in mock AI service: {Message}", ex.Message);
-                throw new Exception($"Mock AI service error: {ex.Message}");
-            }
-        }
-
         private string BuildPatientHealthSummary(ElderlyPerson patient, List<ActivityLog> activities, 
             List<MedicationLog> medications, List<MealLog> meals, List<AppointmentLog> appointments)
         {
@@ -330,7 +206,7 @@ namespace ElderlyCareApp.Services
                 summary += "\nRecent Activities:\n";
                 foreach (var activity in activities.Take(3))
                 {
-                    summary += $"- {activity.Description} ({activity.StartTime:MM/dd/yyyy})\n";
+                    summary += $"- {activity.Description} ({activity.StartTime:MM/dd/yyyy HH:mm})\n";
                 }
             }
 
@@ -341,7 +217,7 @@ namespace ElderlyCareApp.Services
                 foreach (var med in medications.Take(3))
                 {
                     var takenStatus = med.Taken ? "Taken" : "Missed";
-                    summary += $"- {med.MedicationName} ({takenStatus} on {med.Timestamp:MM/dd/yyyy})\n";
+                    summary += $"- {med.MedicationName} ({takenStatus} on {med.Timestamp:MM/dd/yyyy HH:mm})\n";
                 }
             }
 
@@ -351,7 +227,7 @@ namespace ElderlyCareApp.Services
                 summary += "\nRecent Meals:\n";
                 foreach (var meal in meals.Take(3))
                 {
-                    summary += $"- {meal.MealType} on {meal.MealTime:MM/dd/yyyy}\n";
+                    summary += $"- {meal.MealType} on {meal.MealTime:MM/dd/yyyy HH:mm}\n";
                 }
             }
 
@@ -361,7 +237,7 @@ namespace ElderlyCareApp.Services
                 summary += "\nRecent Appointments:\n";
                 foreach (var appt in appointments.Take(3))
                 {
-                    summary += $"- {appt.AppointmentType} with {appt.ProviderName} on {appt.ScheduledDateTime:MM/dd/yyyy}\n";
+                    summary += $"- {appt.AppointmentType} with {appt.ProviderName} on {appt.ScheduledDateTime:MM/dd/yyyy HH:mm}\n";
                 }
             }
 
@@ -370,4 +246,4 @@ namespace ElderlyCareApp.Services
             return summary;
         }
     }
-} 
+}
