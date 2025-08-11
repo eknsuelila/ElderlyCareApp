@@ -17,217 +17,217 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = ElderlyCareApp
 build_property.RootNamespace = ElderlyCareApp
-build_property.ProjectDir = C:\Users\eknsu\Documents\FSDM\Term 3\ASP.NET\Project\ElderlyCareApp\ElderlyCareApp\
+build_property.ProjectDir = C:\Users\Admin\Documents\Lambton College\Term3\csharp\ElderlyCareApp\ElderlyCareApp\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\eknsu\Documents\FSDM\Term 3\ASP.NET\Project\ElderlyCareApp\ElderlyCareApp
+build_property.MSBuildProjectDirectory = C:\Users\Admin\Documents\Lambton College\Term3\csharp\ElderlyCareApp\ElderlyCareApp
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/Account/AccessDenied.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/Account/AccessDenied.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxBY2Nlc3NEZW5pZWQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/Account/Login.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/ActivityLogs/Create.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/ActivityLogs/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWN0aXZpdHlMb2dzXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/ActivityLogs/Delete.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/ActivityLogs/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWN0aXZpdHlMb2dzXERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/ActivityLogs/Details.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/ActivityLogs/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWN0aXZpdHlMb2dzXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/ActivityLogs/Edit.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/ActivityLogs/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWN0aXZpdHlMb2dzXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/ActivityLogs/Index.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/ActivityLogs/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWN0aXZpdHlMb2dzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/AppointmentLogs/Create.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/AppointmentLogs/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRMb2dzXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/AppointmentLogs/Delete.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/AppointmentLogs/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRMb2dzXERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/AppointmentLogs/Details.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/AppointmentLogs/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRMb2dzXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/AppointmentLogs/Edit.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/AppointmentLogs/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRMb2dzXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/AppointmentLogs/Index.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/AppointmentLogs/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRMb2dzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/CaregiverAssignments/Create.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/CaregiverAssignments/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZWdpdmVyQXNzaWdubWVudHNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/CaregiverAssignments/Delete.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/CaregiverAssignments/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZWdpdmVyQXNzaWdubWVudHNcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/CaregiverAssignments/Details.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/CaregiverAssignments/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZWdpdmVyQXNzaWdubWVudHNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/CaregiverAssignments/Edit.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/CaregiverAssignments/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZWdpdmVyQXNzaWdubWVudHNcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/CaregiverAssignments/Index.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/CaregiverAssignments/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZWdpdmVyQXNzaWdubWVudHNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/CareNotes/Create.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/CareNotes/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZU5vdGVzXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/CareNotes/Delete.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/CareNotes/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZU5vdGVzXERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/CareNotes/Details.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/CareNotes/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZU5vdGVzXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/CareNotes/Edit.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/CareNotes/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZU5vdGVzXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/CareNotes/Index.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/CareNotes/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZU5vdGVzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/ElderlyPeople/Create.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/ElderlyPeople/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRWxkZXJseVBlb3BsZVxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/ElderlyPeople/Delete.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/ElderlyPeople/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRWxkZXJseVBlb3BsZVxEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/ElderlyPeople/Details.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/ElderlyPeople/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRWxkZXJseVBlb3BsZVxEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/ElderlyPeople/Edit.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/ElderlyPeople/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRWxkZXJseVBlb3BsZVxFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/ElderlyPeople/Index.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/ElderlyPeople/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRWxkZXJseVBlb3BsZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/Home/PatientDashboard.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/Home/PatientDashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQYXRpZW50RGFzaGJvYXJkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/Home/PatientSelection.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/Home/PatientSelection.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQYXRpZW50U2VsZWN0aW9uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/Home/Privacy.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/Home/SystemOverview.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/Home/SystemOverview.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTeXN0ZW1PdmVydmlldy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/MealLogs/Create.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/MealLogs/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVhbExvZ3NcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/MealLogs/Delete.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/MealLogs/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVhbExvZ3NcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/MealLogs/Details.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/MealLogs/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVhbExvZ3NcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/MealLogs/Edit.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/MealLogs/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVhbExvZ3NcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/MealLogs/Index.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/MealLogs/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVhbExvZ3NcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/MedicationLogs/Create.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/MedicationLogs/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVkaWNhdGlvbkxvZ3NcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/MedicationLogs/Delete.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/MedicationLogs/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVkaWNhdGlvbkxvZ3NcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/MedicationLogs/Details.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/MedicationLogs/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVkaWNhdGlvbkxvZ3NcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/MedicationLogs/Edit.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/MedicationLogs/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVkaWNhdGlvbkxvZ3NcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/MedicationLogs/Index.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/MedicationLogs/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVkaWNhdGlvbkxvZ3NcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/Shared/Error.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/Users/Create.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/Users/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/Users/Delete.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/Users/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/Users/Details.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/Users/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/Users/Edit.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/Users/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/Users/Index.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/Users/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/_ViewImports.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/_ViewStart.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/eknsu/Documents/FSDM/Term 3/ASP.NET/Project/ElderlyCareApp/ElderlyCareApp/Views/Shared/_Layout.cshtml]
+[C:/Users/Admin/Documents/Lambton College/Term3/csharp/ElderlyCareApp/ElderlyCareApp/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-kj22j4m45b
