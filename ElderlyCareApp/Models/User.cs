@@ -66,9 +66,9 @@ namespace ElderlyCareApp.Models
         
         // Navigation properties
         [ForeignKey("CaregiverId")]
-        public virtual User Caregiver { get; set; } = null!;
+        public virtual User? Caregiver { get; set; } = null!;
         
         [ForeignKey("ElderlyPersonId")]
-        public virtual ElderlyPerson ElderlyPerson { get; set; } = null!;
+        public virtual ElderlyPerson? ElderlyPerson { get; set; } = null!;
     }
 } 
